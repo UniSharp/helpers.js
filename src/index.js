@@ -68,6 +68,10 @@ Array.prototype.flatten = function () {
   }, [])
 }
 
+Array.prototype.contains = function (needle) {
+  return this.indexOf(needle) !== -1
+}
+
 String.prototype.slugify = function () {
   return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
 }
