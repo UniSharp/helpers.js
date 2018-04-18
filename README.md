@@ -1,25 +1,25 @@
-# Helper.js
+# Helpers.js
 
-[![Build Status](https://travis-ci.org/UniSharp/helper.js.svg?branch=master)](https://travis-ci.org/UniSharp/helper.js)
+[![Build Status](https://travis-ci.org/UniSharp/helpers.js.svg?branch=master)](https://travis-ci.org/UniSharp/helpers.js)
 
 ## Installation
 
 ### Via npm
 
 ```bash
-npm install @unisharp/helper.js --save
+npm install @unisharp/helpers.js --save
 ```
 
 ### Via yarn
 
 ```bash
-yarn add @unisharp/helper.js
+yarn add @unisharp/helpers.js
 ```
 
 ## Usage
 
 ```javascript
-require('@unisharp/helper.js')
+require('@unisharp/helpers.js')
 
 // Array
 [1, 2, 3].count() // 3
