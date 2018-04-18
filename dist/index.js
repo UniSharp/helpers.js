@@ -28,6 +28,34 @@ Array.prototype.max = function () {
 
 Array.prototype.each = function (callback) {
   this.forEach(callback);
+
+  return this;
+};
+
+Array.prototype.first = function () {
+  var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+  if (!callback) {
+    return this[0];
+  }
+
+  return this.filter(callback)[0];
+};
+
+Array.prototype.last = function () {
+  var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+  var array = this;
+
+  if (callback) {
+    array = array.filter(callback);
+  }
+
+  return array[array.length - 1];
+};
+
+Array.prototype.unique = function () {
+  return [].concat(_toConsumableArray(new Set(this)));
 };
 
 String.prototype.slugify = function () {
@@ -35,7 +63,9 @@ String.prototype.slugify = function () {
 };
 
 Number.prototype.format = function () {
-  var withDollarSign = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+  return this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,');
+};
 
-  return '' + (withDollarSign ? '$ ' : '') + this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,');
+Number.prototype.times = function (callback) {
+  return [].concat(_toConsumableArray(Array(+this).keys())).each(callback);
 };
