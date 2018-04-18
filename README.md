@@ -88,6 +88,18 @@ require('@unisharp/helpers.js')
 [1, 1, 2, 2, 3].unique() // [1, 2, 3]
 ```
 
+`chunk()`
+
+```javascript
+[1, 2, 3, 4, 5].chunk(2) // [[1, 2], [3, 4], [5]]
+```
+
+`flatten()`
+
+```javascript
+[[1, 2], [3, 4], [5]].flatten() // [1, 2, 3, 4, 5]
+```
+
 ### String
 
 `slugify()`
