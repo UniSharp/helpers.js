@@ -93,6 +93,18 @@ describe('Array', () => {
       assert.deepEqual([1, 1, 2, 2, 3, 3].unique(), [1, 2, 3])
     })
   })
+
+  describe('#chunk()', () => {
+    it('should chunk into multiple array of a given size', () => {
+      assert.deepEqual([1, 2, 3, 4, 5].chunk(2), [[1, 2], [3, 4], [5]])
+    })
+  })
+
+  describe('#flatten()', () => {
+    it('should flatten a multi dimensional array into signle dimension', () => {
+      assert.deepEqual([[1, 2], [3, 4], [5]].flatten(), [1, 2, 3, 4, 5])
+    })
+  })
 })
 
 describe('String', () => {

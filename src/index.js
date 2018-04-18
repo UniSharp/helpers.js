@@ -54,6 +54,20 @@ Array.prototype.unique = function () {
   return [...new Set(this)]
 }
 
+Array.prototype.chunk = function (size) {
+  return [...Array(Math.ceil(this.count() / size)).keys()].map(n => this.slice(n * size, (n + 1) * size))
+}
+
+Array.prototype.flatten = function () {
+  return this.reduce((flatten, toFlatten) => {
+    if (Array.isArray(toFlatten)) {
+      toFlatten = toFlatten.flatten()
+    }
+
+    return flatten.concat(toFlatten)
+  }, [])
+}
+
 String.prototype.slugify = function () {
   return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
 }
