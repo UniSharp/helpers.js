@@ -13,6 +13,10 @@ describe('Array', function() {
     it('should return the sum', function() {
       assert.equal([1, 2, 3].sum(), 6)
     })
+
+    it('should return the sum of string items', function() {
+      assert.equal(['1', '2', '3'].sum(), 6)
+    })
   })
 
   describe('#avg()', function() {

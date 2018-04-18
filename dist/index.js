@@ -10,7 +10,7 @@ Array.prototype.count = function () {
 
 Array.prototype.sum = function () {
   return this.reduce(function (sum, n) {
-    return sum + n;
+    return sum + +n;
   }, 0);
 };
 

@@ -5,7 +5,7 @@ Array.prototype.count = function () {
 }
 
 Array.prototype.sum = function () {
-  return this.reduce((sum, n) => sum + n, 0)
+  return this.reduce((sum, n) => sum + +n, 0)
 }
 
 Array.prototype.avg = function () {
