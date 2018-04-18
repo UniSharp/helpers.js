@@ -7,4 +7,4 @@ install:
   - travis_retry npm install
 
 script:
-  - npm build
+  - npm run build
