@@ -27,7 +27,13 @@ Array.prototype.max = function () {
 };
 
 Array.prototype.each = function (callback) {
-  this.forEach(callback);
+  var count = this.count();
+
+  for (var i = 0; i < count; i++) {
+    if (callback(this[i], i) === false) {
+      break;
+    }
+  }
 
   return this;
 };
@@ -56,6 +62,24 @@ Array.prototype.last = function () {
 
 Array.prototype.unique = function () {
   return [].concat(_toConsumableArray(new Set(this)));
+};
+
+Array.prototype.chunk = function (size) {
+  var _this = this;
+
+  return [].concat(_toConsumableArray(Array(Math.ceil(this.count() / size)).keys())).map(function (n) {
+    return _this.slice(n * size, (n + 1) * size);
+  });
+};
+
+Array.prototype.flatten = function () {
+  return this.reduce(function (flatten, toFlatten) {
+    if (Array.isArray(toFlatten)) {
+      toFlatten = toFlatten.flatten();
+    }
+
+    return flatten.concat(toFlatten);
+  }, []);
 };
 
 String.prototype.slugify = function () {
