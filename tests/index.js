@@ -64,4 +64,17 @@ describe('Number', function () {
       assert.equal((1000000).format(false), '1,000,000')
     })
   })
+
+  describe('#times()', function () {
+    it('should iterate callback function n items', function () {
+      let count = 0
+      let times = 3
+
+      times.times(function (n) {
+        assert.equal(n, count++)
+      })
+
+      assert.equal(count, 3)
+    })
+  })
 })
