@@ -39,25 +39,25 @@ require('@unisharp/helpers.js')
 `sum()`
 
 ```javascript
-[1, 2, 3, 4, 5].count() // 15
+[1, 2, 3, 4, 5].sum() // 15
 ```
 
 `avg()`
 
 ```javascript
-[1, 2, 3, 4, 5].count() // 3
+[1, 2, 3, 4, 5].avg() // 3
 ```
 
 `min()`
 
 ```javascript
-[1, 2, 3, 4, 5].count() // 1
+[1, 2, 3, 4, 5].min() // 1
 ```
 
 `max()`
 
 ```javascript
-[1, 2, 3, 4, 5].count() // 5
+[1, 2, 3, 4, 5].max() // 5
 ```
 
 `each()`
