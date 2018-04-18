@@ -22,6 +22,8 @@ Array.prototype.max = function () {
 
 Array.prototype.each = function (callback) {
   this.forEach(callback)
+
+  return this
 }
 
 String.prototype.slugify = function () {
@@ -33,5 +35,5 @@ Number.prototype.format = function (withDollarSign = true) {
 }
 
 Number.prototype.times = function (callback) {
-  [...Array(+this).keys()].each(callback)
+  return [...Array(+this).keys()].each(callback)
 }
