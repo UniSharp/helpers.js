@@ -2,108 +2,102 @@ require('../src')
 
 const assert = require('assert')
 
-describe('Array', function () {
-  describe('#count()', function () {
-    it('should return the total number', function () {
+describe('Array', () => {
+  describe('#count()', () => {
+    it('should return the total number', () => {
       assert.equal([1, 2, 3].count(), 3)
     })
   })
 
-  describe('#sum()', function () {
-    it('should return the sum', function () {
+  describe('#sum()', () => {
+    it('should return the sum', () => {
       assert.equal([1, 2, 3].sum(), 6)
     })
 
-    it('should return the sum of string items', function () {
+    it('should return the sum of string items', () => {
       assert.equal(['1', '2', '3'].sum(), 6)
     })
   })
 
-  describe('#avg()', function () {
-    it('should return the average value', function () {
+  describe('#avg()', () => {
+    it('should return the average value', () => {
       assert.equal([1, 2, 3].avg(), 2)
     })
   })
 
-  describe('#min()', function () {
-    it('should return the minimum value', function () {
+  describe('#min()', () => {
+    it('should return the minimum value', () => {
       assert.equal([1, 2, 3].min(), 1)
     })
   })
 
-  describe('#max()', function () {
-    it('should return the maximum value', function () {
+  describe('#max()', () => {
+    it('should return the maximum value', () => {
       assert.equal([1, 2, 3].max(), 3)
     })
   })
 
-  describe('#each()', function () {
-    it('should iterate over the items', function () {
-      [1, 2, 3].each(function (value, index) {
+  describe('#each()', () => {
+    it('should iterate over the items', () => {
+      [1, 2, 3].each((value, index) => {
         assert.equal(value, [1, 2, 3][index])
       })
     })
   })
 
-  describe('#first()', function () {
-    it('should return the first element', function () {
+  describe('#first()', () => {
+    it('should return the first element', () => {
       assert.equal([1, 2, 3].first(), 1)
     })
 
-    it('should return null if array is empty', function () {
+    it('should return null if array is empty', () => {
       assert.equal([].first(), null)
     })
 
-    it('should return the first element which passes a given truth test', function () {
-      assert.equal([1, 2, 3].first(function (n) {
-        return n > 1
-      }), 2)
+    it('should return the first element which passes a given truth test', () => {
+      assert.equal([1, 2, 3].first(n => n > 1), 2)
     })
   })
 
-  describe('#last()', function () {
-    it('should return the last element', function () {
+  describe('#last()', () => {
+    it('should return the last element', () => {
       assert.equal([1, 2, 3].last(), 3)
     })
 
-    it('should return null if array is empty', function () {
+    it('should return null if array is empty', () => {
       assert.equal([].last(), null)
     })
 
-    it('should return the last element which passes a given truth test', function () {
-      assert.equal([1, 2, 3].last(function (n) {
-        return n < 3
-      }), 2)
+    it('should return the last element which passes a given truth test', () => {
+      assert.equal([1, 2, 3].last(n => n < 3), 2)
     })
   })
 
-  describe('#unique()', function () {
-    it('should return all of the unique items', function () {
+  describe('#unique()', () => {
+    it('should return all of the unique items', () => {
       assert.deepEqual([1, 1, 2, 2, 3, 3].unique(), [1, 2, 3])
     })
   })
 })
 
-describe('String', function () {
-  describe('#slugify()', function () {
-    it('should slugify a string', function () {
+describe('String', () => {
+  describe('#slugify()', () => {
+    it('should slugify a string', () => {
       assert.equal(' A:B/C.D??E=F&G '.slugify(), 'a-b-c-d-e-f-g')
     })
   })
 })
 
-describe('Number', function () {
-  describe('#format()', function () {
-    it('should format a number with grouped thousands', function () {
+describe('Number', () => {
+  describe('#format()', () => {
+    it('should format a number with grouped thousands', () => {
       assert.equal((1000000).format(), '1,000,000')
     })
   })
 
-  describe('#times()', function () {
-    it('should iterate callback function n items', function () {
-      assert.deepEqual((3).times(function (n) {
-        return n
-      }), [0, 1, 2])
+  describe('#times()', () => {
+    it('should iterate callback function n items', () => {
+      assert.deepEqual((3).times(n => n), [0, 1, 2])
     })
   })
 })
