@@ -1,0 +1,36 @@
+{
+  "name": "@unisharp/helpers.js",
+  "version": "0.1.0",
+  "description": "JavaScript useful helpers.",
+  "main": "dist/index.js",
+  "author": {
+    "name": "UniSharp Ltd.",
+    "email": "unisharp-service@unisharp.com"
+  },
+  "scripts": {
+    "lint": "node_modules/.bin/eslint src",
+    "test": "node_modules/.bin/mocha tests/index.js",
+    "babel": "node_modules/.bin/babel src/index.js -o dist/index.js",
+    "uglify": "node_modules/.bin/uglifyjs dist/index.js -c -m -o dist/index.min.js",
+    "build": "npm run lint && npm run test && npm run babel && npm run uglify"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.3",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^5.1.0",
+    "uglify-js": "^3.3.21"
+  }
+}
