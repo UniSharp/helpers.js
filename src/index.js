@@ -26,6 +26,24 @@ Array.prototype.each = function (callback) {
   return this
 }
 
+Array.prototype.first = function (callback = null) {
+  if (!callback) {
+    return this[0]
+  }
+
+  return this.filter(callback)[0]
+}
+
+Array.prototype.last = function (callback = null) {
+  let array = this
+
+  if (callback) {
+    array = array.filter(callback)
+  }
+
+  return array[array.length - 1]
+}
+
 String.prototype.slugify = function () {
   return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
 }

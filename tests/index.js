@@ -44,6 +44,38 @@ describe('Array', function () {
       })
     })
   })
+
+  describe('#first()', function () {
+    it('should return the first element', function () {
+      assert.equal([1, 2, 3].first(), 1)
+    })
+
+    it('should return null if array is empty', function () {
+      assert.equal([].first(), null)
+    })
+
+    it('should return the first element which passes a given truth test', function () {
+      assert.equal([1, 2, 3].first(function (n) {
+        return n > 1
+      }), 2)
+    })
+  })
+
+  describe('#last()', function () {
+    it('should return the last element', function () {
+      assert.equal([1, 2, 3].last(), 3)
+    })
+
+    it('should return null if array is empty', function () {
+      assert.equal([].last(), null)
+    })
+
+    it('should return the last element which passes a given truth test', function () {
+      assert.equal([1, 2, 3].last(function (n) {
+        return n < 3
+      }), 2)
+    })
+  })
 })
 
 describe('String', function () {
