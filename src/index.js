@@ -52,8 +52,8 @@ String.prototype.slugify = function () {
   return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
 }
 
-Number.prototype.format = function (withDollarSign = true) {
-  return `${withDollarSign ? '$ ' : ''}${this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,')}`
+Number.prototype.format = function () {
+  return this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,')
 }
 
 Number.prototype.times = function (callback) {

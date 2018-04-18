@@ -94,12 +94,8 @@ describe('String', function () {
 
 describe('Number', function () {
   describe('#format()', function () {
-    it('should format a number with grouped thousands and dollar sign', function () {
-      assert.equal((1000000).format(), '$ 1,000,000')
-    })
-
-    it('should format a number with grouped thousands but dollar sign', function () {
-      assert.equal((1000000).format(false), '1,000,000')
+    it('should format a number with grouped thousands', function () {
+      assert.equal((1000000).format(), '1,000,000')
     })
   })
 
