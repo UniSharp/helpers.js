@@ -43,6 +43,21 @@ describe('Array', () => {
         assert.equal(value, [1, 2, 3][index])
       })
     })
+
+    it('should stop iterating when callback function return false', () => {
+      let count = 0
+      let array = [1, 2, 3]
+
+      array.each(value => {
+        if (value === 2) {
+          return false
+        }
+
+        count++
+      })
+
+      assert.equal(count, 1)
+    })
   })
 
   describe('#first()', () => {

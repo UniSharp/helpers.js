@@ -21,7 +21,13 @@ Array.prototype.max = function () {
 }
 
 Array.prototype.each = function (callback) {
-  this.forEach(callback)
+  let count = this.count()
+
+  for (let i = 0; i < count; i++) {
+    if (callback(this[i], i) === false) {
+      break
+    }
+  }
 
   return this
 }
