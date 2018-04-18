@@ -44,6 +44,10 @@ Array.prototype.last = function (callback = null) {
   return array[array.length - 1]
 }
 
+Array.prototype.unique = function () {
+  return [...new Set(this)]
+}
+
 String.prototype.slugify = function () {
   return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
 }

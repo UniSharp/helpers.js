@@ -76,6 +76,12 @@ describe('Array', function () {
       }), 2)
     })
   })
+
+  describe('#unique()', function () {
+    it('should return all of the unique items', function () {
+      assert.deepEqual([1, 1, 2, 2, 3, 3].unique(), [1, 2, 3])
+    })
+  })
 })
 
 describe('String', function () {
