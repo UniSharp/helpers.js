@@ -1,15 +1,38 @@
-'use strict';
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 (function (global, factory) {
-  (typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? factory() : typeof define === 'function' && define.amd ? define(factory) : factory();
-})(undefined, function () {
-  'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (factory());
+}(this, (function () { 'use strict';
+
+  var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  };
+
+  var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  var toConsumableArray = function (arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+      return arr2;
+    } else {
+      return Array.from(arr);
+    }
+  };
 
   Array.prototype.contains = function (needle) {
     return this.indexOf(needle) !== -1;
@@ -82,15 +105,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   };
 
   Array.prototype.min = function () {
-    return Math.min.apply(Math, _toConsumableArray(this));
+    return Math.min.apply(Math, toConsumableArray(this));
   };
 
   Array.prototype.max = function () {
-    return Math.max.apply(Math, _toConsumableArray(this));
+    return Math.max.apply(Math, toConsumableArray(this));
   };
 
   Array.prototype.unique = function () {
-    return [].concat(_toConsumableArray(new Set(this)));
+    return [].concat(toConsumableArray(new Set(this)));
   };
 
   Number.prototype.format = function () {
@@ -98,7 +121,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   };
 
   Number.prototype.times = function (callback) {
-    return [].concat(_toConsumableArray(Array(+this).keys())).map(function (n) {
+    return [].concat(toConsumableArray(Array(+this).keys())).map(function (n) {
       return n + 1;
     }).map(callback);
   };
@@ -144,12 +167,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   };
 
   Object.prototype.each = function (callback) {
-    var _this3 = this;
+    var _this = this;
 
     var count = 0;
 
     this.keys().each(function (key) {
-      return callback(_this3[key], key, count++);
+      return callback(_this[key], key, count++);
     });
 
     return this;
@@ -197,10 +220,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   };
 
   Object.prototype.chunk = function (size) {
-    var _this4 = this;
+    var _this2 = this;
 
     return Math.ceil(this.count() / size).times(function (n) {
-      return _this4.slice((n - 1) * size, n * size);
+      return _this2.slice((n - 1) * size, n * size);
     });
   };
 
@@ -297,4 +320,5 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   String.prototype.slugify = function () {
     return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
   };
-});
+
+})));

@@ -9,17 +9,22 @@
   },
   "scripts": {
     "lint": "node_modules/.bin/eslint src",
-    "rollup": "node_modules/.bin/rollup src/index.js --format umd --file dist/index.js",
-    "babel": "node_modules/.bin/babel dist/index.js -o dist/index.js",
+    "rollup": "node_modules/.bin/rollup -c",
     "uglify": "node_modules/.bin/uglifyjs dist/index.js -c -m -o dist/index.min.js",
     "test": "npm rum rollup && node_modules/.bin/mocha tests/index.js",
-    "build": "npm run lint && npm run test && npm run babel && npm run uglify"
+    "build": "npm run lint && npm run test && npm run uglify"
   },
   "babel": {
     "presets": [
-      "env"
+      [
+        "env",
+        {
+          "modules": false
+        }
+      ]
     ],
     "plugins": [
+      "external-helpers",
       "transform-object-rest-spread"
     ]
   },
@@ -27,6 +32,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.3",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.1",
@@ -37,6 +43,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "mocha": "^5.1.0",
     "rollup": "^0.58.1",
+    "rollup-plugin-babel": "^3.0.3",
     "uglify-js": "^3.3.21"
   }
 }
