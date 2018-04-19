@@ -9,10 +9,11 @@
   },
   "scripts": {
     "lint": "node_modules/.bin/eslint src",
-    "test": "node_modules/.bin/mocha tests/index.js",
-    "babel": "node_modules/.bin/babel src/index.js -o dist/index.js",
+    "rollup": "node_modules/.bin/rollup src/index.js --format umd --file dist/index.js",
+    "babel": "node_modules/.bin/babel dist/index.js -o dist/index.js",
     "uglify": "node_modules/.bin/uglifyjs dist/index.js -c -m -o dist/index.min.js",
-    "build": "npm run lint && npm run test && npm run babel && npm run uglify"
+    "test": "npm run lint && npm rum rollup && node_modules/.bin/mocha tests/index.js",
+    "build": "npm run test && npm run babel && npm run uglify"
   },
   "babel": {
     "presets": [
@@ -31,6 +32,7 @@
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "mocha": "^5.1.0",
+    "rollup": "^0.58.1",
     "uglify-js": "^3.3.21"
   }
 }
