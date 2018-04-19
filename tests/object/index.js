@@ -20,6 +20,13 @@ describe('Object', () => {
     })
   })
 
+  describe('#contains()', () => {
+    it('should determines whether the object contains a given item', () => {
+      assert.equal({ a: 1, b: 2, c: 3 }.contains(3), true)
+      assert.equal({ a: 1, b: 2, c: 3 }.contains(4), false)
+    })
+  })
+
   describe('#count()', () => {
     it('should return the total number', () => {
       assert.equal({ a: 1, b: 2, c: 3 }.count(), 3)

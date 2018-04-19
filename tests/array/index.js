@@ -2,7 +2,7 @@ const assert = require('assert')
 
 describe('Array', () => {
   describe('#contains()', () => {
-    it('should determines whether the collection contains a given item', () => {
+    it('should determines whether the array contains a given item', () => {
       assert.equal([1, 2, 3, 4, 5].contains(3), true)
       assert.equal([1, 2, 3, 4, 5].contains(6), false)
     })

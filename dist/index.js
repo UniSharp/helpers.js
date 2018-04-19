@@ -154,6 +154,10 @@
     return Object.values(this);
   };
 
+  Object.prototype.contains = function (needle) {
+    return this.values().contains(needle);
+  };
+
   Object.prototype.count = function () {
     return this.keys().count();
   };
