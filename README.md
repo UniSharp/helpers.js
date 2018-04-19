@@ -119,7 +119,7 @@ require('@unisharp/helpers.js')
 `times()`
 
 ```javascript
-(5).times(n => n) // [0, 1, 2, 3, 4]
+(5).times(n => n) // [1, 2, 3, 4, 5]
 ```
 
 ## License

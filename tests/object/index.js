@@ -1,6 +1,13 @@
 const assert = require('assert')
 
 describe('Object', () => {
+  describe('#isObject', () => {
+    it('should determines whether the given item is object', () => {
+      assert.equal(Object.isObject({}), true)
+      assert.equal(Object.isObject([]), false)
+    })
+  })
+
   describe('#keys()', () => {
     it('should return the keys', () => {
       assert.deepEqual({ a: 1, b: 2, c: 3 }.keys(), ['a', 'b', 'c'])
@@ -35,25 +42,14 @@ describe('Object', () => {
     })
   })
 
-  describe('#min()', () => {
-    it('should return the minimum value', () => {
-      assert.equal({ a: 1, b: 2, c: 3 }.min(), 1)
-    })
-  })
-
-  describe('#max()', () => {
-    it('should return the maximum value', () => {
-      assert.equal({ a: 1, b: 2, c: 3 }.max(), 3)
-    })
-  })
-
   describe('#each()', () => {
     it('should iterate over the items', () => {
       let count = 0
       let obj = { a: 1, b: 2, c: 3 }
 
-      obj.each((value, key) => {
+      obj.each((value, key, index) => {
         assert.equal(key, ['a', 'b', 'c'][count])
+        assert.equal(index, count)
         assert.equal(value, ++count)
       })
 
@@ -73,6 +69,47 @@ describe('Object', () => {
       })
 
       assert.equal(count, 1)
+    })
+  })
+
+  describe('#slice()', () => {
+    it('should return a new object without args', () => {
+      assert.deepEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 }.slice(), { a: 1, b: 2, c: 3, d: 4, e: 5 })
+    })
+
+    it('should slice of items with positive begin', () => {
+      assert.deepEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 }.slice(2), { c: 3, d: 4, e: 5 })
+    })
+
+    it('should slice of items with negative begin', () => {
+      assert.deepEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 }.slice(-2), { d: 4, e: 5 })
+    })
+
+    it('should slice of items with begin and end', () => {
+      assert.deepEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 }.slice(2, 4), { c: 3, d: 4 })
+      assert.deepEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 }.slice(2, -2), { c: 3 })
+      assert.deepEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 }.slice(-3, 4), { c: 3, d: 4 })
+      assert.deepEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 }.slice(-3, -2), { c: 3 })
+    })
+
+    it('should slice of items with begin and end but not enough items', () => {
+      assert.deepEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 }.slice(4, 6), { e: 5 })
+    })
+  })
+
+  describe('#toArray()', () => {
+    it('should covert object to array', () => {
+      assert.deepEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 }.toArray(), [1, 2, 3, 4, 5])
+      assert.deepEqual({ a: { a: 1, b: 2 }, b: { c: 3, d: 4 }, c: { e: 5 } }.toArray(), [[1, 2], [3, 4], [5]])
+    })
+  })
+
+  describe('#chunk()', () => {
+    it('should chunk into multiple array of a given size', () => {
+      assert.deepEqual(
+        { a: 1, b: 2, c: 3, d: 4, e: 5 }.chunk(2),
+        [{ a: 1, b: 2 }, { c: 3, d: 4 }, { e: 5 }]
+      )
     })
   })
 
@@ -108,6 +145,49 @@ describe('Object', () => {
 
     it('should return the last element which passes a given truth test', () => {
       assert.equal({ a: 1, b: 2, c: 3 }.last(n => n < 3), 2)
+    })
+  })
+
+  describe('#map()', () => {
+    it('should iterate over the items and replace value from callback', () => {
+      assert.deepEqual(
+        { a: 1, b: 2, c: 3 }.map((value, key, index) => `${index} - ${key} - ${value}`),
+        { a: '0 - a - 1', b: '1 - b - 2', c: '2 - c - 3' }
+      )
+    })
+  })
+
+  describe('#reduce()', () => {
+    it('should iterate over the items and reduce to a single value', () => {
+      assert.deepEqual({ a: 1, b: 2, c: 3 }.reduce((carry, value) => carry + value, 0), 6)
+      assert.deepEqual(
+        { a: 1, b: 2, c: 3 }.reduce((carry, value, key, index) => `${carry} - ${index} - ${key} - ${value}`, ''),
+        ' - 0 - a - 1 - 1 - b - 2 - 2 - c - 3'
+      )
+    })
+  })
+
+  describe('#flatten()', () => {
+    it('should flatten a multi dimensional object into signle dimension', () => {
+      assert.deepEqual({ a: { a: 1, b: 2 }, b: { c: 3, d: 4 }, c: { e: 5 } }.flatten(), [1, 2, 3, 4, 5])
+    })
+  })
+
+  describe('#min()', () => {
+    it('should return the minimum value', () => {
+      assert.equal({ a: 1, b: 2, c: 3 }.min(), 1)
+    })
+  })
+
+  describe('#max()', () => {
+    it('should return the maximum value', () => {
+      assert.equal({ a: 1, b: 2, c: 3 }.max(), 3)
+    })
+  })
+
+  describe('#unique()', () => {
+    it('should return all of the unique items', () => {
+      assert.deepEqual({ a: 1, b: 2, c: 2 }.unique(), { a: 1, b: 2 })
     })
   })
 })

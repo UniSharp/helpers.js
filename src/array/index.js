@@ -1,3 +1,7 @@
+Array.prototype.contains = function (needle) {
+  return this.indexOf(needle) !== -1
+}
+
 Array.prototype.count = function () {
   return this.length
 }
@@ -10,14 +14,6 @@ Array.prototype.avg = function () {
   return this.sum() / this.count()
 }
 
-Array.prototype.min = function () {
-  return Math.min(...this)
-}
-
-Array.prototype.max = function () {
-  return Math.max(...this)
-}
-
 Array.prototype.each = function (callback) {
   let count = this.count()
 
@@ -28,6 +24,20 @@ Array.prototype.each = function (callback) {
   }
 
   return this
+}
+
+Array.prototype.toArray = function () {
+  return this.map(value => {
+    if (typeof value === 'object' && value.constructor === Object) {
+      value = value.toArray()
+    }
+
+    return value
+  })
+}
+
+Array.prototype.chunk = function (size) {
+  return {...this}.chunk(size).toArray()
 }
 
 Array.prototype.first = function (callback = null) {
@@ -48,24 +58,18 @@ Array.prototype.last = function (callback = null) {
   return array[array.count() - 1]
 }
 
+Array.prototype.flatten = function () {
+  return {...this}.flatten().toArray()
+}
+
+Array.prototype.min = function () {
+  return Math.min(...this)
+}
+
+Array.prototype.max = function () {
+  return Math.max(...this)
+}
+
 Array.prototype.unique = function () {
   return [...new Set(this)]
-}
-
-Array.prototype.chunk = function (size) {
-  return [...Array(Math.ceil(this.count() / size)).keys()].map(n => this.slice(n * size, (n + 1) * size))
-}
-
-Array.prototype.flatten = function () {
-  return this.reduce((flatten, toFlatten) => {
-    if (Array.isArray(toFlatten)) {
-      toFlatten = toFlatten.flatten()
-    }
-
-    return flatten.concat(toFlatten)
-  }, [])
-}
-
-Array.prototype.contains = function (needle) {
-  return this.indexOf(needle) !== -1
 }

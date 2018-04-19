@@ -1,6 +1,13 @@
 const assert = require('assert')
 
 describe('Array', () => {
+  describe('#contains()', () => {
+    it('should determines whether the collection contains a given item', () => {
+      assert.equal([1, 2, 3, 4, 5].contains(3), true)
+      assert.equal([1, 2, 3, 4, 5].contains(6), false)
+    })
+  })
+
   describe('#count()', () => {
     it('should return the total number', () => {
       assert.equal([1, 2, 3].count(), 3)
@@ -20,18 +27,6 @@ describe('Array', () => {
   describe('#avg()', () => {
     it('should return the average value', () => {
       assert.equal([1, 2, 3].avg(), 2)
-    })
-  })
-
-  describe('#min()', () => {
-    it('should return the minimum value', () => {
-      assert.equal([1, 2, 3].min(), 1)
-    })
-  })
-
-  describe('#max()', () => {
-    it('should return the maximum value', () => {
-      assert.equal([1, 2, 3].max(), 3)
     })
   })
 
@@ -63,6 +58,19 @@ describe('Array', () => {
     })
   })
 
+  describe('#toArray()', () => {
+    it('should covert to array', () => {
+      assert.deepEqual([1, 2, 3, 4, 5].toArray(), [1, 2, 3, 4, 5])
+      assert.deepEqual([{ a: 1, b: 2 }, { c: 3, d: 4 }, { e: 5 }].toArray(), [[1, 2], [3, 4], [5]])
+    })
+  })
+
+  describe('#chunk()', () => {
+    it('should chunk into multiple array of a given size', () => {
+      assert.deepEqual([1, 2, 3, 4, 5].chunk(2), [[1, 2], [3, 4], [5]])
+    })
+  })
+
   describe('#first()', () => {
     it('should return the first element', () => {
       assert.equal([1, 2, 3].first(), 1)
@@ -91,28 +99,28 @@ describe('Array', () => {
     })
   })
 
-  describe('#unique()', () => {
-    it('should return all of the unique items', () => {
-      assert.deepEqual([1, 1, 2, 2, 3, 3].unique(), [1, 2, 3])
-    })
-  })
-
-  describe('#chunk()', () => {
-    it('should chunk into multiple array of a given size', () => {
-      assert.deepEqual([1, 2, 3, 4, 5].chunk(2), [[1, 2], [3, 4], [5]])
-    })
-  })
-
   describe('#flatten()', () => {
     it('should flatten a multi dimensional array into signle dimension', () => {
       assert.deepEqual([[1, 2], [3, 4], [5]].flatten(), [1, 2, 3, 4, 5])
+      assert.deepEqual([{ a: 1, b: 2 }, { c: 3, d: 4 }, { e: 5 }].flatten(), [1, 2, 3, 4, 5])
     })
   })
 
-  describe('#contains()', () => {
-    it('should determines whether the collection contains a given item', () => {
-      assert.equal([1, 2, 3, 4, 5].contains(3), true)
-      assert.equal([1, 2, 3, 4, 5].contains(6), false)
+  describe('#min()', () => {
+    it('should return the minimum value', () => {
+      assert.equal([1, 2, 3].min(), 1)
+    })
+  })
+
+  describe('#max()', () => {
+    it('should return the maximum value', () => {
+      assert.equal([1, 2, 3].max(), 3)
+    })
+  })
+
+  describe('#unique()', () => {
+    it('should return all of the unique items', () => {
+      assert.deepEqual([1, 1, 2, 2, 3, 3].unique(), [1, 2, 3])
     })
   })
 })
