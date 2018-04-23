@@ -37,7 +37,7 @@
 
   Array.prototype.toArray = function () {
     return this.map(value => {
-      if (typeof value === 'object' && value.constructor === Object) {
+      if (Object.isObject(value)) {
         value = value.toArray()
       }
 
