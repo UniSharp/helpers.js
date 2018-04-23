@@ -1,201 +1,203 @@
-Object.isObject = function (obj) {
-  return typeof obj === 'object' && obj.constructor === Object
-}
-
-Object.prototype.keys = function () {
-  return Object.keys(this)
-}
-
-Object.prototype.values = function () {
-  return Object.values(this)
-}
-
-Object.prototype.contains = function (needle) {
-  return this.values().contains(needle)
-}
-
-Object.prototype.has = function (key) {
-  if (!Array.isArray(key)) {
-    key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
+(() => {
+  Object.isObject = function (obj) {
+    return typeof obj === 'object' && obj.constructor === Object
   }
 
-  let segment = `${key.shift()}`
-
-  if (!this.keys().contains(segment)) {
-    return false
+  Object.prototype.keys = function () {
+    return Object.keys(this)
   }
 
-  let target = this[segment]
-
-  if (!key.count()) {
-    return true
+  Object.prototype.values = function () {
+    return Object.values(this)
   }
 
-  return target.has(key)
-}
-
-Object.prototype.get = function (key, defaultValue = null) {
-  if (!Array.isArray(key)) {
-    key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
+  Object.prototype.contains = function (needle) {
+    return this.values().contains(needle)
   }
 
-  let segment = `${key.shift()}`
-
-  if (!this.keys().contains(segment)) {
-    return defaultValue
-  }
-
-  let target = this[segment]
-
-  if (!key.count()) {
-    return target
-  }
-
-  return target.get(key, defaultValue)
-}
-
-Object.prototype.count = function () {
-  return this.keys().count()
-}
-
-Object.prototype.sum = function () {
-  return this.values().sum()
-}
-
-Object.prototype.avg = function () {
-  return this.values().sum() / this.count()
-}
-
-Object.prototype.each = function (callback) {
-  let count = 0
-
-  this.keys().each(key => callback(this[key], key, count++))
-
-  return this
-}
-
-Object.prototype.slice = function (begin = 0, end = null) {
-  let result = {}
-
-  if (end === null) {
-    end = this.count()
-  }
-
-  if (begin < 0) {
-    begin = this.count() + begin
-  }
-
-  if (end < 0) {
-    end = this.count() + end
-  }
-
-  this.each((value, key, index) => {
-    if (index >= begin && index < end) {
-      result[key] = value
-    }
-  })
-
-  return result
-}
-
-Object.prototype.toArray = function () {
-  let result = []
-
-  this.each(value => {
-    if (Object.isObject(value)) {
-      value = value.toArray()
+  Object.prototype.has = function (key) {
+    if (!Array.isArray(key)) {
+      key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
     }
 
-    result.push(value)
-  })
+    let segment = `${key.shift()}`
 
-  return result
-}
-
-Object.prototype.chunk = function (size) {
-  return Math.ceil(this.count() / size).times(n => this.slice((n - 1) * size, n * size))
-}
-
-Object.prototype.filter = function (callback) {
-  let result = {}
-
-  this.each((value, key) => {
-    if (callback(value, key)) {
-      result[key] = value
+    if (!this.keys().contains(segment)) {
+      return false
     }
-  })
 
-  return result
-}
+    let target = this[segment]
 
-Object.prototype.first = function (callback = null) {
-  let object = this
+    if (!key.count()) {
+      return true
+    }
 
-  if (callback) {
-    object = object.filter(callback)
+    return target.has(key)
   }
 
-  return object.values()[0]
-}
+  Object.prototype.get = function (key, defaultValue = null) {
+    if (!Array.isArray(key)) {
+      key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
+    }
 
-Object.prototype.last = function (callback = null) {
-  let object = this
+    let segment = `${key.shift()}`
 
-  if (callback) {
-    object = object.filter(callback)
+    if (!this.keys().contains(segment)) {
+      return defaultValue
+    }
+
+    let target = this[segment]
+
+    if (!key.count()) {
+      return target
+    }
+
+    return target.get(key, defaultValue)
   }
 
-  return object.values()[object.count() - 1]
-}
+  Object.prototype.count = function () {
+    return this.keys().count()
+  }
 
-Object.prototype.map = function (callback) {
-  let result = {}
+  Object.prototype.sum = function () {
+    return this.values().sum()
+  }
 
-  this.each((value, key, index) => {
-    result[key] = callback(value, key, index)
-  })
+  Object.prototype.avg = function () {
+    return this.values().sum() / this.count()
+  }
 
-  return result
-}
+  Object.prototype.each = function (callback) {
+    let count = 0
 
-Object.prototype.reduce = function (callback, init = null) {
-  let result = init
+    this.keys().each(key => callback(this[key], key, count++))
 
-  this.each((value, key, index) => {
-    result = callback(result, value, key, index)
-  })
+    return this
+  }
 
-  return result
-}
+  Object.prototype.slice = function (begin = 0, end = null) {
+    let result = {}
 
-Object.prototype.flatten = function () {
-  return this.reduce((flatten, toFlatten) => {
-    if (Array.isArray(toFlatten) || Object.isObject(toFlatten)) {
-      toFlatten = toFlatten.flatten()
+    if (end === null) {
+      end = this.count()
     }
 
-    return flatten.concat(toFlatten)
-  }, [])
-}
-
-Object.prototype.min = function () {
-  return this.values().min()
-}
-
-Object.prototype.max = function () {
-  return this.values().max()
-}
-
-Object.prototype.unique = function () {
-  let haystack = []
-  let result = {}
-
-  this.each((value, key) => {
-    if (!haystack.contains(value)) {
-      result[key] = value
-      haystack.push(value)
+    if (begin < 0) {
+      begin = this.count() + begin
     }
-  })
 
-  return result
-}
+    if (end < 0) {
+      end = this.count() + end
+    }
+
+    this.each((value, key, index) => {
+      if (index >= begin && index < end) {
+        result[key] = value
+      }
+    })
+
+    return result
+  }
+
+  Object.prototype.toArray = function () {
+    let result = []
+
+    this.each(value => {
+      if (Object.isObject(value)) {
+        value = value.toArray()
+      }
+
+      result.push(value)
+    })
+
+    return result
+  }
+
+  Object.prototype.chunk = function (size) {
+    return Math.ceil(this.count() / size).times(n => this.slice((n - 1) * size, n * size))
+  }
+
+  Object.prototype.filter = function (callback) {
+    let result = {}
+
+    this.each((value, key) => {
+      if (callback(value, key)) {
+        result[key] = value
+      }
+    })
+
+    return result
+  }
+
+  Object.prototype.first = function (callback = null) {
+    let object = this
+
+    if (callback) {
+      object = object.filter(callback)
+    }
+
+    return object.values()[0]
+  }
+
+  Object.prototype.last = function (callback = null) {
+    let object = this
+
+    if (callback) {
+      object = object.filter(callback)
+    }
+
+    return object.values()[object.count() - 1]
+  }
+
+  Object.prototype.map = function (callback) {
+    let result = {}
+
+    this.each((value, key, index) => {
+      result[key] = callback(value, key, index)
+    })
+
+    return result
+  }
+
+  Object.prototype.reduce = function (callback, init = null) {
+    let result = init
+
+    this.each((value, key, index) => {
+      result = callback(result, value, key, index)
+    })
+
+    return result
+  }
+
+  Object.prototype.flatten = function () {
+    return this.reduce((flatten, toFlatten) => {
+      if (Array.isArray(toFlatten) || Object.isObject(toFlatten)) {
+        toFlatten = toFlatten.flatten()
+      }
+
+      return flatten.concat(toFlatten)
+    }, [])
+  }
+
+  Object.prototype.min = function () {
+    return this.values().min()
+  }
+
+  Object.prototype.max = function () {
+    return this.values().max()
+  }
+
+  Object.prototype.unique = function () {
+    let haystack = []
+    let result = {}
+
+    this.each((value, key) => {
+      if (!haystack.contains(value)) {
+        result[key] = value
+        haystack.push(value)
+      }
+    })
+
+    return result
+  }
+})()
