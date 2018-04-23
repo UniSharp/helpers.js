@@ -2,6 +2,14 @@ Array.prototype.contains = function (needle) {
   return this.indexOf(needle) !== -1
 }
 
+Array.prototype.has = function (key) {
+  return {...this}.has(key)
+}
+
+Array.prototype.get = function (key, defaultValue = null) {
+  return {...this}.get(key, defaultValue)
+}
+
 Array.prototype.count = function () {
   return this.length
 }

@@ -14,6 +14,46 @@ Object.prototype.contains = function (needle) {
   return this.values().contains(needle)
 }
 
+Object.prototype.has = function (key) {
+  if (!Array.isArray(key)) {
+    key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
+  }
+
+  let segment = `${key.shift()}`
+
+  if (!this.keys().contains(segment)) {
+    return false
+  }
+
+  let target = this[segment]
+
+  if (!key.count()) {
+    return true
+  }
+
+  return target.has(key)
+}
+
+Object.prototype.get = function (key, defaultValue = null) {
+  if (!Array.isArray(key)) {
+    key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
+  }
+
+  let segment = `${key.shift()}`
+
+  if (!this.keys().contains(segment)) {
+    return defaultValue
+  }
+
+  let target = this[segment]
+
+  if (!key.count()) {
+    return target
+  }
+
+  return target.get(key, defaultValue)
+}
+
 Object.prototype.count = function () {
   return this.keys().count()
 }

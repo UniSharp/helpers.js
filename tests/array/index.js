@@ -1,6 +1,40 @@
 const assert = require('assert')
 
 describe('Array', () => {
+  describe('#has()', () => {
+    it('should determines if a given key exists', () => {
+      assert.equal([1, 2, 3, 4, 5].has(0), true)
+      assert.equal([1, 2, 3, 4, 5].has(5), false)
+      assert.equal([[1, 2, 3, 4, 5]].has('[0][0]'), true)
+      assert.equal([[1, 2, 3, 4, 5]].has('[0][5]'), false)
+      assert.equal([[{ a: 1, b: 2, c: 3 }]].has('[0][0].a'), true)
+      assert.equal([[{ a: 1, b: 2, c: 3 }]].has('[0][0].d'), false)
+
+      assert.equal([1, 2, 3, 4, 5].has([0]), true)
+      assert.equal([1, 2, 3, 4, 5].has([5]), false)
+      assert.equal([[1, 2, 3, 4, 5]].has([0, 0]), true)
+      assert.equal([[1, 2, 3, 4, 5]].has([0, 5]), false)
+      assert.equal([[{ a: 1, b: 2, c: 3 }]].has([0, 0, 'a']), true)
+      assert.equal([[{ a: 1, b: 2, c: 3 }]].has([0, 0, 'd']), false)
+    })
+  })
+
+  describe('#get()', () => {
+    it('should return the value at a given key', () => {
+      assert.equal([1, 2, 3, 4, 5].get([0]), 1)
+      assert.equal([[1, 2, 3, 4, 5]].get('[0][0]'), 1)
+      assert.equal([[{ a: 1, b: 2, c: 3 }]].get('[0][0].a'), 1)
+
+      assert.equal([1, 2, 3, 4, 5].get(0), 1)
+      assert.equal([[1, 2, 3, 4, 5]].get([0, 0]), 1)
+      assert.equal([[{ a: 1, b: 2, c: 3 }]].get([0, 0, 'a']), 1)
+    })
+
+    it('should return the default value if given key is not exists', () => {
+      assert.equal([1, 2, 3, 4, 5].get(5, 6), 6)
+    })
+  })
+
   describe('#contains()', () => {
     it('should determines whether the array contains a given item', () => {
       assert.equal([1, 2, 3, 4, 5].contains(3), true)

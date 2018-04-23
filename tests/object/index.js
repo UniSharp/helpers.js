@@ -20,6 +20,36 @@ describe('Object', () => {
     })
   })
 
+  describe('#has()', () => {
+    it('should determines if a given key exists', () => {
+      assert.equal({ a: 1, b: 2, c: 3 }.has('a'), true)
+      assert.equal({ a: 1, b: 2, c: 3 }.has('d'), false)
+      assert.equal({ a: { b: { c: 1 } } }.has('a.b.c'), true)
+      assert.equal({ a: { b: { c: 1 } } }.has('a.b.d'), false)
+      assert.equal({ a: { b: { c: [1, 2, 3] } } }.has('a.b.c[0]'), true)
+      assert.equal({ a: { b: { c: [1, 2, 3] } } }.has('a.b.c[4]'), false)
+
+      assert.equal({ a: 1, b: 2, c: 3 }.has(['a']), true)
+      assert.equal({ a: 1, b: 2, c: 3 }.has(['d']), false)
+      assert.equal({ a: { b: { c: 1 } } }.has(['a', 'b', 'c']), true)
+      assert.equal({ a: { b: { c: 1 } } }.has(['a', 'b', 'd']), false)
+      assert.equal({ a: { b: { c: [1, 2, 3] } } }.has(['a', 'b', 'c', 0]), true)
+      assert.equal({ a: { b: { c: [1, 2, 3] } } }.has(['a', 'b', 'd', 4]), false)
+    })
+  })
+
+  describe('#get()', () => {
+    it('should return the value at a given key', () => {
+      assert.equal({ a: 1, b: 2, c: 3 }.get(['a']), 1)
+      assert.equal({ a: { b: { c: 1 } } }.get(['a', 'b', 'c']), 1)
+      assert.equal({ a: { b: { c: [1, 2, 3] } } }.get(['a', 'b', 'c', 0]), 1)
+    })
+
+    it('should return the default value if given key is not exists', () => {
+      assert.equal({ a: 1, b: 2, c: 3 }.get('d', 4), 4)
+    })
+  })
+
   describe('#contains()', () => {
     it('should determines whether the object contains a given item', () => {
       assert.equal({ a: 1, b: 2, c: 3 }.contains(3), true)
@@ -47,6 +77,10 @@ describe('Object', () => {
     it('should return the average value', () => {
       assert.equal({ a: 1, b: 2, c: 3 }.avg(), 2)
     })
+
+    // it('should return the average value of a given key', () => {
+    //   assert.equal({ a: 1, b: 2, c: 3 }.avg(), 2)
+    // })
   })
 
   describe('#each()', () => {
