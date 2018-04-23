@@ -34,7 +34,7 @@ describe('Object', () => {
       assert.equal({ a: { b: { c: 1 } } }.has(['a', 'b', 'c']), true)
       assert.equal({ a: { b: { c: 1 } } }.has(['a', 'b', 'd']), false)
       assert.equal({ a: { b: { c: [1, 2, 3] } } }.has(['a', 'b', 'c', 0]), true)
-      assert.equal({ a: { b: { c: [1, 2, 3] } } }.has(['a', 'b', 'd', 4]), false)
+      assert.equal({ a: { b: { c: [1, 2, 3] } } }.has(['a', 'b', 'c', 4]), false)
     })
   })
 

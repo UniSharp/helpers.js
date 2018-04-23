@@ -1,4 +1,30 @@
 (() => {
+  const has = function (obj, key, defaultValue = null) {
+    if (!Array.isArray(key)) {
+      key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
+    }
+
+    key = [...key]
+
+    let segment = `${key.shift()}`
+
+    if (Array.isArray(obj)) {
+      obj = {...obj}
+    }
+
+    if (!obj.keys().contains(segment)) {
+      return [false, defaultValue]
+    }
+
+    let target = obj[segment]
+
+    if (!key.count()) {
+      return [true, target]
+    }
+
+    return has(target, key, defaultValue)
+  }
+
   Object.isObject = function (obj) {
     return typeof obj === 'object' && obj.constructor === Object
   }
@@ -16,43 +42,11 @@
   }
 
   Object.prototype.has = function (key) {
-    if (!Array.isArray(key)) {
-      key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
-    }
-
-    let segment = `${key.shift()}`
-
-    if (!this.keys().contains(segment)) {
-      return false
-    }
-
-    let target = this[segment]
-
-    if (!key.count()) {
-      return true
-    }
-
-    return target.has(key)
+    return has(this, key)[0]
   }
 
   Object.prototype.get = function (key, defaultValue = null) {
-    if (!Array.isArray(key)) {
-      key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
-    }
-
-    let segment = `${key.shift()}`
-
-    if (!this.keys().contains(segment)) {
-      return defaultValue
-    }
-
-    let target = this[segment]
-
-    if (!key.count()) {
-      return target
-    }
-
-    return target.get(key, defaultValue)
+    return has(this, key, defaultValue)[1]
   }
 
   Object.prototype.count = function () {
