@@ -38,6 +38,20 @@ require('@unisharp/helpers.js')
 [1, 2, 3, 4, 5].contains(6) // false
 ```
 
+`has()`
+
+```javascript
+[1, 2, 3, 4, 5].has(2) // true
+[1, 2, 3, 4, 5].has(5) // false
+```
+
+`get()`
+
+```javascript
+[1, 2, 3, 4, 5].get(2, 'default') // 3
+[1, 2, 3, 4, 5].get(5, 'default') // 'default'
+```
+
 `count()`
 
 ```javascript
@@ -140,6 +154,20 @@ Object.isObject([]) // false
 ```javascript
 { a: 1, b: 2, c: 3 }.contains(3) // true
 { a: 1, b: 2, c: 3 }.contains(4) // false
+```
+
+`has()`
+
+```javascript
+{ a: { b: { c: 1 } } }.has('a.b.c') // true
+{ a: { b: { c: 1 } } }.has('a.b.d') // false
+```
+
+`get()`
+
+```javascript
+{ a: { b: { c: 1 } } }.get('a.b.c', 'default') // 1
+{ a: { b: { c: 1 } } }.get('a.b.c', 'default') // 'default'
 ```
 
 `count()`
@@ -277,6 +305,15 @@ Object.isObject([]) // false
 
 ```javascript
 (5).downto(1, n => n) // [5, 4, 3, 2, 1]
+```
+
+### Date
+
+```javascript
+(1).year().ago()
+(10).days().ago()
+(1).hour().after()
+(10).minutes().after(new Date(2000, 1, 1, 1, 1, 1, 1))
 ```
 
 ## License
