@@ -34,295 +34,351 @@
     }
   };
 
-  Array.prototype.contains = function (needle) {
-    return this.indexOf(needle) !== -1;
-  };
+  (function () {
+    Array.prototype.contains = function (needle) {
+      return this.indexOf(needle) !== -1;
+    };
 
-  Array.prototype.count = function () {
-    return this.length;
-  };
+    Array.prototype.has = function (key) {
+      return _extends({}, this).has(key);
+    };
 
-  Array.prototype.sum = function () {
-    return this.reduce(function (sum, n) {
-      return sum + +n;
-    }, 0);
-  };
+    Array.prototype.get = function (key) {
+      var defaultValue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-  Array.prototype.avg = function () {
-    return this.sum() / this.count();
-  };
+      return _extends({}, this).get(key, defaultValue);
+    };
 
-  Array.prototype.each = function (callback) {
-    var count = this.count();
+    Array.prototype.count = function () {
+      return this.length;
+    };
 
-    for (var i = 0; i < count; i++) {
-      if (callback(this[i], i) === false) {
-        break;
-      }
-    }
+    Array.prototype.sum = function () {
+      return this.reduce(function (sum, n) {
+        return sum + +n;
+      }, 0);
+    };
 
-    return this;
-  };
+    Array.prototype.avg = function () {
+      return this.sum() / this.count();
+    };
 
-  Array.prototype.toArray = function () {
-    return this.map(function (value) {
-      if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object) {
-        value = value.toArray();
-      }
+    Array.prototype.each = function (callback) {
+      var count = this.count();
 
-      return value;
-    });
-  };
-
-  Array.prototype.chunk = function (size) {
-    return _extends({}, this).chunk(size).toArray();
-  };
-
-  Array.prototype.first = function () {
-    var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-    if (!callback) {
-      return this[0];
-    }
-
-    return this.filter(callback)[0];
-  };
-
-  Array.prototype.last = function () {
-    var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-    var array = this;
-
-    if (callback) {
-      array = array.filter(callback);
-    }
-
-    return array[array.count() - 1];
-  };
-
-  Array.prototype.flatten = function () {
-    return _extends({}, this).flatten().toArray();
-  };
-
-  Array.prototype.min = function () {
-    return Math.min.apply(Math, toConsumableArray(this));
-  };
-
-  Array.prototype.max = function () {
-    return Math.max.apply(Math, toConsumableArray(this));
-  };
-
-  Array.prototype.unique = function () {
-    return [].concat(toConsumableArray(new Set(this)));
-  };
-
-  Number.prototype.format = function () {
-    return this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,');
-  };
-
-  Number.prototype.times = function (callback) {
-    return [].concat(toConsumableArray(Array(+this).keys())).map(function (n) {
-      return n + 1;
-    }).map(callback);
-  };
-
-  Number.prototype.upto = function (limit, callback) {
-    var _this = this;
-
-    return (limit - this + 1).times(function (n) {
-      return n + _this - 1;
-    }).map(callback);
-  };
-
-  Number.prototype.downto = function (limit, callback) {
-    var _this2 = this;
-
-    return (this - limit + 1).times(function (n) {
-      return _this2 - n + 1;
-    }).map(callback);
-  };
-
-  Object.isObject = function (obj) {
-    return (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && obj.constructor === Object;
-  };
-
-  Object.prototype.keys = function () {
-    return Object.keys(this);
-  };
-
-  Object.prototype.values = function () {
-    return Object.values(this);
-  };
-
-  Object.prototype.contains = function (needle) {
-    return this.values().contains(needle);
-  };
-
-  Object.prototype.count = function () {
-    return this.keys().count();
-  };
-
-  Object.prototype.sum = function () {
-    return this.values().sum();
-  };
-
-  Object.prototype.avg = function () {
-    return this.values().sum() / this.count();
-  };
-
-  Object.prototype.each = function (callback) {
-    var _this = this;
-
-    var count = 0;
-
-    this.keys().each(function (key) {
-      return callback(_this[key], key, count++);
-    });
-
-    return this;
-  };
-
-  Object.prototype.slice = function () {
-    var begin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-    var end = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-    var result = {};
-
-    if (end === null) {
-      end = this.count();
-    }
-
-    if (begin < 0) {
-      begin = this.count() + begin;
-    }
-
-    if (end < 0) {
-      end = this.count() + end;
-    }
-
-    this.each(function (value, key, index) {
-      if (index >= begin && index < end) {
-        result[key] = value;
-      }
-    });
-
-    return result;
-  };
-
-  Object.prototype.toArray = function () {
-    var result = [];
-
-    this.each(function (value) {
-      if (Object.isObject(value)) {
-        value = value.toArray();
+      for (var i = 0; i < count; i++) {
+        if (callback(this[i], i) === false) {
+          break;
+        }
       }
 
-      result.push(value);
-    });
+      return this;
+    };
 
-    return result;
-  };
+    Array.prototype.toArray = function () {
+      return this.map(function (value) {
+        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object) {
+          value = value.toArray();
+        }
 
-  Object.prototype.chunk = function (size) {
-    var _this2 = this;
+        return value;
+      });
+    };
 
-    return Math.ceil(this.count() / size).times(function (n) {
-      return _this2.slice((n - 1) * size, n * size);
-    });
-  };
+    Array.prototype.chunk = function (size) {
+      return _extends({}, this).chunk(size).toArray();
+    };
 
-  Object.prototype.filter = function (callback) {
-    var result = {};
+    Array.prototype.first = function () {
+      var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-    this.each(function (value, key) {
-      if (callback(value, key)) {
-        result[key] = value;
-      }
-    });
-
-    return result;
-  };
-
-  Object.prototype.first = function () {
-    var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-    var object = this;
-
-    if (callback) {
-      object = object.filter(callback);
-    }
-
-    return object.values()[0];
-  };
-
-  Object.prototype.last = function () {
-    var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-    var object = this;
-
-    if (callback) {
-      object = object.filter(callback);
-    }
-
-    return object.values()[object.count() - 1];
-  };
-
-  Object.prototype.map = function (callback) {
-    var result = {};
-
-    this.each(function (value, key, index) {
-      result[key] = callback(value, key, index);
-    });
-
-    return result;
-  };
-
-  Object.prototype.reduce = function (callback) {
-    var init = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-    var result = init;
-
-    this.each(function (value, key, index) {
-      result = callback(result, value, key, index);
-    });
-
-    return result;
-  };
-
-  Object.prototype.flatten = function () {
-    return this.reduce(function (flatten, toFlatten) {
-      if (Array.isArray(toFlatten) || Object.isObject(toFlatten)) {
-        toFlatten = toFlatten.flatten();
+      if (!callback) {
+        return this[0];
       }
 
-      return flatten.concat(toFlatten);
-    }, []);
-  };
+      return this.filter(callback)[0];
+    };
 
-  Object.prototype.min = function () {
-    return this.values().min();
-  };
+    Array.prototype.last = function () {
+      var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-  Object.prototype.max = function () {
-    return this.values().max();
-  };
+      var array = this;
 
-  Object.prototype.unique = function () {
-    var haystack = [];
-    var result = {};
-
-    this.each(function (value, key) {
-      if (!haystack.contains(value)) {
-        result[key] = value;
-        haystack.push(value);
+      if (callback) {
+        array = array.filter(callback);
       }
-    });
 
-    return result;
-  };
+      return array[array.count() - 1];
+    };
 
-  String.prototype.slugify = function () {
-    return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
-  };
+    Array.prototype.flatten = function () {
+      return _extends({}, this).flatten().toArray();
+    };
+
+    Array.prototype.min = function () {
+      return Math.min.apply(Math, toConsumableArray(this));
+    };
+
+    Array.prototype.max = function () {
+      return Math.max.apply(Math, toConsumableArray(this));
+    };
+
+    Array.prototype.unique = function () {
+      return [].concat(toConsumableArray(new Set(this)));
+    };
+  })();
+
+  (function () {
+    Number.prototype.format = function () {
+      return this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,');
+    };
+
+    Number.prototype.times = function (callback) {
+      return [].concat(toConsumableArray(Array(+this).keys())).map(function (n) {
+        return n + 1;
+      }).map(callback);
+    };
+
+    Number.prototype.upto = function (limit, callback) {
+      var _this = this;
+
+      return (limit - this + 1).times(function (n) {
+        return n + _this - 1;
+      }).map(callback);
+    };
+
+    Number.prototype.downto = function (limit, callback) {
+      var _this2 = this;
+
+      return (this - limit + 1).times(function (n) {
+        return _this2 - n + 1;
+      }).map(callback);
+    };
+  })();
+
+  (function () {
+    var has = function has(obj, key) {
+      var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+      if (!Array.isArray(key)) {
+        key = ('' + key).replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.');
+      }
+
+      key = [].concat(toConsumableArray(key));
+
+      var segment = '' + key.shift();
+
+      if (Array.isArray(obj)) {
+        obj = _extends({}, obj);
+      }
+
+      if (!obj.keys().contains(segment)) {
+        return [false, defaultValue];
+      }
+
+      var target = obj[segment];
+
+      if (!key.count()) {
+        return [true, target];
+      }
+
+      return has(target, key, defaultValue);
+    };
+
+    Object.isObject = function (obj) {
+      return (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && obj.constructor === Object;
+    };
+
+    Object.prototype.keys = function () {
+      return Object.keys(this);
+    };
+
+    Object.prototype.values = function () {
+      return Object.values(this);
+    };
+
+    Object.prototype.contains = function (needle) {
+      return this.values().contains(needle);
+    };
+
+    Object.prototype.has = function (key) {
+      return has(this, key)[0];
+    };
+
+    Object.prototype.get = function (key) {
+      var defaultValue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      return has(this, key, defaultValue)[1];
+    };
+
+    Object.prototype.count = function () {
+      return this.keys().count();
+    };
+
+    Object.prototype.sum = function () {
+      return this.values().sum();
+    };
+
+    Object.prototype.avg = function () {
+      return this.values().sum() / this.count();
+    };
+
+    Object.prototype.each = function (callback) {
+      var _this = this;
+
+      var count = 0;
+
+      this.keys().each(function (key) {
+        return callback(_this[key], key, count++);
+      });
+
+      return this;
+    };
+
+    Object.prototype.slice = function () {
+      var begin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var end = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      var result = {};
+
+      if (end === null) {
+        end = this.count();
+      }
+
+      if (begin < 0) {
+        begin = this.count() + begin;
+      }
+
+      if (end < 0) {
+        end = this.count() + end;
+      }
+
+      this.each(function (value, key, index) {
+        if (index >= begin && index < end) {
+          result[key] = value;
+        }
+      });
+
+      return result;
+    };
+
+    Object.prototype.toArray = function () {
+      var result = [];
+
+      this.each(function (value) {
+        if (Object.isObject(value)) {
+          value = value.toArray();
+        }
+
+        result.push(value);
+      });
+
+      return result;
+    };
+
+    Object.prototype.chunk = function (size) {
+      var _this2 = this;
+
+      return Math.ceil(this.count() / size).times(function (n) {
+        return _this2.slice((n - 1) * size, n * size);
+      });
+    };
+
+    Object.prototype.filter = function (callback) {
+      var result = {};
+
+      this.each(function (value, key) {
+        if (callback(value, key)) {
+          result[key] = value;
+        }
+      });
+
+      return result;
+    };
+
+    Object.prototype.first = function () {
+      var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+      var object = this;
+
+      if (callback) {
+        object = object.filter(callback);
+      }
+
+      return object.values()[0];
+    };
+
+    Object.prototype.last = function () {
+      var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+      var object = this;
+
+      if (callback) {
+        object = object.filter(callback);
+      }
+
+      return object.values()[object.count() - 1];
+    };
+
+    Object.prototype.map = function (callback) {
+      var result = {};
+
+      this.each(function (value, key, index) {
+        result[key] = callback(value, key, index);
+      });
+
+      return result;
+    };
+
+    Object.prototype.reduce = function (callback) {
+      var init = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      var result = init;
+
+      this.each(function (value, key, index) {
+        result = callback(result, value, key, index);
+      });
+
+      return result;
+    };
+
+    Object.prototype.flatten = function () {
+      return this.reduce(function (flatten, toFlatten) {
+        if (Array.isArray(toFlatten) || Object.isObject(toFlatten)) {
+          toFlatten = toFlatten.flatten();
+        }
+
+        return flatten.concat(toFlatten);
+      }, []);
+    };
+
+    Object.prototype.min = function () {
+      return this.values().min();
+    };
+
+    Object.prototype.max = function () {
+      return this.values().max();
+    };
+
+    Object.prototype.unique = function () {
+      var haystack = [];
+      var result = {};
+
+      this.each(function (value, key) {
+        if (!haystack.contains(value)) {
+          result[key] = value;
+          haystack.push(value);
+        }
+      });
+
+      return result;
+    };
+  })();
+
+  (function () {
+    String.prototype.slugify = function () {
+      return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+    };
+  })();
 
 })));
