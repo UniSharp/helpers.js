@@ -9,7 +9,7 @@
     }
 
     invert () {
-      let newInterval = new DateInterval
+      let newInterval = new DateInterval()
 
       PROPERTIES.forEach(key => {
         newInterval[`${key}s`] = this[`${key}s`] * -1
@@ -23,7 +23,7 @@
     }
 
     after (date = null) {
-      date = date || new Date
+      date = date || new Date()
 
       date.setFullYear(date.getFullYear() + this.years)
       date.setMonth(date.getMonth() + this.months)
@@ -43,7 +43,7 @@
     }
 
     Number.prototype[`${key}s`] = function () {
-      let interval = new DateInterval
+      let interval = new DateInterval()
 
       interval[`${key}s`] = this
 
