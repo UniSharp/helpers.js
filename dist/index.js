@@ -10,6 +10,30 @@
     return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
   };
 
+  var classCallCheck = function (instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  };
+
+  var createClass = function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
+
   var _extends = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
@@ -77,7 +101,7 @@
 
     Array.prototype.toArray = function () {
       return this.map(function (value) {
-        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object) {
+        if (Object.isObject(value)) {
           value = value.toArray();
         }
 
@@ -126,6 +150,78 @@
     Array.prototype.unique = function () {
       return [].concat(toConsumableArray(new Set(this)));
     };
+  })();
+
+  (function () {
+    var PROPERTIES = ['year', 'month', 'day', 'hour', 'minute', 'second', 'millisecond'];
+
+    var DateInterval = function () {
+      function DateInterval() {
+        var _this = this;
+
+        classCallCheck(this, DateInterval);
+
+        PROPERTIES.forEach(function (key) {
+          _this[key + 's'] = 0;
+        });
+      }
+
+      createClass(DateInterval, [{
+        key: 'invert',
+        value: function invert() {
+          var _this2 = this;
+
+          var newInterval = new DateInterval();
+
+          PROPERTIES.forEach(function (key) {
+            newInterval[key + 's'] = _this2[key + 's'] * -1;
+          });
+
+          return newInterval;
+        }
+      }, {
+        key: 'ago',
+        value: function ago() {
+          var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+          return this.invert().after(date);
+        }
+      }, {
+        key: 'after',
+        value: function after() {
+          var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+          date = date || new Date();
+
+          date.setFullYear(date.getFullYear() + this.years);
+          date.setMonth(date.getMonth() + this.months);
+          date.setDate(date.getDate() + this.days);
+          date.setHours(date.getHours() + this.hours);
+          date.setMinutes(date.getMinutes() + this.minutes);
+          date.setSeconds(date.getSeconds() + this.seconds);
+          date.setMilliseconds(date.getMilliseconds() + this.milliseconds);
+
+          return date;
+        }
+      }]);
+      return DateInterval;
+    }();
+
+    PROPERTIES.forEach(function (key) {
+      Number.prototype[key] = function () {
+        return this[key + 's']();
+      };
+
+      Number.prototype[key + 's'] = function () {
+        var interval = new DateInterval();
+
+        interval[key + 's'] = this;
+
+        return interval;
+      };
+    });
+
+    global.DateInterval = DateInterval;
   })();
 
   (function () {
