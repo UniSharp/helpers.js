@@ -3,13 +3,13 @@
     return this.indexOf(needle) !== -1
   }
 
-  Array.prototype.has = function (key) {
-    return {...this}.has(key)
-  }
-
-  Array.prototype.get = function (key, defaultValue = null) {
-    return {...this}.get(key, defaultValue)
-  }
+  // Array.prototype.has = function (key) {
+  //   return {...this}.has(key)
+  // }
+  //
+  // Array.prototype.get = function (key, defaultValue = null) {
+  //   return {...this}.get(key, defaultValue)
+  // }
 
   Array.prototype.count = function () {
     return this.length
@@ -45,9 +45,9 @@
     })
   }
 
-  Array.prototype.chunk = function (size) {
-    return {...this}.chunk(size).toArray()
-  }
+  // Array.prototype.chunk = function (size) {
+  //   return {...this}.chunk(size).toArray()
+  // }
 
   Array.prototype.first = function (callback = null) {
     if (!callback) {
@@ -67,9 +67,9 @@
     return array[array.count() - 1]
   }
 
-  Array.prototype.flatten = function () {
-    return {...this}.flatten().toArray()
-  }
+  // Array.prototype.flatten = function () {
+  //   return {...this}.flatten().toArray()
+  // }
 
   Array.prototype.min = function () {
     return Math.min(...this)
