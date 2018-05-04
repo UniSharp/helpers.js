@@ -1,101 +1,101 @@
-const assert = require('assert')
+import './'
 
 describe('Number', () => {
   describe('#millisecond()', () => {
     it('should return a date interval', () => {
-      assert.equal((1).millisecond() instanceof DateInterval, true)
-      assert.equal((1).millisecond().milliseconds, 1)
+      expect((1).millisecond() instanceof DateInterval).toBe(true)
+      expect((1).millisecond().milliseconds).toBe(1)
     })
   })
 
   describe('#milliseconds()', () => {
     it('should return a date interval', () => {
-      assert.equal((10).milliseconds() instanceof DateInterval, true)
-      assert.equal((10).milliseconds().milliseconds, 10)
+      expect((10).milliseconds() instanceof DateInterval).toBe(true)
+      expect((10).milliseconds().milliseconds).toBe(10)
     })
   })
 
   describe('#second()', () => {
     it('should return a date interval', () => {
-      assert.equal((1).second() instanceof DateInterval, true)
-      assert.equal((1).second().seconds, 1)
+      expect((1).second() instanceof DateInterval).toBe(true)
+      expect((1).second().seconds).toBe(1)
     })
   })
 
   describe('#seconds()', () => {
     it('should return a date interval', () => {
-      assert.equal((10).seconds() instanceof DateInterval, true)
-      assert.equal((10).seconds().seconds, 10)
+      expect((10).seconds() instanceof DateInterval).toBe(true)
+      expect((10).seconds().seconds).toBe(10)
     })
   })
 
   describe('#minute()', () => {
     it('should return a date interval', () => {
-      assert.equal((1).minute() instanceof DateInterval, true)
-      assert.equal((1).minute().minutes, 1)
+      expect((1).minute() instanceof DateInterval).toBe(true)
+      expect((1).minute().minutes).toBe(1)
     })
   })
 
   describe('#minutes()', () => {
     it('should return a date interval', () => {
-      assert.equal((10).minutes() instanceof DateInterval, true)
-      assert.equal((10).minutes().minutes, 10)
+      expect((10).minutes() instanceof DateInterval).toBe(true)
+      expect((10).minutes().minutes).toBe(10)
     })
   })
 
   describe('#hour()', () => {
     it('should return a date interval', () => {
-      assert.equal((1).hour() instanceof DateInterval, true)
-      assert.equal((1).hour().hours, 1)
+      expect((1).hour() instanceof DateInterval).toBe(true)
+      expect((1).hour().hours).toBe(1)
     })
   })
 
   describe('#hours()', () => {
     it('should return a date interval', () => {
-      assert.equal((10).hours() instanceof DateInterval, true)
-      assert.equal((10).hours().hours, 10)
+      expect((10).hours() instanceof DateInterval).toBe(true)
+      expect((10).hours().hours).toBe(10)
     })
   })
 
   describe('#day()', () => {
     it('should return a date interval', () => {
-      assert.equal((1).day() instanceof DateInterval, true)
-      assert.equal((1).day().days, 1)
+      expect((1).day() instanceof DateInterval).toBe(true)
+      expect((1).day().days).toBe(1)
     })
   })
 
   describe('#days()', () => {
     it('should return a date interval', () => {
-      assert.equal((10).days() instanceof DateInterval, true)
-      assert.equal((10).days().days, 10)
+      expect((10).days() instanceof DateInterval).toBe(true)
+      expect((10).days().days).toBe(10)
     })
   })
 
   describe('#month()', () => {
     it('should return a date interval', () => {
-      assert.equal((1).month() instanceof DateInterval, true)
-      assert.equal((1).month().months, 1)
+      expect((1).month() instanceof DateInterval).toBe(true)
+      expect((1).month().months).toBe(1)
     })
   })
 
   describe('#months()', () => {
     it('should return a date interval', () => {
-      assert.equal((10).months() instanceof DateInterval, true)
-      assert.equal((10).months().months, 10)
+      expect((10).months() instanceof DateInterval).toBe(true)
+      expect((10).months().months).toBe(10)
     })
   })
 
   describe('#year()', () => {
     it('should return a date interval', () => {
-      assert.equal((1).year() instanceof DateInterval, true)
-      assert.equal((1).year().years, 1)
+      expect((1).year() instanceof DateInterval).toBe(true)
+      expect((1).year().years).toBe(1)
     })
   })
 
   describe('#years()', () => {
     it('should return a date interval', () => {
-      assert.equal((10).years() instanceof DateInterval, true)
-      assert.equal((10).years().years, 10)
+      expect((10).years() instanceof DateInterval).toBe(true)
+      expect((10).years().years).toBe(10)
     })
   })
 })
@@ -107,8 +107,8 @@ describe('DateInterval', () => {
 
       interval.seconds = 1
 
-      assert.equal(interval.ago() instanceof Date, true)
-      assert.equal(Math.round((Date.now() - interval.ago().getTime()) / 1000), 1)
+      expect(interval.ago() instanceof Date).toBe(true)
+      expect(Math.round((Date.now() - interval.ago().getTime()) / 1000)).toBe(1)
 
       interval.milliseconds = 1
       interval.seconds = 1
@@ -118,7 +118,7 @@ describe('DateInterval', () => {
       interval.months = 1
       interval.years = 1
 
-      assert.equal(interval.ago(new Date(2002, 2, 2, 2, 2, 2, 2)).getTime(), new Date(2001, 1, 1, 1, 1, 1, 1).getTime())
+      expect(interval.ago(new Date(2002, 2, 2, 2, 2, 2, 2)).getTime()).toBe(new Date(2001, 1, 1, 1, 1, 1, 1).getTime())
     })
   })
 
@@ -128,8 +128,8 @@ describe('DateInterval', () => {
 
       interval.seconds = 1
 
-      assert.equal(interval.after() instanceof Date, true)
-      assert.equal(Math.round((interval.after().getTime() - Date.now()) / 1000), 1)
+      expect(interval.after() instanceof Date).toBe(true)
+      expect(Math.round((interval.after().getTime() - Date.now()) / 1000)).toBe(1)
 
       interval.milliseconds = 1
       interval.seconds = 1
@@ -139,7 +139,7 @@ describe('DateInterval', () => {
       interval.months = 1
       interval.years = 1
 
-      assert.equal(interval.after(new Date(2001, 1, 1, 1, 1, 1, 1)).getTime(), new Date(2002, 2, 2, 2, 2, 2, 2).getTime())
+      expect(interval.after(new Date(2001, 1, 1, 1, 1, 1, 1)).getTime()).toBe(new Date(2002, 2, 2, 2, 2, 2, 2).getTime())
     })
   })
 })

@@ -3,5 +3,8 @@
   "extends": "standard",
   "rules": {
     no-extend-native: [error, { exceptions: ['String', 'Number', 'Array', 'Object'] }]
+  },
+  "globals": {
+    "UniSharp": true
   }
 }

@@ -1,9 +1,9 @@
-const assert = require('assert')
+import './'
 
 describe('String', () => {
   describe('#slugify()', () => {
     it('should slugify a string', () => {
-      assert.equal(' A:B/C.D??E=F&G '.slugify(), 'a-b-c-d-e-f-g')
+      expect(' A:B/C.D??E=F&G '.slugify()).toBe('a-b-c-d-e-f-g')
     })
   })
 })

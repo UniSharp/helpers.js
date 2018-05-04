@@ -1,6 +1,6 @@
 {
   "name": "@unisharp/helpers.js",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "JavaScript useful helpers.",
   "main": "dist/index.js",
   "author": {
@@ -9,24 +9,23 @@
   },
   "scripts": {
     "lint": "node_modules/.bin/eslint src",
+    "test": "node_modules/.bin/jest",
     "rollup": "node_modules/.bin/rollup -c",
     "uglify": "node_modules/.bin/uglifyjs dist/index.js -c -m -o dist/index.min.js",
-    "test": "npm rum rollup && node_modules/.bin/mocha tests/index.js",
-    "build": "npm run lint && npm run test && npm run uglify"
+    "build": "npm run lint && npm run test && npm run rollup && npm run uglify"
   },
   "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "modules": false
-        }
-      ]
-    ],
-    "plugins": [
-      "external-helpers",
-      "transform-object-rest-spread"
-    ]
+    "env": {
+      "test": {
+        "presets": ["env"],
+        "plugins": ["transform-object-rest-spread"]
+      }
+    }
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   },
   "license": "MIT",
   "devDependencies": {
@@ -41,9 +40,10 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
-    "mocha": "^5.1.0",
+    "jest": "^22.4.3",
     "rollup": "^0.58.1",
     "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-node-resolve": "^3.3.0",
     "uglify-js": "^3.3.21"
   }
 }

@@ -1,4 +1,5 @@
 import babel from 'rollup-plugin-babel'
+import resolve from 'rollup-plugin-node-resolve'
 
 export default {
   input: 'src/index.js',
@@ -7,8 +8,14 @@ export default {
     format: 'umd'
   },
   plugins: [
+    resolve(),
     babel({
-      exclude: 'node_modules/**'
+      exclude: 'node_modules/**',
+      presets: [['env', { 'modules': false }]],
+      plugins: [
+        'external-helpers',
+        'transform-object-rest-spread'
+      ]
     })
   ]
 }
