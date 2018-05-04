@@ -156,6 +156,12 @@ Object.isObject([]) // false
 { a: 1, b: 2, c: 3 }.contains(4) // false
 ```
 
+`count()`
+
+```javascript
+{ a: 1, b: 2, c: 3 }.count() // 3
+```
+
 `has()`
 
 ```javascript
@@ -168,12 +174,6 @@ Object.isObject([]) // false
 ```javascript
 { a: { b: { c: 1 } } }.get('a.b.c', 'default') // 1
 { a: { b: { c: 1 } } }.get('a.b.c', 'default') // 'default'
-```
-
-`count()`
-
-```javascript
-{ a: 1, b: 2, c: 3 }.count() // 3
 ```
 
 `sum()`
@@ -205,6 +205,12 @@ Object.isObject([]) // false
 { a: 1, b: 2, c: 3 }.slice(1, -1) // { b: 2 }
 ```
 
+`reduce()`
+
+```javascript
+{ a: 1, b: 2, c: 3 }.reduce((carry, value, key, index) => carry + value) // 6
+```
+
 `toArray()`
 
 ```javascript
@@ -221,6 +227,20 @@ Object.isObject([]) // false
 
 ```javascript
 { a: 1, b: 2, c: 3 }.filter((value, key, index) => value > 1) // { b: 2, c: 3 }
+```
+
+`isEmpty()`
+
+```javascript
+{}.isEmpty()                   // true
+{ a: 1, b: 2, c: 3 }.isEmpty() // false
+```
+
+`isNotEmpty()`
+
+```javascript
+{}.isNotEmpty()                   // false
+{ a: 1, b: 2, c: 3 }.isNotEmpty() // true
 ```
 
 `first()`
@@ -241,12 +261,6 @@ Object.isObject([]) // false
 
 ```javascript
 { a: 1, b: 2, c: 3 }.map((value, key, index) => value * 2) // { a: 2, b: 4, c: 6 }
-```
-
-`reduce()`
-
-```javascript
-{ a: 1, b: 2, c: 3 }.reduce((carry, value, key, index) => carry + value) // 6
 ```
 
 `flatten()`
