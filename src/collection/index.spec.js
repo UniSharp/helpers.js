@@ -4,7 +4,11 @@ const c = UniSharp.Helpers.collection
 
 describe('Collection', () => {
   it('Accept only Array or Object', () => {
-    expect(c('slice', 'Hello World')).toEqual('Hello World')
+    expect(c('slice', 'Hello World')).toBe('Hello World')
+  })
+
+  it('Run own method first', () => {
+    expect(c('count', { count: () => 10 })).toBe(10)
   })
 
   describe('#keys()', () => {

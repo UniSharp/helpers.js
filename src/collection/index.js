@@ -210,7 +210,8 @@
   }
 
   UniSharp.Helpers.collection = (method, items, ...args) => {
-    if (!isa(items) && !iso(items)) {
+    if ((!isa(items) && !iso(items)) ||
+        (iso(items) && has(items, method))) {
       return items[method](...args)
     }
 
