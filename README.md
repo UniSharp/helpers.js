@@ -18,6 +18,16 @@ yarn add @unisharp/helpers.js
 
 ## Getting Started
 
+First, add our babel plugin to your bable configuration.
+
+```
+{
+  "plugins": ["@unisharp/helpers.js/plugin/lib"]
+}
+```
+
+Then require main library to happy coding.
+
 ```javascript
 require('@unisharp/helpers.js')
 
