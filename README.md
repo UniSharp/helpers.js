@@ -29,129 +29,27 @@ require('@unisharp/helpers.js')
 
 ## Usage
 
-### Array
-
-`contains()`
-
-```javascript
-[1, 2, 3, 4, 5].contains(3) // true
-[1, 2, 3, 4, 5].contains(6) // false
-```
-
-`has()`
-
-```javascript
-[1, 2, 3, 4, 5].has(2) // true
-[1, 2, 3, 4, 5].has(5) // false
-```
-
-`get()`
-
-```javascript
-[1, 2, 3, 4, 5].get(2, 'default') // 3
-[1, 2, 3, 4, 5].get(5, 'default') // 'default'
-```
-
-`count()`
-
-```javascript
-[1, 2, 3, 4, 5].count() // 5
-```
-
-`sum()`
-
-```javascript
-[1, 2, 3, 4, 5].sum() // 15
-```
-
-`avg()`
-
-```javascript
-[1, 2, 3, 4, 5].avg() // 3
-```
-
-`each()`
-
-```javascript
-[1, 2, 3, 4, 5].each((value, index) => {
-  //
-})
-```
-
-`toArray()`
-
-```javascript
-[{ a: 1, b: 2 }, { c: 3 }].toArray() // [1, 2, 3]
-```
-
-`chunk()`
-
-```javascript
-[1, 2, 3, 4, 5].chunk(2) // [[1, 2], [3, 4], [5]]
-```
-
-`first()`
-
-```javascript
-[1, 2, 3, 4, 5].first() // 1
-[1, 2, 3, 4, 5].first(n => n > 1) // 2
-```
-
-`last()`
-
-```javascript
-[1, 2, 3, 4, 5].last() // 5
-[1, 2, 3, 4, 5].last(n => n < 5) // 4
-```
-
-`flatten()`
-
-```javascript
-[[1, 2], [3, 4], [5]].flatten() // [1, 2, 3, 4, 5]
-```
-
-`min()`
-
-```javascript
-[1, 2, 3, 4, 5].min() // 1
-```
-
-`max()`
-
-```javascript
-[1, 2, 3, 4, 5].max() // 5
-```
-
-`unique()`
-
-```javascript
-[1, 1, 2, 2, 3].unique() // [1, 2, 3]
-```
-
-### Object
-
-`isObject()`
-
-```javascript
-Object.isObject({}) // true
-Object.isObject([]) // false
-```
+### Collection
 
 `keys()`
 
 ```javascript
+[1, 2, 3, 4, 5].keys()      // [0, 1, 2, 3, 4]
 { a: 1, b: 2, c: 3 }.keys() // ['a', 'b', 'c']
 ```
 
 `values()`
 
 ```javascript
+[1, 2, 3, 4, 5].values()      // [1, 2, 3, 4, 5]
 { a: 1, b: 2, c: 3 }.values() // [1, 2, 3]
 ```
 
 `contains()`
 
 ```javascript
+[1, 2, 3, 4, 5].contains(3)      // true
+[1, 2, 3, 4, 5].contains(6)      // false
 { a: 1, b: 2, c: 3 }.contains(3) // true
 { a: 1, b: 2, c: 3 }.contains(4) // false
 ```
@@ -159,12 +57,15 @@ Object.isObject([]) // false
 `count()`
 
 ```javascript
+[1, 2, 3, 4, 5].count()      // 5
 { a: 1, b: 2, c: 3 }.count() // 3
 ```
 
 `has()`
 
 ```javascript
+[1, 2, 3, 4, 5].has(2)              // true
+[1, 2, 3, 4, 5].has(5)              // false
 { a: { b: { c: 1 } } }.has('a.b.c') // true
 { a: { b: { c: 1 } } }.has('a.b.d') // false
 ```
@@ -172,6 +73,8 @@ Object.isObject([]) // false
 `get()`
 
 ```javascript
+[1, 2, 3, 4, 5].get(2, 'default')              // 3
+[1, 2, 3, 4, 5].get(5, 'default')              // 'default'
 { a: { b: { c: 1 } } }.get('a.b.c', 'default') // 1
 { a: { b: { c: 1 } } }.get('a.b.c', 'default') // 'default'
 ```
@@ -179,26 +82,31 @@ Object.isObject([]) // false
 `sum()`
 
 ```javascript
+[1, 2, 3, 4, 5].sum()      // 15
 { a: 1, b: 2, c: 3 }.sum() // 6
 ```
 
 `avg()`
 
 ```javascript
+[1, 2, 3, 4, 5].avg()      // 3
 { a: 1, b: 2, c: 3 }.avg() // 2
 ```
 
 `each()`
 
 ```javascript
-{ a: 1, b: 2, c: 3 }.each((value, key, index) => {
-  //
-})
+[1, 2, 3, 4, 5].each((value, index) => { /* ... */ })
+{ a: 1, b: 2, c: 3 }.each((value, key, index) => { /* ... */ })
 ```
 
 `slice()`
 
 ```javascript
+[1, 2, 3, 4, 5].slice(1)          // [2, 3, 4, 5]
+[1, 2, 3, 4, 5].slice(-1)         // [5]
+[1, 2, 3, 4, 5].slice(1, 2)       // [2]
+[1, 2, 3, 4, 5].slice(1, -1)      // [2, 3, 4]
 { a: 1, b: 2, c: 3 }.slice(1)     // { b: 2, c: 3 }
 { a: 1, b: 2, c: 3 }.slice(-1)    // { c: 3 }
 { a: 1, b: 2, c: 3 }.slice(1, 2)  // { b: 2 }
@@ -208,30 +116,36 @@ Object.isObject([]) // false
 `reduce()`
 
 ```javascript
+[1, 2, 3, 4, 5].reduce((carry, value, index) => carry + value)           // 15
 { a: 1, b: 2, c: 3 }.reduce((carry, value, key, index) => carry + value) // 6
 ```
 
 `toArray()`
 
 ```javascript
+[{ a: 1, b: 2 }, { c: 3 }].toArray()        // [1, 2, 3]
 { a: { a: 1, b: 2 }, b: { c: 3 }}.toArray() // [1, 2, 3]
 ```
 
 `chunk()`
 
 ```javascript
+[1, 2, 3, 4, 5].chunk(2)      // [[1, 2], [3, 4], [5]]
 { a: 1, b: 2, c: 3 }.chunk(2) // [{ a: 1, b: 2 }, { c: 3 }]
 ```
 
 `filter()`
 
 ```javascript
+[1, 2, 3, 4, 5].filter((value, index) => value > 1)           // [2, 3, 4, 5]
 { a: 1, b: 2, c: 3 }.filter((value, key, index) => value > 1) // { b: 2, c: 3 }
 ```
 
 `isEmpty()`
 
 ```javascript
+[].isEmpty()                   // true
+[1, 2, 3, 4, 5].isEmpty()      // false
 {}.isEmpty()                   // true
 { a: 1, b: 2, c: 3 }.isEmpty() // false
 ```
@@ -239,6 +153,8 @@ Object.isObject([]) // false
 `isNotEmpty()`
 
 ```javascript
+[].isNotEmpty()                   // false
+[1, 2, 3, 4, 5].isNotEmpty()      // true
 {}.isNotEmpty()                   // false
 { a: 1, b: 2, c: 3 }.isNotEmpty() // true
 ```
@@ -246,45 +162,63 @@ Object.isObject([]) // false
 `first()`
 
 ```javascript
-{ a: 1, b: 2, c: 3 }.first() // 1
+[1, 2, 3, 4, 5].first()                // 1
+[1, 2, 3, 4, 5].first(n => n > 1)      // 2
+{ a: 1, b: 2, c: 3 }.first()           // 1
 { a: 1, b: 2, c: 3 }.first(n => n > 1) // 2
 ```
 
 `last()`
 
 ```javascript
-{ a: 1, b: 2, c: 3 }.last() // 3
+[1, 2, 3, 4, 5].last()                // 5
+[1, 2, 3, 4, 5].last(n => n < 5)      // 4
+{ a: 1, b: 2, c: 3 }.last()           // 3
 { a: 1, b: 2, c: 3 }.last(n => n < 3) // 2
 ```
 
 `map()`
 
 ```javascript
+[1, 2, 3, 4, 5].map((value, index) => value * 2)           // [2, 4, 6, 8, 10]
 { a: 1, b: 2, c: 3 }.map((value, key, index) => value * 2) // { a: 2, b: 4, c: 6 }
 ```
 
 `flatten()`
 
 ```javascript
+[[1, 2], [3, 4], [5]].flatten() // [1, 2, 3, 4, 5]
 { a: { a: 1, b: 2 }, b: { c: 3 } }.flatten() // [1, 2, 3]
 ```
 
 `min()`
 
 ```javascript
+[1, 2, 3, 4, 5].min()      // 1
 { a: 1, b: 2, c: 3 }.min() // 1
 ```
 
 `max()`
 
 ```javascript
+[1, 2, 3, 4, 5].max()      // 5
 { a: 1, b: 2, c: 3 }.max() // 3
 ```
 
 `unique()`
 
 ```javascript
+[1, 1, 2, 2, 3].unique()      // [1, 2, 3]
 { a: 1, b: 2, c: 2 }.unique() // { a: 1, b: 2 }
+```
+
+### Object
+
+`isObject()`
+
+```javascript
+Object.isObject({}) // true
+Object.isObject([]) // false
 ```
 
 ### String
