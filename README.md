@@ -233,6 +233,13 @@ Object.isObject([]) // false
 
 ### String
 
+`random()`
+
+```javascript
+String.random()   // 'hnq6dmd5f9keo20d'
+String.random(10) // 'erbzjw0rks'
+```
+
 `slugify()`
 
 ```javascript
