@@ -310,7 +310,7 @@
         args[_key - 2] = arguments[_key];
       }
 
-      if (!isa(items) && !iso(items)) {
+      if (!isa(items) && !iso(items) || iso(items) && has(items, method)) {
         return items[method].apply(items, args);
       }
 
@@ -617,6 +617,18 @@
   })();
 
   (function () {
+    String.random = function () {
+      var length = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 16;
+
+      var string = '';
+
+      while (string.length < length) {
+        string += Math.random().toString(36).slice(2);
+      }
+
+      return string.slice(-length);
+    };
+
     String.prototype.slugify = function () {
       return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
     };
