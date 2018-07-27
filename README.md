@@ -215,6 +215,26 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.max() // 3
 ```
 
+`swap()`
+
+```javascript
+[1, 2, 3, 4, 5].swap(0, 1)          // [2, 1, 3, 4, 5]
+{ a: 1, b: 2, c: 3 }.swap('a', 'b') // { a: 2, b: 1, c: 3 }
+```
+
+`shuffle()`
+
+```javascript
+[1, 2, 3, 4, 5].shuffle() // [3, 5, 1, 4, 2]
+```
+
+`take()`
+
+```javascript
+[1, 2, 3, 4, 5].take(2)      // [1, 2]
+{ a: 1, b: 2, c: 3 }.swap(2) // { a: 1, b: 2 }
+```
+
 `unique()`
 
 ```javascript
@@ -244,6 +264,25 @@ String.random(10) // 'erbzjw0rks'
 
 ```javascript
 'Hello World'.slugify() // 'hello-world'
+```
+
+`stripTags()`
+
+```javascript
+'<h1>Hello World</h1>'.stripTags() // 'Hello World'
+```
+
+`limit()`
+
+```javascript
+'Hello World'.limit(5)        // 'Hello...'
+'Hello World'.limit(5, '***') // 'Hello'***')'
+```
+
+`nl2br()`
+
+```javascript
+'Hello\nWorld'.nl2br() // 'Hello<br>World'
 ```
 
 ### Number
