@@ -4,6 +4,9 @@ UniSharp.Helpers.collection('map', UniSharp.Helpers.collection('map', foo, value
 UniSharp.Helpers.collection('map', foo.bar, value => value);
 UniSharp.Helpers.collection('map', UniSharp.Helpers.collection('map', foo.bar, value => value), value => value);
 
+UniSharp.Helpers.collection('map', foo.bar.baz, value => value);
+UniSharp.Helpers.collection('map', UniSharp.Helpers.collection('map', foo.bar.baz, value => value), value => value);
+
 UniSharp.Helpers.collection('map', [1, 2, 3], value => value);
 UniSharp.Helpers.collection('map', UniSharp.Helpers.collection('map', [1, 2, 3], value => value), value => value);
 
