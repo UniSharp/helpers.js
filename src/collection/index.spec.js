@@ -342,6 +342,33 @@ describe('Collection', () => {
     })
   })
 
+  describe('#swap()', () => {
+    it('should swap two value of given keys', () => {
+      expect(c('swap', [1, 2, 3], 1, 2)).toEqual([1, 3, 2])
+      expect(c('swap', { a: 1, b: 2, c: 3 }, 'b', 'c')).toEqual({ a: 1, b: 3, c: 2 })
+    })
+  })
+
+  describe('#shuffle()', () => {
+    it('should shuffle the itmes', () => {
+      let originalRandom = Math.random
+
+      Math.random = () => 0
+
+      expect(c('shuffle', [1, 2, 3])).toEqual([3, 1, 2])
+      expect(c('shuffle', { a: 1, b: 2, c: 3 })).toEqual({ a: 1, b: 2, c: 3 })
+
+      Math.random = originalRandom
+    })
+  })
+
+  describe('#take()', () => {
+    it('should return a new collection with the specified number of items', () => {
+      expect(c('take', [1, 2, 3, 4, 5], 3)).toEqual([1, 2, 3])
+      expect(c('take', { a: 1, b: 2, c: 3, d: 4, e: 5 }, 3)).toEqual({ a: 1, b: 2, c: 3 })
+    })
+  })
+
   describe('#unique()', () => {
     it('should return all of the unique items', () => {
       expect(c('unique', [1, 2, 2])).toEqual([1, 2])

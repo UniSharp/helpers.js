@@ -21,6 +21,9 @@ const METHODS = [
   'flatten',
   'min',
   'max',
+  'swap',
+  'shuffle',
+  'take',
   'unique'
 ]
 

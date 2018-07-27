@@ -169,6 +169,32 @@
   }
   const min = items => Math.min(...values(items))
   const max = items => Math.max(...values(items))
+  const swap = (items, from, to) => {
+    let result = slice(items)
+    let temp = result[from]
+
+    result[from] = result[to]
+    result[to] = temp
+
+    return result
+  }
+  const shuffle = items => {
+    if (iso(items)) {
+      return items
+    }
+
+    let length = count(items)
+    let result = slice(items)
+
+    for (let i = 0; i < length; i++) {
+      let target = Math.floor(Math.random() * length)
+
+      result = swap(result, i, target)
+    }
+
+    return reduce(result, (carry, item) => ([...carry, item]), [])
+  }
+  const take = (items, limit) => slice(items, 0, limit)
   const unique = items => {
     let haystack = []
     let result = {}
@@ -206,6 +232,9 @@
     flatten,
     min,
     max,
+    swap,
+    shuffle,
+    take,
     unique
   }
 
