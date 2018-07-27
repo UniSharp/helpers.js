@@ -265,6 +265,36 @@
     var max = function max(items) {
       return Math.max.apply(Math, toConsumableArray(values(items)));
     };
+    var swap = function swap(items, from, to) {
+      var result = slice(items);
+      var temp = result[from];
+
+      result[from] = result[to];
+      result[to] = temp;
+
+      return result;
+    };
+    var shuffle = function shuffle(items) {
+      if (iso(items)) {
+        return items;
+      }
+
+      var length = count(items);
+      var result = slice(items);
+
+      for (var i = 0; i < length; i++) {
+        var target = Math.floor(Math.random() * length);
+
+        result = swap(result, i, target);
+      }
+
+      return reduce(result, function (carry, item) {
+        return [].concat(toConsumableArray(carry), [item]);
+      }, []);
+    };
+    var take = function take(items, limit) {
+      return slice(items, 0, limit);
+    };
     var unique = function unique(items) {
       var haystack = [];
       var result = {};
@@ -302,6 +332,9 @@
       flatten: flatten,
       min: min,
       max: max,
+      swap: swap,
+      shuffle: shuffle,
+      take: take,
       unique: unique
     };
 
@@ -439,6 +472,20 @@
 
     String.prototype.slugify = function () {
       return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+    };
+
+    String.prototype.stripTags = function () {
+      return this.replace(/<\/?[a-z0-9]+.*?>/ig, '');
+    };
+
+    String.prototype.limit = function (length) {
+      var suffix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '...';
+
+      return this.slice(0, length) + suffix;
+    };
+
+    String.prototype.nl2br = function () {
+      return this.replace(/\r\n|\n\r|\n|\r/g, '<br>');
     };
   })();
 
