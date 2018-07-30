@@ -243,9 +243,10 @@ require('@unisharp/helpers.js')
 `pluck()`
 
 ```javascript
-[[1, 2, 3], [1, 2, 3]].pluck(0)                     // [1, 1]
-[{ a: 1, b: 2 }, { a: 1, b: 2 }].pluck('a')         // [1, 1]
-{ a: { a: 1, b: 2 }, b: { a: 1, b: 2 } }.pluck('a') // { a: 1, b: 1 }
+[[1, 2, 3], [1, 2, 3]].pluck(0)                      // [1, 1]
+[{ a: 1, b: 2 }, { a: 1, b: 2 }].pluck('a')          // [1, 1]
+{ a: { a: 1, b: 2 }, b: { a: 1, b: 2 } }.pluck('a')  // [1, 1]
+[{ a: 1, b: 'a' }, { a: 2, b: 'b' }].pluck('a', 'b') // { a: 1, b: 2 }
 ```
 
 `reject()`

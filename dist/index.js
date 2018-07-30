@@ -34,6 +34,21 @@
     };
   }();
 
+  var defineProperty = function (obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  };
+
   var _extends = Object.assign || function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
@@ -333,10 +348,15 @@
       return callback(items);
     };
 
-    var pluck = function pluck(items, key) {
-      return map(items, function (item) {
-        return get$$1(item, key);
-      });
+    var pluck = function pluck(items, value) {
+      var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      return reduce(items, function (result, row) {
+        if (key === null) {
+          return [].concat(toConsumableArray(result), [get$$1(row, value)]);
+        }
+
+        return _extends({}, result, defineProperty({}, get$$1(row, key), get$$1(row, value)));
+      }, key === null ? [] : {});
     };
 
     var reject = function reject(items) {

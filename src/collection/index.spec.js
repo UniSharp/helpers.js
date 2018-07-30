@@ -368,7 +368,10 @@ describe('Collection', () => {
     it('should retrive all of the values for a given key', () => {
       expect(c('pluck', [[1, 2, 3], [1, 2, 3]], 0)).toEqual([1, 1])
       expect(c('pluck', [{ a: 1, b: 2 }, { a: 1, b: 2 }], 'a')).toEqual([1, 1])
-      expect(c('pluck', { a: { a: 1, b: 2 }, b: { a: 1, b: 2 } }, 'a')).toEqual({ a: 1, b: 1 })
+      expect(c('pluck', { a: { a: 1, b: 2 }, b: { a: 1, b: 2 } }, 'a')).toEqual([1, 1])
+
+      expect(c('pluck', [{ a: 1, b: 'a' }, { a: 2, b: 'b' }], 'a', 'b')).toEqual({ a: 1, b: 2 })
+      expect(c('pluck', { a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } }, 'a', 'b')).toEqual({ a: 1, b: 2 })
     })
   })
 

@@ -213,7 +213,17 @@
 
   const pipe = (items, callback) => callback(items)
 
-  const pluck = (items, key) => map(items, item => get(item, key))
+  const pluck = (items, value, key = null) => reduce(
+    items,
+    (result, row) => {
+      if (key === null) {
+        return [...result, get(row, value)]
+      }
+
+      return { ...result, [get(row, key)]: get(row, value) }
+    },
+    key === null ? [] : {}
+  )
 
   const reject = (items, callback = null) => {
     if (callback === null) {
