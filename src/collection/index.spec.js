@@ -247,12 +247,27 @@ describe('Collection', () => {
     })
   })
 
+  describe('#except', () => {
+    it('should return the items with the specified keys', () => {
+      expect(c('except', [1, 2, 3], [0, 1])).toEqual([3])
+      expect(c('except', { a: 1, b: 2, c: 3 }, ['a', 'b'])).toEqual({ c: 3 })
+
+      expect(c('except', [1, 2, 3], 0, 1)).toEqual([3])
+      expect(c('except', { a: 1, b: 2, c: 3 }, 'a', 'b')).toEqual({ c: 3 })
+    })
+  })
+
   describe('#filter', () => {
     it('should filter the items using the given callback', () => {
       expect(c('filter', [1, 2, 3], value => value > 1)).toEqual([2, 3])
       expect(c('filter', [1, 2, 3], (value, key, index) => key === 1 && index === 1)).toEqual([2])
       expect(c('filter', { a: 1, b: 2, c: 3 }, value => value > 1)).toEqual({ b: 2, c: 3 })
       expect(c('filter', { a: 1, b: 2, c: 3 }, (value, key, index) => key === 'b' && index === 1)).toEqual({ b: 2 })
+    })
+
+    it('should filter the items using the given value', () => {
+      expect(c('filter', [1, 2, 3], 1)).toEqual([1])
+      expect(c('filter', { a: 1, b: 2, c: 3 }, 1)).toEqual({ a: 1 })
     })
 
     it('should filter the items without callback', () => {
@@ -339,6 +354,40 @@ describe('Collection', () => {
     it('should return the maximum value', () => {
       expect(c('max', [1, 2, 3])).toBe(3)
       expect(c('max', { a: 1, b: 2, c: 3 })).toBe(3)
+    })
+  })
+
+  describe('#pipe', () => {
+    it('should pass the items to the given callback and return the result', () => {
+      expect(c('pipe', [1, 2, 3], items => [...items, 4])).toEqual([1, 2, 3, 4])
+      expect(c('pipe', { a: 1, b: 2, c: 3 }, items => ({ ...items, b: 4 }))).toEqual({ a: 1, b: 2, c: 3, b: 4 })
+    })
+  })
+
+  describe('#pluck', () => {
+    it('should retrive all of the values for a given key', () => {
+      expect(c('pluck', [[1, 2, 3], [1, 2, 3]], 0)).toEqual([1, 1])
+      expect(c('pluck', [{ a: 1, b: 2 }, { a: 1, b: 2 }], 'a')).toEqual([1, 1])
+      expect(c('pluck', { a: { a: 1, b: 2 }, b: { a: 1, b: 2 } }, 'a')).toEqual({ a: 1, b: 1 })
+    })
+  })
+
+  describe('#reject', () => {
+    it('should reject the items using the given callback', () => {
+      expect(c('reject', [1, 2, 3], value => value > 1)).toEqual([1])
+      expect(c('reject', [1, 2, 3], (value, key, index) => key === 1 && index === 1)).toEqual([1, 3])
+      expect(c('reject', { a: 1, b: 2, c: 3 }, value => value > 1)).toEqual({ a: 1 })
+      expect(c('reject', { a: 1, b: 2, c: 3 }, (value, key, index) => key === 'b' && index === 1)).toEqual({ a: 1, c: 3 })
+    })
+
+    it('should reject the items using the given value', () => {
+      expect(c('reject', [1, 2, 3], 1)).toEqual([2, 3])
+      expect(c('reject', { a: 1, b: 2, c: 3 }, 1)).toEqual({ b: 2, c: 3 })
+    })
+
+    it('should throw error without callback', () => {
+      expect(() => c('reject', ['', false, 0, 1, 2, 3])).toThrow('Callback function is required.')
+      expect(() => c('reject', { a: '', b: false, c: 0, d: 1, e: 2, f: 3 })).toThrow('Callback function is required.')
     })
   })
 

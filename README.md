@@ -144,6 +144,15 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.chunk(2) // [{ a: 1, b: 2 }, { c: 3 }]
 ```
 
+`except()`
+
+```javascript
+[1, 2, 3, 4, 5].except(0, 1, 2)         // [4, 5]
+{ a: 1, b: 2, c: 3 }.except('a', 'b')   // { c: 3 }
+[1, 2, 3, 4, 5].except([0, 1, 2])       // [4, 5]
+{ a: 1, b: 2, c: 3 }.except(['a', 'b']) // { c: 3 }
+```
+
 `filter()`
 
 ```javascript
@@ -213,6 +222,37 @@ require('@unisharp/helpers.js')
 ```javascript
 [1, 2, 3, 4, 5].max()      // 5
 { a: 1, b: 2, c: 3 }.max() // 3
+```
+
+`only()`
+
+```javascript
+[1, 2, 3, 4, 5].only(0, 1, 2)         // [1, 2, 3]
+{ a: 1, b: 2, c: 3 }.only('a', 'b')   // { a: 1, b: 2 }
+[1, 2, 3, 4, 5].only([0, 1, 2])       // [1, 2, 3]
+{ a: 1, b: 2, c: 3 }.only(['a', 'b']) // { a: 1, b: 2 }
+```
+
+`pipe()`
+
+```javascript
+[1, 2, 3, 4, 5].pipe(items => [...items, 6])           // [1, 2, 3, 4, 5, 6]
+{ a: 1, b: 2, c: 3 }.pipe(items => { ...items, d: 4 }) // { a: 1, b: 2, c: 3, d: 4 }
+```
+
+`pluck()`
+
+```javascript
+[[1, 2, 3], [1, 2, 3]].pluck(0)                     // [1, 1]
+[{ a: 1, b: 2 }, { a: 1, b: 2 }].pluck('a')         // [1, 1]
+{ a: { a: 1, b: 2 }, b: { a: 1, b: 2 } }.pluck('a') // { a: 1, b: 1 }
+```
+
+`reject()`
+
+```javascript
+[1, 2, 3, 4, 5].reject((value, index) => value > 4)           // [1, 2, 3, 4]
+{ a: 1, b: 2, c: 3 }.reject((value, key, index) => value > 2) // { a: 1, b: 2 }
 ```
 
 `swap()`

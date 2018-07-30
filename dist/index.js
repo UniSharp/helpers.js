@@ -65,34 +65,31 @@
     var isa = function isa(value) {
       return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Array;
     };
+
     var iso = function iso(value) {
       return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object;
     };
 
-    var keys = function keys(items) {
-      var keys = Object.keys(items);
+    var isf = function isf(value) {
+      return typeof value === 'function';
+    };
 
-      if (isa(items)) {
-        keys = keys.map(function (k) {
-          return +k;
-        });
+    var normalizeCallback = function normalizeCallback(callback) {
+      if (isf(callback)) {
+        return callback;
       }
 
-      return keys;
-    };
-    var values = function values(items) {
-      if (isa(items)) {
-        return items;
+      if (callback === null) {
+        return function (value) {
+          return value;
+        };
       }
 
-      return Object.values(items);
+      return function (value) {
+        return value === callback;
+      };
     };
-    var contains = function contains(haystack, needle) {
-      return values(haystack).indexOf(needle) !== -1;
-    };
-    var count = function count(items) {
-      return keys(items).length;
-    };
+
     var _has = function _has(items, key) {
       var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
@@ -120,21 +117,54 @@
 
       return _has(target, key, defaultValue);
     };
+
+    var keys = function keys(items) {
+      var keys = Object.keys(items);
+
+      if (isa(items)) {
+        keys = keys.map(function (k) {
+          return +k;
+        });
+      }
+
+      return keys;
+    };
+
+    var values = function values(items) {
+      if (isa(items)) {
+        return items;
+      }
+
+      return Object.values(items);
+    };
+
+    var contains = function contains(haystack, needle) {
+      return values(haystack).indexOf(needle) !== -1;
+    };
+
+    var count = function count(items) {
+      return keys(items).length;
+    };
+
     var has = function has(items, key) {
       return _has(items, key)[0];
     };
+
     var get$$1 = function get$$1(items, key) {
       var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
       return _has(items, key, defaultValue)[1];
     };
+
     var sum = function sum(items) {
       return values(items).reduce(function (carry, n) {
         return carry + +n;
       }, 0);
     };
+
     var avg = function avg(items) {
       return sum(items) / count(items);
     };
+
     var each = function each(items, callback) {
       var c = 0;
       var k = keys(items);
@@ -147,6 +177,7 @@
 
       return items;
     };
+
     var slice = function slice(items) {
       var begin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
       var end = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
@@ -177,6 +208,7 @@
 
       return result;
     };
+
     var reduce = function reduce(items, callback) {
       var initValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
@@ -188,6 +220,7 @@
 
       return result;
     };
+
     var toArray$$1 = function toArray$$1(items) {
       return reduce(items, function (carry, value) {
         if (iso(value)) {
@@ -197,19 +230,29 @@
         return [].concat(toConsumableArray(carry), [value]);
       }, []);
     };
+
     var chunk = function chunk(items, size) {
       return reduce([].concat(toConsumableArray(Array(Math.ceil(count(items) / size)).keys())), function (carry, n) {
         return [].concat(toConsumableArray(carry), [slice(items, n * size, (n + 1) * size)]);
       }, []);
     };
+
+    var except = function except(items) {
+      for (var _len = arguments.length, keys = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        keys[_key - 1] = arguments[_key];
+      }
+
+      keys = flatten(keys);
+
+      return filter(items, function (value, key) {
+        return !contains(keys, key);
+      });
+    };
+
     var filter = function filter(items) {
       var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-      if (!callback) {
-        callback = function callback(value) {
-          return value;
-        };
-      }
+      callback = normalizeCallback(callback);
 
       var result = reduce(items, function (carry, value, key, index) {
         if (callback(value, key, index)) {
@@ -221,12 +264,15 @@
 
       return iso(items) ? result : values(result);
     };
+
     var isEmpty = function isEmpty(items) {
       return !count(items);
     };
+
     var isNotEmpty = function isNotEmpty(items) {
       return !isEmpty(items);
     };
+
     var first = function first(items) {
       var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
@@ -236,6 +282,7 @@
 
       return isNotEmpty(items) ? values(items)[0] : null;
     };
+
     var last = function last(items) {
       var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
@@ -245,6 +292,7 @@
 
       return isNotEmpty(items) ? values(items)[count(items) - 1] : null;
     };
+
     var map = function map(items, callback) {
       var result = {};
 
@@ -254,17 +302,57 @@
 
       return iso(items) ? result : values(result);
     };
+
     var flatten = function flatten(items) {
       return reduce(items, function (carry, value) {
         return isa(value) || iso(value) ? [].concat(toConsumableArray(carry), toConsumableArray(flatten(value))) : [].concat(toConsumableArray(carry), [value]);
       }, []);
     };
+
     var min = function min(items) {
       return Math.min.apply(Math, toConsumableArray(values(items)));
     };
+
     var max = function max(items) {
       return Math.max.apply(Math, toConsumableArray(values(items)));
     };
+
+    var only = function only(items) {
+      for (var _len2 = arguments.length, keys = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        keys[_key2 - 1] = arguments[_key2];
+      }
+
+      keys = flatten(keys);
+
+      return filter(items, function (value, key) {
+        return contains(keys, key);
+      });
+    };
+
+    var pipe = function pipe(items, callback) {
+      return callback(items);
+    };
+
+    var pluck = function pluck(items, key) {
+      return map(items, function (item) {
+        return get$$1(item, key);
+      });
+    };
+
+    var reject = function reject(items) {
+      var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+      if (callback === null) {
+        throw new Error('Callback function is required.');
+      }
+
+      callback = normalizeCallback(callback);
+
+      return filter(items, function (value, key, index) {
+        return !callback(value, key, index);
+      });
+    };
+
     var swap = function swap(items, from, to) {
       var result = slice(items);
       var temp = result[from];
@@ -274,6 +362,7 @@
 
       return result;
     };
+
     var shuffle = function shuffle(items) {
       if (iso(items)) {
         return items;
@@ -292,9 +381,11 @@
         return [].concat(toConsumableArray(carry), [item]);
       }, []);
     };
+
     var take = function take(items, limit) {
       return slice(items, 0, limit);
     };
+
     var unique = function unique(items) {
       var haystack = [];
       var result = {};
@@ -323,6 +414,7 @@
       reduce: reduce,
       toArray: toArray$$1,
       chunk: chunk,
+      except: except,
       filter: filter,
       isEmpty: isEmpty,
       isNotEmpty: isNotEmpty,
@@ -332,6 +424,10 @@
       flatten: flatten,
       min: min,
       max: max,
+      only: only,
+      pipe: pipe,
+      pluck: pluck,
+      reject: reject,
       swap: swap,
       shuffle: shuffle,
       take: take,
@@ -339,8 +435,8 @@
     };
 
     UniSharp.Helpers.collection = function (method, items) {
-      for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-        args[_key - 2] = arguments[_key];
+      for (var _len3 = arguments.length, args = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
+        args[_key3 - 2] = arguments[_key3];
       }
 
       if (!isa(items) && !iso(items) || iso(items) && has(items, method)) {

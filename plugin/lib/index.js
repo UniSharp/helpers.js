@@ -38,4 +38,4 @@ exports.default = function (_ref) {
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var METHODS = ['keys', 'values', 'contains', 'count', 'has', 'get', 'sum', 'avg', 'each', 'slice', 'reduce', 'toArray', 'chunk', 'filter', 'isEmpty', 'isNotEmpty', 'first', 'last', 'map', 'flatten', 'min', 'max', 'swap', 'shuffle', 'take', 'unique'];
+var METHODS = ['keys', 'values', 'contains', 'count', 'has', 'get', 'sum', 'avg', 'each', 'slice', 'reduce', 'toArray', 'chunk', 'except', 'filter', 'isEmpty', 'isNotEmpty', 'first', 'last', 'map', 'flatten', 'min', 'max', 'only', 'pipe', 'pluck', 'reject', 'swap', 'shuffle', 'take', 'unique'];

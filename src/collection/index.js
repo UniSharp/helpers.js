@@ -3,26 +3,23 @@
   UniSharp.Helpers = UniSharp.Helpers || {}
 
   const isa = value => value && typeof value === 'object' && value.constructor === Array
+
   const iso = value => value && typeof value === 'object' && value.constructor === Object
 
-  const keys = (items) => {
-    let keys = Object.keys(items)
+  const isf = value => typeof value === 'function'
 
-    if (isa(items)) {
-      keys = keys.map(k => +k)
+  const normalizeCallback = (callback) => {
+    if (isf(callback)) {
+      return callback
     }
 
-    return keys
-  }
-  const values = items => {
-    if (isa(items)) {
-      return items
+    if (callback === null) {
+      return value => value
     }
 
-    return Object.values(items)
+    return value => value === callback
   }
-  const contains = (haystack, needle) => values(haystack).indexOf(needle) !== -1
-  const count = items => keys(items).length
+
   const _has = (items, key, defaultValue = null) => {
     if (!isa(key)) {
       key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
@@ -48,10 +45,37 @@
 
     return _has(target, key, defaultValue)
   }
+
+  const keys = (items) => {
+    let keys = Object.keys(items)
+
+    if (isa(items)) {
+      keys = keys.map(k => +k)
+    }
+
+    return keys
+  }
+
+  const values = items => {
+    if (isa(items)) {
+      return items
+    }
+
+    return Object.values(items)
+  }
+
+  const contains = (haystack, needle) => values(haystack).indexOf(needle) !== -1
+
+  const count = items => keys(items).length
+
   const has = (items, key) => _has(items, key)[0]
+
   const get = (items, key, defaultValue = null) => _has(items, key, defaultValue)[1]
+
   const sum = items => values(items).reduce((carry, n) => carry + +n, 0)
+
   const avg = items => sum(items) / count(items)
+
   const each = (items, callback) => {
     let c = 0
     let k = keys(items)
@@ -64,6 +88,7 @@
 
     return items
   }
+
   const slice = (items, begin = 0, end = null) => {
     if (end === null) {
       end = count(items)
@@ -91,6 +116,7 @@
 
     return result
   }
+
   const reduce = (items, callback, initValue = null) => {
     let result = initValue
 
@@ -100,6 +126,7 @@
 
     return result
   }
+
   const toArray = items => {
     return reduce(items, (carry, value) => {
       if (iso(value)) {
@@ -109,6 +136,7 @@
       return [...carry, value]
     }, [])
   }
+
   const chunk = (items, size) => {
     return reduce(
       [...Array(Math.ceil(count(items) / size)).keys()],
@@ -116,10 +144,15 @@
       []
     )
   }
+
+  const except = (items, ...keys) => {
+    keys = flatten(keys)
+
+    return filter(items, (value, key) => !contains(keys, key))
+  }
+
   const filter = (items, callback = null) => {
-    if (!callback) {
-      callback = value => value
-    }
+    callback = normalizeCallback(callback)
 
     let result = reduce(items, (carry, value, key, index) => {
       if (callback(value, key, index)) {
@@ -131,12 +164,11 @@
 
     return iso(items) ? result : values(result)
   }
-  const isEmpty = (items) => {
-    return !count(items)
-  }
-  const isNotEmpty = (items) => {
-    return !isEmpty(items)
-  }
+
+  const isEmpty = (items) => !count(items)
+
+  const isNotEmpty = (items) => !isEmpty(items)
+
   const first = (items, callback = null) => {
     if (callback) {
       items = filter(items, callback)
@@ -144,6 +176,7 @@
 
     return isNotEmpty(items) ? values(items)[0] : null
   }
+
   const last = (items, callback = null) => {
     if (callback) {
       items = filter(items, callback)
@@ -151,6 +184,7 @@
 
     return isNotEmpty(items) ? values(items)[count(items) - 1] : null
   }
+
   const map = (items, callback) => {
     let result = {}
 
@@ -160,15 +194,37 @@
 
     return iso(items) ? result : values(result)
   }
-  const flatten = items => {
-    return reduce(
-      items,
-      (carry, value) => isa(value) || iso(value) ? [...carry, ...flatten(value)] : [...carry, value],
-      []
-    )
-  }
+
+  const flatten = items => reduce(
+    items,
+    (carry, value) => isa(value) || iso(value) ? [...carry, ...flatten(value)] : [...carry, value],
+    []
+  )
+
   const min = items => Math.min(...values(items))
+
   const max = items => Math.max(...values(items))
+
+  const only = (items, ...keys) => {
+    keys = flatten(keys)
+
+    return filter(items, (value, key) => contains(keys, key))
+  }
+
+  const pipe = (items, callback) => callback(items)
+
+  const pluck = (items, key) => map(items, item => get(item, key))
+
+  const reject = (items, callback = null) => {
+    if (callback === null) {
+      throw new Error('Callback function is required.')
+    }
+
+    callback = normalizeCallback(callback)
+
+    return filter(items, (value, key, index) => !callback(value, key, index))
+  }
+
   const swap = (items, from, to) => {
     let result = slice(items)
     let temp = result[from]
@@ -178,6 +234,7 @@
 
     return result
   }
+
   const shuffle = items => {
     if (iso(items)) {
       return items
@@ -194,7 +251,9 @@
 
     return reduce(result, (carry, item) => ([...carry, item]), [])
   }
+
   const take = (items, limit) => slice(items, 0, limit)
+
   const unique = items => {
     let haystack = []
     let result = {}
@@ -223,6 +282,7 @@
     reduce,
     toArray,
     chunk,
+    except,
     filter,
     isEmpty,
     isNotEmpty,
@@ -232,6 +292,10 @@
     flatten,
     min,
     max,
+    only,
+    pipe,
+    pluck,
+    reject,
     swap,
     shuffle,
     take,
