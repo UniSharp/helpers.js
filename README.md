@@ -395,7 +395,7 @@ Object.isObject([]) // false
 
 ```javascript
 'Hello World'.limit(5)        // 'Hello...'
-'Hello World'.limit(5, '***') // 'Hello'***')'
+'Hello World'.limit(5, '***') // 'Hello***'
 ```
 
 #### nl2br
