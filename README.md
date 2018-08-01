@@ -1,6 +1,7 @@
 # Helpers.js
 
 [![Build Status](https://travis-ci.org/UniSharp/helpers.js.svg?branch=master)](https://travis-ci.org/UniSharp/helpers.js)
+[![Coverage Status](https://coveralls.io/repos/github/UniSharp/helpers.js/badge.svg?branch=master)](https://coveralls.io/github/UniSharp/helpers.js?branch=master)
 
 ## Installation
 
