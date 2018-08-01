@@ -255,8 +255,8 @@ require('@unisharp/helpers.js')
 #### mapWithKeys
 
 ```javascript
-[1, 2, 3].map((value, index) => ({ [value]: index }))             // { 1: 0, 2: 1, 3: 2 }
-{ a: 1, b: 2, c: 3 }.map((value, key, index) => { [value]: key }) // { 1: 'a', 2: 'b', 3: 'c' }
+[1, 2, 3].map((value, index) => ({ [value]: index }))               // { 1: 0, 2: 1, 3: 2 }
+{ a: 1, b: 2, c: 3 }.map((value, key, index) => ({ [value]: key })) // { 1: 'a', 2: 'b', 3: 'c' }
 ```
 
 #### max
@@ -269,7 +269,7 @@ require('@unisharp/helpers.js')
 #### merge
 
 ```javascript
-[1, 2, 3, 4, 5].merge([6, 7])           // [1, 2, 3, 4, 5, 6, 7]
+[1, 2, 3, 4, 5].merge([6, 7])              // [1, 2, 3, 4, 5, 6, 7]
 { a: 1, b: 2, c: 3 }.merge({ d: 4, e: 5 }) // { a: 1, b: 2, c: 3, d: 4, e: 5 }
 ```
 
