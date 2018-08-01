@@ -48,18 +48,17 @@
     return _has(target, key, defaultValue)
   }
 
-  const _merge = (items, merged, flag = null) => {
-    if (flag === null) {
-      flag = isa(items) ? count(items) : 0
-    }
-
+  const _merge = (items, merged, flag) => {
     let result = reduce(
       merged,
       (result, value, key) => ({ ...result, [isn(key) ? flag++ : key]: value }),
       { ...items }
     )
 
-    return iso(items) || iso(merged) ? result : values(result)
+    return {
+      flag,
+      result: iso(items) || iso(merged) ? result : values(result)
+    }
   }
 
   const keys = (items) => {
@@ -133,7 +132,7 @@
     return result
   }
 
-  const reduce = (items, callback, initValue = null) => {
+  const reduce = (items, callback, initValue) => {
     let result = initValue
 
     each(items, (value, key, index) => {
@@ -302,7 +301,11 @@
 
   const intersectByKeys = (items, compared) => filter({ ...items }, (item, key) => has(compared, key))
 
-  const merge = (items, ...merged) => reduce(merged, (carry, merged) => _merge(carry, merged), items)
+  const merge = (items, ...merged) => reduce(
+    merged,
+    ({ flag, result }, merged) => _merge(result, merged, flag),
+    { flag: isa(items) ? count(items) : 0, result: items }
+  ).result
 
   const methods = {
     keys,

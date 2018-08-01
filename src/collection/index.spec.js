@@ -248,7 +248,7 @@ describe('Collection', () => {
   })
 
   describe('#except', () => {
-    it('should return the items with the specified keys', () => {
+    it('should return the items except for those with the specified keys', () => {
       expect(c('except', [1, 2, 3], [0, 1])).toEqual([3])
       expect(c('except', { a: 1, b: 2, c: 3 }, ['a', 'b'])).toEqual({ c: 3 })
 
@@ -365,6 +365,16 @@ describe('Collection', () => {
     it('should return the maximum value', () => {
       expect(c('max', [1, 2, 3])).toBe(3)
       expect(c('max', { a: 1, b: 2, c: 3 })).toBe(3)
+    })
+  })
+
+  describe('#only', () => {
+    it('should return the items with the specified keys', () => {
+      expect(c('only', [1, 2, 3], [0, 1])).toEqual([1, 2])
+      expect(c('only', { a: 1, b: 2, c: 3 }, ['a', 'b'])).toEqual({ a: 1, b: 2 })
+
+      expect(c('only', [1, 2, 3], 0, 1)).toEqual([1, 2])
+      expect(c('only', { a: 1, b: 2, c: 3 }, 'a', 'b')).toEqual({ a: 1, b: 2 })
     })
   })
 
@@ -494,6 +504,7 @@ describe('Collection', () => {
 
     it('should merge more than one collections', () => {
       expect(c('merge', [1, 2, 3], [4, 5], [6, 7])).toEqual([1, 2, 3, 4, 5, 6, 7])
+      expect(c('merge', { a: 1, b: 2, c: 3 }, [4, 5], [6, 7])).toEqual({ a: 1, b: 2, c: 3, 0: 4, 1: 5, 2: 6, 3: 7 })
     })
   })
 })

@@ -9,7 +9,7 @@
   },
   "scripts": {
     "lint": "node_modules/.bin/eslint src",
-    "test": "node_modules/.bin/jest",
+    "test": "node_modules/.bin/jest --coverage",
     "rollup": "node_modules/.bin/rollup -c",
     "uglify": "node_modules/.bin/uglifyjs dist/index.js -c -m -o dist/index.min.js",
     "build": "npm run lint && npm run test && npm run rollup && npm run uglify"

@@ -137,18 +137,15 @@
       return _has(target, key, defaultValue);
     };
 
-    var _merge = function _merge(items, merged) {
-      var flag = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
-      if (flag === null) {
-        flag = isa(items) ? count(items) : 0;
-      }
-
+    var _merge = function _merge(items, merged, flag) {
       var result = reduce(merged, function (result, value, key) {
         return _extends({}, result, defineProperty({}, isn(key) ? flag++ : key, value));
       }, _extends({}, items));
 
-      return iso(items) || iso(merged) ? result : values(result);
+      return {
+        flag: flag,
+        result: iso(items) || iso(merged) ? result : values(result)
+      };
     };
 
     var keys = function keys(items) {
@@ -242,9 +239,7 @@
       return result;
     };
 
-    var reduce = function reduce(items, callback) {
-      var initValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
+    var reduce = function reduce(items, callback, initValue) {
       var result = initValue;
 
       each(items, function (value, key, index) {
@@ -467,9 +462,11 @@
         merged[_key3 - 1] = arguments[_key3];
       }
 
-      return reduce(merged, function (carry, merged) {
-        return _merge(carry, merged);
-      }, items);
+      return reduce(merged, function (_ref, merged) {
+        var flag = _ref.flag,
+            result = _ref.result;
+        return _merge(result, merged, flag);
+      }, { flag: isa(items) ? count(items) : 0, result: items }).result;
     };
 
     var methods = {
