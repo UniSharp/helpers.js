@@ -37,22 +37,77 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.sum() // 6
 ```
 
+## Available Methods
+
+- [*Collection*](#Collection)
+  - [avg](#avg)
+  - [chunk](#chunk)
+  - [contains](#contains)
+  - [count](#count)
+  - [diff](#diff)
+  - [diffKeys](#diffKeys)
+  - [each](#each)
+  - [except](#except)
+  - [filter](#filter)
+  - [first](#first)
+  - [flatten](#flatten)
+  - [get](#get)
+  - [has](#has)
+  - [intersect](#intersect)
+  - [intersectByKeys](#intersectByKeys)
+  - [isEmpty](#isEmpty)
+  - [isNotEmpty](#isNotEmpty)
+  - [keys](#keys)
+  - [last](#last)
+  - [map](#map)
+  - [mapWithKeys](#mapWithKeys)
+  - [max](#max)
+  - [merge](#merge)
+  - [min](#min)
+  - [only](#only)
+  - [pipe](#pipe)
+  - [pluck](#pluck)
+  - [reduce](#reduce)
+  - [reject](#reject)
+  - [shuffle](#shuffle)
+  - [slice](#slice)
+  - [sum](#sum)
+  - [swap](#swap)
+  - [take](#take)
+  - [toArray](#toArray)
+  - [unique](#unique)
+  - [values](#values)
+- [*Object*](#Object)
+  - [isObject](#isObject)
+- [*String*](#String)
+  - [limit](#limit)
+  - [nl2br](#nl2br)
+  - [random](#random)
+  - [slugify](#slugify)
+  - [stripTags](#stripTags)
+- [*Number*](#Number)
+  - [downto](#downto)
+  - [format](#format)
+  - [times](#times)
+  - [upto](#upto)
+- [*Date*](#Date)
+
 ## Usage
 
 ### Collection
 
-#### keys
+#### avg
 
 ```javascript
-[1, 2, 3, 4, 5].keys()      // [0, 1, 2, 3, 4]
-{ a: 1, b: 2, c: 3 }.keys() // ['a', 'b', 'c']
+[1, 2, 3, 4, 5].avg()      // 3
+{ a: 1, b: 2, c: 3 }.avg() // 2
 ```
 
-#### values
+#### chunk
 
 ```javascript
-[1, 2, 3, 4, 5].values()      // [1, 2, 3, 4, 5]
-{ a: 1, b: 2, c: 3 }.values() // [1, 2, 3]
+[1, 2, 3, 4, 5].chunk(2)      // [[1, 2], [3, 4], [5]]
+{ a: 1, b: 2, c: 3 }.chunk(2) // [{ a: 1, b: 2 }, { c: 3 }]
 ```
 
 #### contains
@@ -71,36 +126,18 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.count() // 3
 ```
 
-#### has
+#### diff
 
 ```javascript
-[1, 2, 3, 4, 5].has(2)              // true
-[1, 2, 3, 4, 5].has(5)              // false
-{ a: { b: { c: 1 } } }.has('a.b.c') // true
-{ a: { b: { c: 1 } } }.has('a.b.d') // false
+[1, 2, 3, 4, 5].diff([1, 2, 3])           // [4, 5]
+{ a: 1, b: 2, c: 3 }.diff({ a: 1, b: 2 }) // { c: 3 }
 ```
 
-#### get
+#### diffWithKeys
 
 ```javascript
-[1, 2, 3, 4, 5].get(2, 'default')              // 3
-[1, 2, 3, 4, 5].get(5, 'default')              // 'default'
-{ a: { b: { c: 1 } } }.get('a.b.c', 'default') // 1
-{ a: { b: { c: 1 } } }.get('a.b.c', 'default') // 'default'
-```
-
-#### sum
-
-```javascript
-[1, 2, 3, 4, 5].sum()      // 15
-{ a: 1, b: 2, c: 3 }.sum() // 6
-```
-
-#### avg
-
-```javascript
-[1, 2, 3, 4, 5].avg()      // 3
-{ a: 1, b: 2, c: 3 }.avg() // 2
+[1, 2, 3, 4, 5].diffWithKeys([1, 2, 3])           // { 3: 4, 4: 5 }
+{ a: 1, b: 2, c: 3 }.diffWithKeys({ a: 1, b: 2 }) // { c: 3 }
 ```
 
 #### each
@@ -108,40 +145,6 @@ require('@unisharp/helpers.js')
 ```javascript
 [1, 2, 3, 4, 5].each((value, index) => { /* ... */ })
 { a: 1, b: 2, c: 3 }.each((value, key, index) => { /* ... */ })
-```
-
-#### slice
-
-```javascript
-[1, 2, 3, 4, 5].slice(1)          // [2, 3, 4, 5]
-[1, 2, 3, 4, 5].slice(-1)         // [5]
-[1, 2, 3, 4, 5].slice(1, 2)       // [2]
-[1, 2, 3, 4, 5].slice(1, -1)      // [2, 3, 4]
-{ a: 1, b: 2, c: 3 }.slice(1)     // { b: 2, c: 3 }
-{ a: 1, b: 2, c: 3 }.slice(-1)    // { c: 3 }
-{ a: 1, b: 2, c: 3 }.slice(1, 2)  // { b: 2 }
-{ a: 1, b: 2, c: 3 }.slice(1, -1) // { b: 2 }
-```
-
-#### reduce
-
-```javascript
-[1, 2, 3, 4, 5].reduce((carry, value, index) => carry + value)           // 15
-{ a: 1, b: 2, c: 3 }.reduce((carry, value, key, index) => carry + value) // 6
-```
-
-#### toArray
-
-```javascript
-[{ a: 1, b: 2 }, { c: 3 }].toArray()        // [1, 2, 3]
-{ a: { a: 1, b: 2 }, b: { c: 3 }}.toArray() // [1, 2, 3]
-```
-
-#### chunk
-
-```javascript
-[1, 2, 3, 4, 5].chunk(2)      // [[1, 2], [3, 4], [5]]
-{ a: 1, b: 2, c: 3 }.chunk(2) // [{ a: 1, b: 2 }, { c: 3 }]
 ```
 
 #### except
@@ -158,6 +161,54 @@ require('@unisharp/helpers.js')
 ```javascript
 [1, 2, 3, 4, 5].filter((value, index) => value > 1)           // [2, 3, 4, 5]
 { a: 1, b: 2, c: 3 }.filter((value, key, index) => value > 1) // { b: 2, c: 3 }
+```
+
+#### first
+
+```javascript
+[1, 2, 3, 4, 5].first()                // 1
+[1, 2, 3, 4, 5].first(n => n > 1)      // 2
+{ a: 1, b: 2, c: 3 }.first()           // 1
+{ a: 1, b: 2, c: 3 }.first(n => n > 1) // 2
+```
+
+#### flatten
+
+```javascript
+[[1, 2], [3, 4], [5]].flatten() // [1, 2, 3, 4, 5]
+{ a: { a: 1, b: 2 }, b: { c: 3 } }.flatten() // [1, 2, 3]
+```
+
+#### get
+
+```javascript
+[1, 2, 3, 4, 5].get(2, 'default')              // 3
+[1, 2, 3, 4, 5].get(5, 'default')              // 'default'
+{ a: { b: { c: 1 } } }.get('a.b.c', 'default') // 1
+{ a: { b: { c: 1 } } }.get('a.b.c', 'default') // 'default'
+```
+
+#### has
+
+```javascript
+[1, 2, 3, 4, 5].has(2)              // true
+[1, 2, 3, 4, 5].has(5)              // false
+{ a: { b: { c: 1 } } }.has('a.b.c') // true
+{ a: { b: { c: 1 } } }.has('a.b.d') // false
+```
+
+#### intersect
+
+```javascript
+[1, 2, 3, 4, 5].intersect([1, 2, 3])           // [1, 2, 3]
+{ a: 1, b: 2, c: 3 }.intersect({ a: 1, b: 2 }) // { a: 1, b: 2 }
+```
+
+#### intersectByKeys
+
+```javascript
+[1, 2, 3, 4, 5].intersectByKeys([1, 2, 3])           // { 0: 1, 1: 2, 2: 3 }
+{ a: 1, b: 2, c: 3 }.intersectByKeys({ a: 1, b: 2 }) // { a: 1, b: 2 }
 ```
 
 #### isEmpty
@@ -178,13 +229,11 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.isNotEmpty() // true
 ```
 
-#### first
+#### keys
 
 ```javascript
-[1, 2, 3, 4, 5].first()                // 1
-[1, 2, 3, 4, 5].first(n => n > 1)      // 2
-{ a: 1, b: 2, c: 3 }.first()           // 1
-{ a: 1, b: 2, c: 3 }.first(n => n > 1) // 2
+[1, 2, 3, 4, 5].keys()      // [0, 1, 2, 3, 4]
+{ a: 1, b: 2, c: 3 }.keys() // ['a', 'b', 'c']
 ```
 
 #### last
@@ -203,18 +252,11 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.map((value, key, index) => value * 2) // { a: 2, b: 4, c: 6 }
 ```
 
-#### flatten
+#### mapWithKeys
 
 ```javascript
-[[1, 2], [3, 4], [5]].flatten() // [1, 2, 3, 4, 5]
-{ a: { a: 1, b: 2 }, b: { c: 3 } }.flatten() // [1, 2, 3]
-```
-
-#### min
-
-```javascript
-[1, 2, 3, 4, 5].min()      // 1
-{ a: 1, b: 2, c: 3 }.min() // 1
+[1, 2, 3].map((value, index) => ({ [value]: index }))             // { 1: 0, 2: 1, 3: 2 }
+{ a: 1, b: 2, c: 3 }.map((value, key, index) => { [value]: key }) // { 1: 'a', 2: 'b', 3: 'c' }
 ```
 
 #### max
@@ -222,6 +264,20 @@ require('@unisharp/helpers.js')
 ```javascript
 [1, 2, 3, 4, 5].max()      // 5
 { a: 1, b: 2, c: 3 }.max() // 3
+```
+
+#### merge
+
+```javascript
+[1, 2, 3, 4, 5].merge([6, 7])           // [1, 2, 3, 4, 5, 6, 7]
+{ a: 1, b: 2, c: 3 }.merge({ d: 4, e: 5 }) // { a: 1, b: 2, c: 3, d: 4, e: 5 }
+```
+
+#### min
+
+```javascript
+[1, 2, 3, 4, 5].min()      // 1
+{ a: 1, b: 2, c: 3 }.min() // 1
 ```
 
 #### only
@@ -249,11 +305,44 @@ require('@unisharp/helpers.js')
 [{ a: 1, b: 'a' }, { a: 2, b: 'b' }].pluck('a', 'b') // { a: 1, b: 2 }
 ```
 
+#### reduce
+
+```javascript
+[1, 2, 3, 4, 5].reduce((carry, value, index) => carry + value)           // 15
+{ a: 1, b: 2, c: 3 }.reduce((carry, value, key, index) => carry + value) // 6
+```
+
 #### reject
 
 ```javascript
 [1, 2, 3, 4, 5].reject((value, index) => value > 4)           // [1, 2, 3, 4]
 { a: 1, b: 2, c: 3 }.reject((value, key, index) => value > 2) // { a: 1, b: 2 }
+```
+
+#### shuffle
+
+```javascript
+[1, 2, 3, 4, 5].shuffle() // [3, 5, 1, 4, 2]
+```
+
+#### slice
+
+```javascript
+[1, 2, 3, 4, 5].slice(1)          // [2, 3, 4, 5]
+[1, 2, 3, 4, 5].slice(-1)         // [5]
+[1, 2, 3, 4, 5].slice(1, 2)       // [2]
+[1, 2, 3, 4, 5].slice(1, -1)      // [2, 3, 4]
+{ a: 1, b: 2, c: 3 }.slice(1)     // { b: 2, c: 3 }
+{ a: 1, b: 2, c: 3 }.slice(-1)    // { c: 3 }
+{ a: 1, b: 2, c: 3 }.slice(1, 2)  // { b: 2 }
+{ a: 1, b: 2, c: 3 }.slice(1, -1) // { b: 2 }
+```
+
+#### sum
+
+```javascript
+[1, 2, 3, 4, 5].sum()      // 15
+{ a: 1, b: 2, c: 3 }.sum() // 6
 ```
 
 #### swap
@@ -263,12 +352,6 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.swap('a', 'b') // { a: 2, b: 1, c: 3 }
 ```
 
-#### shuffle
-
-```javascript
-[1, 2, 3, 4, 5].shuffle() // [3, 5, 1, 4, 2]
-```
-
 #### take
 
 ```javascript
@@ -276,11 +359,25 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.swap(2) // { a: 1, b: 2 }
 ```
 
+#### toArray
+
+```javascript
+[{ a: 1, b: 2 }, { c: 3 }].toArray()        // [1, 2, 3]
+{ a: { a: 1, b: 2 }, b: { c: 3 }}.toArray() // [1, 2, 3]
+```
+
 #### unique
 
 ```javascript
 [1, 1, 2, 2, 3].unique()      // [1, 2, 3]
 { a: 1, b: 2, c: 2 }.unique() // { a: 1, b: 2 }
+```
+
+#### values
+
+```javascript
+[1, 2, 3, 4, 5].values()      // [1, 2, 3, 4, 5]
+{ a: 1, b: 2, c: 3 }.values() // [1, 2, 3]
 ```
 
 ### Object
@@ -293,6 +390,19 @@ Object.isObject([]) // false
 ```
 
 ### String
+
+#### limit
+
+```javascript
+'Hello World'.limit(5)        // 'Hello...'
+'Hello World'.limit(5, '***') // 'Hello'***')'
+```
+
+#### nl2br
+
+```javascript
+'Hello\nWorld'.nl2br() // 'Hello<br>World'
+```
 
 #### random
 
@@ -313,20 +423,13 @@ String.random(10) // 'erbzjw0rks'
 '<h1>Hello World</h1>'.stripTags() // 'Hello World'
 ```
 
-#### limit
-
-```javascript
-'Hello World'.limit(5)        // 'Hello...'
-'Hello World'.limit(5, '***') // 'Hello'***')'
-```
-
-#### nl2br
-
-```javascript
-'Hello\nWorld'.nl2br() // 'Hello<br>World'
-```
-
 ### Number
+
+#### downto
+
+```javascript
+(5).downto(1, n => n) // [5, 4, 3, 2, 1]
+```
 
 #### format
 
@@ -344,12 +447,6 @@ String.random(10) // 'erbzjw0rks'
 
 ```javascript
 (1).upto(5, n => n) // [1, 2, 3, 4, 5]
-```
-
-#### downto
-
-```javascript
-(5).downto(1, n => n) // [5, 4, 3, 2, 1]
 ```
 
 ### Date
