@@ -8,3 +8,9 @@ install:
 
 script:
   - npm run build
+
+jobs:
+  include:
+    - stage: Produce Coverage
+      node_js: node
+      script: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
