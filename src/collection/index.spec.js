@@ -330,8 +330,19 @@ describe('Collection', () => {
 
   describe('#map()', () => {
     it('should iterate over the items and replace value from callback', () => {
-      expect(c('map', [1, 2, 3], (value, key, index) => `${index} - ${key} - ${value}`)).toEqual(['0 - 0 - 1', '1 - 1 - 2', '2 - 2 - 3'])
-      expect(c('map', { a: 1, b: 2, c: 3 }, (value, key, index) => `${index} - ${key} - ${value}`)).toEqual({ a: '0 - a - 1', b: '1 - b - 2', c: '2 - c - 3' })
+      expect(c('map', [1, 2, 3], (value, key, index) => `${index} - ${key} - ${value}`))
+        .toEqual(['0 - 0 - 1', '1 - 1 - 2', '2 - 2 - 3'])
+      expect(c('map', { a: 1, b: 2, c: 3 }, (value, key, index) => `${index} - ${key} - ${value}`))
+        .toEqual({ a: '0 - a - 1', b: '1 - b - 2', c: '2 - c - 3' })
+    })
+  })
+
+  describe('#mapWithKeys()', () => {
+    it('should iterate over the items and replace key and value from callback', () => {
+      expect(c('mapWithKeys', [1, 2], (value, key, index) => ({ [`${index} - ${key}`]: `${index} - ${key} - ${value}` })))
+        .toEqual({ '0 - 0': '0 - 0 - 1', '1 - 1': '1 - 1 - 2' })
+      expect(c('mapWithKeys', { a: 1, b: 2 }, (value, key, index) => ({ [`${index} - ${key}`]: `${index} - ${key} - ${value}` })))
+        .toEqual({ '0 - a': '0 - a - 1', '1 - b': '1 - b - 2' })
     })
   })
 
@@ -425,6 +436,64 @@ describe('Collection', () => {
     it('should return all of the unique items', () => {
       expect(c('unique', [1, 2, 2])).toEqual([1, 2])
       expect(c('unique', { a: 1, b: 2, c: 2 })).toEqual({ a: 1, b: 2 })
+    })
+  })
+
+  describe('#diff()', () => {
+    it('should computes the difference of collections', () => {
+      expect(c('diff', [1, 2, 3], [1, 2])).toEqual([3])
+      expect(c('diff', [1, 2, 3, 3], [1, 2])).toEqual([3, 3])
+      expect(c('diff', { a: 1, b: 2, c: 3 }, { a: 1, b: 2 })).toEqual({ c: 3 })
+      expect(c('diff', { a: 1, b: 2, c: 3, d: 3 }, { a: 1, b: 2 })).toEqual({ c: 3, d: 3 })
+      expect(c('diff', [1, 2, 3], { a: 1, b: 2 })).toEqual([3])
+      expect(c('diff', { a: 1, b: 2, c: 3 }, [1, 2])).toEqual({ c: 3 })
+    })
+  })
+
+  describe('#diffKeys()', () => {
+    it('should computes the difference of collections using keys for comparison', () => {
+      expect(c('diffKeys', [1, 2, 3], [1, 2])).toEqual({ 2: 3 })
+      expect(c('diffKeys', [1, 2, 3, 3], [1, 2])).toEqual({ 2: 3, 3: 3 })
+      expect(c('diffKeys', { a: 1, b: 2, c: 3 }, { a: 1, b: 2 })).toEqual({ c: 3 })
+      expect(c('diffKeys', { a: 1, b: 2, c: 3, d: 3 }, { a: 1, b: 2 })).toEqual({ c: 3, d: 3 })
+      expect(c('diffKeys', [1, 2, 3], { a: 1, b: 2 })).toEqual({ 0:1, 1: 2, 2: 3 })
+      expect(c('diffKeys', { a: 1, b: 2, c: 3 }, [1, 2])).toEqual({ a: 1, b: 2, c: 3 })
+    })
+  })
+
+  describe('#intersect()', () => {
+    it('should computes the intersection of collections', () => {
+      expect(c('intersect', [1, 2, 3], [1, 2])).toEqual([1, 2])
+      expect(c('intersect', [1, 2, 2, 3], [1, 2])).toEqual([1, 2, 2])
+      expect(c('intersect', { a: 1, b: 2, c: 3 }, { a: 1, b: 2 })).toEqual({ a: 1, b: 2 })
+      expect(c('intersect', { a: 1, b: 2, c: 2, d: 3 }, { a: 1, b: 2 })).toEqual({ a: 1, b: 2, c: 2 })
+      expect(c('intersect', [1, 2, 3], { a: 1, b: 2 })).toEqual([1, 2])
+      expect(c('intersect', { a: 1, b: 2, c: 3 }, [1, 2])).toEqual({ a: 1, b: 2 })
+    })
+  })
+
+  describe('#intersectByKeys()', () => {
+    it('should computes the intersection of collections using keys for comparison', () => {
+      expect(c('intersectByKeys', [1, 2, 3], [1, 2])).toEqual({ 0: 1, 1: 2 })
+      expect(c('intersectByKeys', [1, 2, 2, 3], [1, 2])).toEqual({ 0: 1, 1: 2 })
+      expect(c('intersectByKeys', { a: 1, b: 2, c: 3 }, { a: 1, b: 2 })).toEqual({ a: 1, b: 2 })
+      expect(c('intersectByKeys', { a: 1, b: 2, c: 2, d: 3 }, { a: 1, b: 2 })).toEqual({ a: 1, b: 2 })
+      expect(c('intersectByKeys', [1, 2, 3], { a: 1, b: 2 })).toEqual({})
+      expect(c('intersectByKeys', { a: 1, b: 2, c: 3 }, [1, 2])).toEqual({})
+    })
+  })
+
+  describe('#merge()', () => {
+    it('should merge collections', () => {
+      expect(c('merge', [1, 2, 3], [4, 5])).toEqual([1, 2, 3, 4, 5])
+      expect(c('merge', { a: 1, b: 2, c: 3 }, { d: 4, e: 5 })).toEqual({ a: 1, b: 2, c: 3, d: 4, e: 5 })
+      expect(c('merge', [1, 2, 3], { a: 4, b: 5 })).toEqual({ 0: 1, 1: 2, 2: 3, a: 4, b: 5 })
+      expect(c('merge', { a: 1, b: 2, c: 3 }, [1, 2])).toEqual({ a: 1, b: 2, c: 3, 0: 1, 1: 2 })
+      expect(c('merge', { a: 1, b: 2, c: 3 }, { a: 4, b: 5, c: 6 })).toEqual({ a: 4, b: 5, c: 6 })
+    })
+
+    it('should merge more than one collections', () => {
+      expect(c('merge', [1, 2, 3], [4, 5], [6, 7])).toEqual([1, 2, 3, 4, 5, 6, 7])
     })
   })
 })

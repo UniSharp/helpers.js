@@ -2,11 +2,13 @@
   global.UniSharp = global.UniSharp || {}
   UniSharp.Helpers = UniSharp.Helpers || {}
 
+  const isf = value => typeof value === 'function'
+
+  const isn = value => typeof value === 'number' && isFinite(value)
+
   const isa = value => value && typeof value === 'object' && value.constructor === Array
 
   const iso = value => value && typeof value === 'object' && value.constructor === Object
-
-  const isf = value => typeof value === 'function'
 
   const normalizeCallback = (callback) => {
     if (isf(callback)) {
@@ -44,6 +46,20 @@
     }
 
     return _has(target, key, defaultValue)
+  }
+
+  const _merge = (items, merged, flag = null) => {
+    if (flag === null) {
+      flag = isa(items) ? count(items) : 0
+    }
+
+    let result = reduce(
+      merged,
+      (result, value, key) => ({ ...result, [isn(key) ? flag++ : key]: value }),
+      { ...items }
+    )
+
+    return iso(items) || iso(merged) ? result : values(result)
   }
 
   const keys = (items) => {
@@ -127,23 +143,17 @@
     return result
   }
 
-  const toArray = items => {
-    return reduce(items, (carry, value) => {
-      if (iso(value)) {
-        value = toArray(value)
-      }
+  const toArray = items => reduce(
+    items,
+    (carry, value) => [...carry, iso(value) ? toArray(value) : value],
+    []
+  )
 
-      return [...carry, value]
-    }, [])
-  }
-
-  const chunk = (items, size) => {
-    return reduce(
-      [...Array(Math.ceil(count(items) / size)).keys()],
-      (carry, n) => [...carry, slice(items, n * size, (n + 1) * size)],
-      []
-    )
-  }
+  const chunk = (items, size) => reduce(
+    [...Array(Math.ceil(count(items) / size)).keys()],
+    (carry, n) => [...carry, slice(items, n * size, (n + 1) * size)],
+    []
+  )
 
   const except = (items, ...keys) => {
     keys = flatten(keys)
@@ -186,14 +196,20 @@
   }
 
   const map = (items, callback) => {
-    let result = {}
-
-    each(items, (value, key, index) => {
-      result[key] = callback(value, key, index)
-    })
+    let result = reduce(
+      items,
+      (result, value, key, index) => ({ ...result, [key]: callback(value, key, index) }),
+      {}
+    )
 
     return iso(items) ? result : values(result)
   }
+
+  const mapWithKeys = (items, callback) => reduce(
+    items,
+    (result, value, key, index) => ({ ...result, ...callback(value, key, index) }),
+    {}
+  )
 
   const flatten = items => reduce(
     items,
@@ -278,6 +294,16 @@
     return iso(items) ? result : values(result)
   }
 
+  const diff = (items, compared) => filter(items, item => !contains(compared, item))
+
+  const diffKeys = (items, compared) => filter({ ...items }, (item, key) => !has(compared, key))
+
+  const intersect = (items, compared) => filter(items, item => contains(compared, item))
+
+  const intersectByKeys = (items, compared) => filter({ ...items }, (item, key) => has(compared, key))
+
+  const merge = (items, ...merged) => reduce(merged, (carry, merged) => _merge(carry, merged), items)
+
   const methods = {
     keys,
     values,
@@ -299,6 +325,7 @@
     first,
     last,
     map,
+    mapWithKeys,
     flatten,
     min,
     max,
@@ -309,7 +336,12 @@
     swap,
     shuffle,
     take,
-    unique
+    unique,
+    diff,
+    diffKeys,
+    intersect,
+    intersectByKeys,
+    merge
   }
 
   UniSharp.Helpers.collection = (method, items, ...args) => {

@@ -19,6 +19,7 @@ const METHODS = [
   'first',
   'last',
   'map',
+  'mapWithKeys',
   'flatten',
   'min',
   'max',
@@ -29,7 +30,12 @@ const METHODS = [
   'swap',
   'shuffle',
   'take',
-  'unique'
+  'unique',
+  'diff',
+  'diffKeys',
+  'intersect',
+  'intersectByKeys',
+  'merge'
 ]
 
 export default function({ types: t }) {

@@ -77,16 +77,20 @@
     global.UniSharp = global.UniSharp || {};
     UniSharp.Helpers = UniSharp.Helpers || {};
 
+    var isf = function isf(value) {
+      return typeof value === 'function';
+    };
+
+    var isn = function isn(value) {
+      return typeof value === 'number' && isFinite(value);
+    };
+
     var isa = function isa(value) {
       return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Array;
     };
 
     var iso = function iso(value) {
       return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object;
-    };
-
-    var isf = function isf(value) {
-      return typeof value === 'function';
     };
 
     var normalizeCallback = function normalizeCallback(callback) {
@@ -131,6 +135,20 @@
       }
 
       return _has(target, key, defaultValue);
+    };
+
+    var _merge = function _merge(items, merged) {
+      var flag = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+      if (flag === null) {
+        flag = isa(items) ? count(items) : 0;
+      }
+
+      var result = reduce(merged, function (result, value, key) {
+        return _extends({}, result, defineProperty({}, isn(key) ? flag++ : key, value));
+      }, _extends({}, items));
+
+      return iso(items) || iso(merged) ? result : values(result);
     };
 
     var keys = function keys(items) {
@@ -238,11 +256,7 @@
 
     var toArray$$1 = function toArray$$1(items) {
       return reduce(items, function (carry, value) {
-        if (iso(value)) {
-          value = toArray$$1(value);
-        }
-
-        return [].concat(toConsumableArray(carry), [value]);
+        return [].concat(toConsumableArray(carry), [iso(value) ? toArray$$1(value) : value]);
       }, []);
     };
 
@@ -309,13 +323,17 @@
     };
 
     var map = function map(items, callback) {
-      var result = {};
-
-      each(items, function (value, key, index) {
-        result[key] = callback(value, key, index);
-      });
+      var result = reduce(items, function (result, value, key, index) {
+        return _extends({}, result, defineProperty({}, key, callback(value, key, index)));
+      }, {});
 
       return iso(items) ? result : values(result);
+    };
+
+    var mapWithKeys = function mapWithKeys(items, callback) {
+      return reduce(items, function (result, value, key, index) {
+        return _extends({}, result, callback(value, key, index));
+      }, {});
     };
 
     var flatten = function flatten(items) {
@@ -420,6 +438,40 @@
       return iso(items) ? result : values(result);
     };
 
+    var diff = function diff(items, compared) {
+      return filter(items, function (item) {
+        return !contains(compared, item);
+      });
+    };
+
+    var diffKeys = function diffKeys(items, compared) {
+      return filter(_extends({}, items), function (item, key) {
+        return !has(compared, key);
+      });
+    };
+
+    var intersect = function intersect(items, compared) {
+      return filter(items, function (item) {
+        return contains(compared, item);
+      });
+    };
+
+    var intersectByKeys = function intersectByKeys(items, compared) {
+      return filter(_extends({}, items), function (item, key) {
+        return has(compared, key);
+      });
+    };
+
+    var merge = function merge(items) {
+      for (var _len3 = arguments.length, merged = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        merged[_key3 - 1] = arguments[_key3];
+      }
+
+      return reduce(merged, function (carry, merged) {
+        return _merge(carry, merged);
+      }, items);
+    };
+
     var methods = {
       keys: keys,
       values: values,
@@ -441,6 +493,7 @@
       first: first,
       last: last,
       map: map,
+      mapWithKeys: mapWithKeys,
       flatten: flatten,
       min: min,
       max: max,
@@ -451,12 +504,17 @@
       swap: swap,
       shuffle: shuffle,
       take: take,
-      unique: unique
+      unique: unique,
+      diff: diff,
+      diffKeys: diffKeys,
+      intersect: intersect,
+      intersectByKeys: intersectByKeys,
+      merge: merge
     };
 
     UniSharp.Helpers.collection = function (method, items) {
-      for (var _len3 = arguments.length, args = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
-        args[_key3 - 2] = arguments[_key3];
+      for (var _len4 = arguments.length, args = Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
+        args[_key4 - 2] = arguments[_key4];
       }
 
       if (!isa(items) && !iso(items) || iso(items) && has(items, method)) {
