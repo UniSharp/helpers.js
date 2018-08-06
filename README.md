@@ -25,7 +25,7 @@ First, add our babel plugin to your bable configuration.
 
 ```
 {
-  "plugins": ["@unisharp/helpers.js/plugin/lib"]
+  "plugins": ["@unisharp/babel-plugin"]
 }
 ```
 
