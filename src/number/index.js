@@ -14,4 +14,16 @@
   Number.prototype.downto = function (limit, callback) {
     return (this - limit + 1).times(n => this - n + 1).map(callback)
   }
+
+  Number.prototype.round = function (precision = 0) {
+    return Math.round(this * 10 ** precision) / 10 ** precision
+  }
+
+  Number.prototype.floor = function () {
+    return Math.floor(this)
+  }
+
+  Number.prototype.ceil = function () {
+    return Math.ceil(this)
+  }
 })()

@@ -27,4 +27,34 @@ describe('Number', () => {
       expect((3).downto(1, n => n * 2)).toEqual([6, 4, 2])
     })
   })
+
+  describe('#round()', () => {
+    it('should round a float', () => {
+      expect((1.4).round()).toEqual(1)
+      expect((1.5).round()).toEqual(2)
+      expect((1.44).round()).toEqual(1)
+      expect((1.55).round()).toEqual(2)
+    })
+
+    it('should round a float with precision', () => {
+      expect((1.44).round(1)).toEqual(1.4)
+      expect((1.45).round(1)).toEqual(1.5)
+      expect((1.444).round(2)).toEqual(1.44)
+      expect((1.445).round(2)).toEqual(1.45)
+    })
+  })
+
+  describe('#floor()', () => {
+    it('should round fractions down a float', () => {
+      expect((1.4).floor()).toEqual(1)
+      expect((1.5).floor()).toEqual(1)
+    })
+  })
+
+  describe('#ceil()', () => {
+    it('should round fractions up a float', () => {
+      expect((1.4).ceil()).toEqual(2)
+      expect((1.5).ceil()).toEqual(2)
+    })
+  })
 })

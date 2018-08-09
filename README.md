@@ -89,8 +89,11 @@ require('@unisharp/helpers.js')
   - [slugify](#slugify)
   - [stripTags](#striptags)
 - [**Number**](#number)
+  - [ceil](#ceil)
   - [downto](#downto)
+  - [floor](#floor)
   - [format](#format)
+  - [round](#round)
   - [times](#times)
   - [upto](#upto)
 - [**Date**](#date)
@@ -428,16 +431,35 @@ String.random(10) // 'erbzjw0rks'
 
 ### Number
 
+#### ceil
+
+```javascript
+1.4.ceil() // 2
+```
+
 #### downto
 
 ```javascript
 (5).downto(1, n => n) // [5, 4, 3, 2, 1]
 ```
 
+#### floor
+
+```javascript
+1.5.floor() // 1
+```
+
 #### format
 
 ```javascript
 (1000000).format() // '1,000,000'
+```
+
+#### round
+
+```javascript
+1.44.round()  // 1
+1.44.round(1) // 1.4
 ```
 
 #### times

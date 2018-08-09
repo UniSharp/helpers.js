@@ -620,6 +620,20 @@
         return _this2 - n + 1;
       }).map(callback);
     };
+
+    Number.prototype.round = function () {
+      var precision = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+      return Math.round(this * Math.pow(10, precision)) / Math.pow(10, precision);
+    };
+
+    Number.prototype.floor = function () {
+      return Math.floor(this);
+    };
+
+    Number.prototype.ceil = function () {
+      return Math.ceil(this);
+    };
   })();
 
   (function () {
