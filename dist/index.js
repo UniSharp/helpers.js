@@ -595,6 +595,18 @@
   })();
 
   (function () {
+    var isf = function isf(n) {
+      return Number(n) === n && n % 1 !== 0;
+    };
+
+    Number.random = function () {
+      var max = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+      var result = Math.random() * (max || 1);
+
+      return max === null || isf(max) ? result : Math.floor(result);
+    };
+
     Number.prototype.format = function () {
       return this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,');
     };

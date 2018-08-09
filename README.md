@@ -93,6 +93,7 @@ require('@unisharp/helpers.js')
   - [downto](#downto)
   - [floor](#floor)
   - [format](#format)
+  - [random](#random)
   - [round](#round)
   - [times](#times)
   - [upto](#upto)
@@ -453,6 +454,14 @@ String.random(10) // 'erbzjw0rks'
 
 ```javascript
 (1000000).format() // '1,000,000'
+```
+
+#### random
+
+```javascript
+Number.random()    // 0.6310469770350284
+Number.random(5)   // 4
+Number.random(5.5) // 2.9265187166993445
 ```
 
 #### round

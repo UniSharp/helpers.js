@@ -1,6 +1,30 @@
 import './'
 
 describe('Number', () => {
+  describe('#random()', () => {
+    let originalRandom = Math.random
+
+    it('should return a random float from 0 to 1 (exclusive)', () => {
+      Math.random = () => 0.5
+
+      expect(Number.random()).toEqual(0.5)
+    })
+
+    it('should return a random integer from 0 to max (exclusive)', () => {
+      Math.random = () => 0.5
+
+      expect(Number.random(5)).toEqual(2)
+    })
+
+    it('should return a random float from 0 to max (exclusive)', () => {
+      Math.random = () => 0.5
+
+      expect(Number.random(2.5)).toEqual(1.25)
+    })
+
+    Math.random = originalRandom
+  })
+
   describe('#format()', () => {
     it('should format a number with grouped thousands', () => {
       expect((1000000).format()).toBe('1,000,000')

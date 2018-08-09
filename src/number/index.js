@@ -1,4 +1,12 @@
 (() => {
+  const isf = n => Number(n) === n && n % 1 !== 0
+
+  Number.random = function (max = null) {
+    let result = Math.random() * (max || 1)
+
+    return max === null || isf(max) ? result : Math.floor(result)
+  }
+
   Number.prototype.format = function () {
     return this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,')
   }
