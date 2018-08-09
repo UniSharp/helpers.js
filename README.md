@@ -431,34 +431,34 @@ String.random(10) // 'erbzjw0rks'
 #### downto
 
 ```javascript
-5..downto(1, n => n) // [5, 4, 3, 2, 1]
+(5).downto(1, n => n) // [5, 4, 3, 2, 1]
 ```
 
 #### format
 
 ```javascript
-1000000..format() // '1,000,000'
+(1000000).format() // '1,000,000'
 ```
 
 #### times
 
 ```javascript
-5..times(n => n) // [1, 2, 3, 4, 5]
+(5).times(n => n) // [1, 2, 3, 4, 5]
 ```
 
 #### upto
 
 ```javascript
-1..upto(5, n => n) // [1, 2, 3, 4, 5]
+(1).upto(5, n => n) // [1, 2, 3, 4, 5]
 ```
 
 ### Date
 
 ```javascript
-1..year().ago()
-10..days().ago()
-1..hour().after()
-10..minutes().after(new Date(2000, 1, 1, 1, 1, 1, 1))
+(1).year().ago()
+(10).days().ago()
+(1).hour().after()
+(10).minutes().after(new Date(2000, 1, 1, 1, 1, 1, 1))
 ```
 
 ## License
