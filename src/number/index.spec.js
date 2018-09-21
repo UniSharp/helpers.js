@@ -81,4 +81,11 @@ describe('Number', () => {
       expect((1.5).ceil()).toEqual(2)
     })
   })
+
+  describe('#abs()', () => {
+    it('should return the absolute value', () => {
+      expect((10).abs()).toEqual(10)
+      expect((-10).abs()).toEqual(10)
+    })
+  })
 })

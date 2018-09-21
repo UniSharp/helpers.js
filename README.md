@@ -89,6 +89,7 @@ require('@unisharp/helpers.js')
   - [slugify](#slugify)
   - [stripTags](#striptags)
 - [**Number**](#number)
+  - [abs](#abs)
   - [ceil](#ceil)
   - [downto](#downto)
   - [floor](#floor)
@@ -431,6 +432,12 @@ String.random(10) // 'erbzjw0rks'
 ```
 
 ### Number
+
+#### abs
+
+```javascript
+(-10).abs() // 10
+```
 
 #### ceil
 
