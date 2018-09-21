@@ -646,6 +646,10 @@
     Number.prototype.ceil = function () {
       return Math.ceil(this);
     };
+
+    Number.prototype.abs = function () {
+      return Math.abs(this);
+    };
   })();
 
   (function () {
