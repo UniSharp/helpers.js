@@ -55,11 +55,13 @@ require('@unisharp/helpers.js')
   - [first](#first)
   - [flatten](#flatten)
   - [get](#get)
+  - [groupBy](#groupby)
   - [has](#has)
   - [intersect](#intersect)
   - [intersectByKeys](#intersectbykeys)
   - [isEmpty](#isempty)
   - [isNotEmpty](#isnotempty)
+  - [keyBy](#keyby)
   - [keys](#keys)
   - [last](#last)
   - [map](#map)
@@ -196,6 +198,13 @@ require('@unisharp/helpers.js')
 { a: { b: { c: 1 } } }.get('a.b.c', 'default') // 'default'
 ```
 
+#### groupBy
+
+```javascript
+[{ a: 'a' }, { a: 'a' }].groupBy('a')         // { a: [{ a: 'a' }, { a: 'a' }] }
+{ a: { a: 'a' }, b: { a: 'a' } }.groupBy('a') // { a: { a: { a: 'a' }, b: { a: 'a' } } }
+```
+
 #### has
 
 ```javascript
@@ -235,6 +244,13 @@ require('@unisharp/helpers.js')
 [1, 2, 3, 4, 5].isNotEmpty()      // true
 {}.isNotEmpty()                   // false
 { a: 1, b: 2, c: 3 }.isNotEmpty() // true
+```
+
+#### keyBy
+
+```javascript
+[{ a: 1, b: 'a' }, { a: 2, b: 'b' }].keyBy('b')         // { a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } }
+{ a: { a: 1, b: 'c' }, b: { a: 2, b: 'd' } }.keyBy('b') // { c: { a: 1, b: 'c' }, d: { a: 2, b: 'd' } }
 ```
 
 #### keys

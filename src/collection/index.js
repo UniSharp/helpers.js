@@ -313,6 +313,26 @@
     {}
   )
 
+  const groupBy = (items, key) => {
+    let result = reduce(items, (result, row, index) => {
+      let group = get(row, key)
+
+      if (!result[group]) {
+        result[group] = {}
+      }
+
+      result[group][index] = row
+
+      return result
+    }, {})
+
+    if (isa(items)) {
+      result = map(result, row => values(row))
+    }
+
+    return result
+  }
+
   const methods = {
     keys,
     values,
@@ -351,7 +371,8 @@
     intersect,
     intersectByKeys,
     merge,
-    keyBy
+    keyBy,
+    groupBy
   }
 
   UniSharp.Helpers.collection = (method, items, ...args) => {

@@ -511,7 +511,14 @@ describe('Collection', () => {
   describe('#keyBy', () => {
     it('should keys the collection by the given key', () => {
       expect(c('keyBy', [{ a: 1, b: 'a' }, { a: 2, b: 'b' }], 'b')).toEqual({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } })
-      expect(c('keyBy', { a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } }, 'b')).toEqual({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } })
+      expect(c('keyBy', { a: { a: 1, b: 'c' }, b: { a: 2, b: 'd' } }, 'b')).toEqual({ c: { a: 1, b: 'c' }, d: { a: 2, b: 'd' } })
+    })
+  })
+
+  describe('#groupBy', () => {
+    it('should groups the collection by the given key', () => {
+      expect(c('groupBy', [{ a: 'a' }, { a: 'a' }], 'a')).toEqual({ a: [{ a: 'a' }, { a: 'a' }] })
+      expect(c('groupBy', { a: { a: 'a' }, b: { a: 'a' } }, 'a')).toEqual({ a: { a: { a: 'a' }, b: { a: 'a' } } })
     })
   })
 })

@@ -475,6 +475,28 @@
       }, {});
     };
 
+    var groupBy = function groupBy(items, key) {
+      var result = reduce(items, function (result, row, index) {
+        var group = get$$1(row, key);
+
+        if (!result[group]) {
+          result[group] = {};
+        }
+
+        result[group][index] = row;
+
+        return result;
+      }, {});
+
+      if (isa(items)) {
+        result = map(result, function (row) {
+          return values(row);
+        });
+      }
+
+      return result;
+    };
+
     var methods = {
       keys: keys,
       values: values,
@@ -513,7 +535,8 @@
       intersect: intersect,
       intersectByKeys: intersectByKeys,
       merge: merge,
-      keyBy: keyBy
+      keyBy: keyBy,
+      groupBy: groupBy
     };
 
     UniSharp.Helpers.collection = function (method, items) {
