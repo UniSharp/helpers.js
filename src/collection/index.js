@@ -307,6 +307,12 @@
     { flag: isa(items) ? count(items) : 0, result: items }
   ).result
 
+  const keyBy = (items, key) => reduce(
+    items,
+    (result, row) => ({ ...result, [get(row, key)]: row }),
+    {}
+  )
+
   const methods = {
     keys,
     values,
@@ -344,7 +350,8 @@
     diffKeys,
     intersect,
     intersectByKeys,
-    merge
+    merge,
+    keyBy
   }
 
   UniSharp.Helpers.collection = (method, items, ...args) => {

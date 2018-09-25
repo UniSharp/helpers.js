@@ -469,6 +469,12 @@
       }, { flag: isa(items) ? count(items) : 0, result: items }).result;
     };
 
+    var keyBy = function keyBy(items, key) {
+      return reduce(items, function (result, row) {
+        return _extends({}, result, defineProperty({}, get$$1(row, key), row));
+      }, {});
+    };
+
     var methods = {
       keys: keys,
       values: values,
@@ -506,7 +512,8 @@
       diffKeys: diffKeys,
       intersect: intersect,
       intersectByKeys: intersectByKeys,
-      merge: merge
+      merge: merge,
+      keyBy: keyBy
     };
 
     UniSharp.Helpers.collection = function (method, items) {

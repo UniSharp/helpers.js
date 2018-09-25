@@ -507,4 +507,11 @@ describe('Collection', () => {
       expect(c('merge', { a: 1, b: 2, c: 3 }, [4, 5], [6, 7])).toEqual({ a: 1, b: 2, c: 3, 0: 4, 1: 5, 2: 6, 3: 7 })
     })
   })
+
+  describe('#keyBy', () => {
+    it('should keys the collection by the given key', () => {
+      expect(c('keyBy', [{ a: 1, b: 'a' }, { a: 2, b: 'b' }], 'b')).toEqual({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } })
+      expect(c('keyBy', { a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } }, 'b')).toEqual({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } })
+    })
+  })
 })
