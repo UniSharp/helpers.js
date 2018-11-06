@@ -1,4 +1,4 @@
-import './'
+import DateInterval from './'
 
 describe('Number', () => {
   describe('#millisecond()', () => {

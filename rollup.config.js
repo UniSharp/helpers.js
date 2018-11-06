@@ -5,6 +5,7 @@ export default {
   input: 'src/index.js',
   output: {
     file: 'dist/index.js',
+    name: 'UniSharp',
     format: 'umd'
   },
   plugins: [

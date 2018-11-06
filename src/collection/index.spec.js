@@ -1,6 +1,4 @@
-import './'
-
-const c = UniSharp.Helpers.collection
+import c from './'
 
 describe('Collection', () => {
   it('Accept only Array or Object', () => {
