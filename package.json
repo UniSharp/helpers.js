@@ -1,6 +1,6 @@
 {
   "name": "@unisharp/helpers.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript useful helpers.",
   "main": "dist/index.js",
   "author": {
@@ -53,6 +53,6 @@
     "uglify-js": "^3.3.21"
   },
   "dependencies": {
-    "@unisharp/babel-plugin": "^0.1.0"
+    "@unisharp/babel-plugin": "^0.2.0"
   }
 }
