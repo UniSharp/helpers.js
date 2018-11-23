@@ -83,9 +83,27 @@ const has = (items, key) => _has(items, key)[0]
 
 const get = (items, key, defaultValue = null) => _has(items, key, defaultValue)[1]
 
-const sum = items => values(items).reduce((carry, n) => carry + +n, 0)
+const sum = (items, key = null) => {
+  if (key) {
+    items = pluck(items, key)
+  }
 
-const avg = items => sum(items) / count(items)
+  return values(items).reduce((carry, n) => carry + (+n || 0), 0)
+}
+
+const avg = (items, key = null) => {
+  let c = count(items)
+
+  if (!c) {
+    return null
+  }
+
+  if (key) {
+    items = pluck(items, key)
+  }
+
+  return sum(items) / c
+}
 
 const each = (items, callback) => {
   let c = 0

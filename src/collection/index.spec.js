@@ -121,17 +121,27 @@ describe('Collection', () => {
       expect(c('sum', ['1', '2', '3'])).toBe(6)
       expect(c('sum', { a: '1', b: '2', c: '3' })).toBe(6)
     })
+
+    it('should return the sum of a given key', () => {
+      expect(c('sum', [{ a: 1, b: 1 }, { a: 2, b: 2 }, { a: 3, b: 3 }])).toBe(0)
+      expect(c('sum', [{ a: 1, b: 1 }, { a: 2, b: 2 }, { a: 3, b: 3 }], 'a')).toBe(6)
+    })
   })
 
   describe('#avg()', () => {
+    it('should return null if is empty', () => {
+      expect(c('avg', [])).toBe(null)
+    })
+
     it('should return the average value', () => {
       expect(c('avg', [1, 2, 3])).toBe(2)
       expect(c('avg', { a: 1, b: 2, c: 3 })).toBe(2)
     })
 
-    // it('should return the average value of a given key', () => {
-    //   expect(c('avg', { a: 1, b: 2, c: 3 })).toBe(2)
-    // })
+    it('should return the average value of a given key', () => {
+      expect(c('avg', [{ a: 1, b: 1 }, { a: 2, b: 2 }, { a: 3, b: 3 }])).toBe(0)
+      expect(c('avg', [{ a: 1, b: 1 }, { a: 2, b: 2 }, { a: 3, b: 3 }], 'a')).toBe(2)
+    })
   })
 
   describe('#each()', () => {

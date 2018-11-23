@@ -182,13 +182,31 @@
   };
 
   var sum = function sum(items) {
+    var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+    if (key) {
+      items = pluck(items, key);
+    }
+
     return values(items).reduce(function (carry, n) {
-      return carry + +n;
+      return carry + (+n || 0);
     }, 0);
   };
 
   var avg = function avg(items) {
-    return sum(items) / count(items);
+    var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+    var c = count(items);
+
+    if (!c) {
+      return null;
+    }
+
+    if (key) {
+      items = pluck(items, key);
+    }
+
+    return sum(items) / c;
   };
 
   var each = function each(items, callback) {
