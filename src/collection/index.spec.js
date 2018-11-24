@@ -529,4 +529,29 @@ describe('Collection', () => {
       expect(c('groupBy', { a: { a: 'a' }, b: { a: 'a' } }, 'a')).toEqual({ a: { a: { a: 'a' }, b: { a: 'a' } } })
     })
   })
+
+  describe('#sort', () => {
+    it('should sort the collection', () => {
+      expect(c('sort', [3, 5, 3, 4, 2, 1])).toEqual([1, 2, 3, 3, 4, 5])
+      expect(c('sort', [[5, 4], [5, 3]])).toEqual([[5, 3], [5, 4]])
+      expect(c('sort', [{ a: 5, b: 4 }, { a: 5, b: 3 }])).toEqual([{ a: 5, b: 3 }, { a: 5, b: 4 }])
+      expect(JSON.stringify(c('sort', { a: 5, b: 4, c: 3 }))).toEqual(JSON.stringify({ c: 3, b: 4, a: 5 }))
+      expect(JSON.stringify(c('sort', { a: [5, 4], b: [5, 3] }))).toEqual(JSON.stringify({ b: [5, 3], a: [5, 4] }))
+      expect(JSON.stringify(c('sort', { a: { a: 5, b: 4 }, b: { a: 5, b: 3 } }))).toEqual(JSON.stringify({ b: { a: 5, b: 3 }, a: { a: 5, b: 4 } }))
+    })
+
+    it('should sort the collection using the given callback', () => {
+      expect(c('sort', [1, 2, 4, 3, 5, 3], (a, b) => b - a)).toEqual([5, 4, 3, 3, 2, 1])
+      expect(c('sort', [[1, 2], [3, 4]], (a, b) => b[0] - a[0])).toEqual([[3, 4], [1, 2]])
+      expect(c('sort', [{ a: 1, b: 2 }, { a: 3, b: 4 }], (a, b) => b.a - a.a)).toEqual([{ a: 3, b: 4 }, { a: 1, b: 2 }])
+      expect(JSON.stringify(c('sort', { a: 1, b: 2, c: 3 }, (a, b) => b - a))).toEqual(JSON.stringify({ c: 3, b: 2, a: 1 }))
+      expect(JSON.stringify(c('sort', { a: [1, 2], b: [3, 4] }, (a, b) => b[0] - a[0]))).toEqual(JSON.stringify({ b: [3, 4], a: [1, 2] }))
+      expect(JSON.stringify(c('sort', { a: { a: 1, b: 2 }, b: { a: 3, b: 4 } }, (a, b) => b.a - a.a))).toEqual(JSON.stringify({ b: { a: 3, b: 4 }, a: { a: 1, b: 2 } }))
+    })
+
+    it('should sort the collection which contains string', () => {
+      expect(c('sort', ['c', 'b', 'a'])).toEqual(['a', 'b', 'c'])
+      expect(JSON.stringify(c('sort', { a: 'c', b: 'b', c: 'a' }))).toEqual(JSON.stringify({ c: 'a', b: 'b', a: 'c' }))
+    })
+  })
 })

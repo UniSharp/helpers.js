@@ -63,6 +63,44 @@
     return target;
   };
 
+  var slicedToArray = function () {
+    function sliceIterator(arr, i) {
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+      var _e = undefined;
+
+      try {
+        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
+      } finally {
+        try {
+          if (!_n && _i["return"]) _i["return"]();
+        } finally {
+          if (_d) throw _e;
+        }
+      }
+
+      return _arr;
+    }
+
+    return function (arr, i) {
+      if (Array.isArray(arr)) {
+        return arr;
+      } else if (Symbol.iterator in Object(arr)) {
+        return sliceIterator(arr, i);
+      } else {
+        throw new TypeError("Invalid attempt to destructure non-iterable instance");
+      }
+    };
+  }();
+
   var toConsumableArray = function (arr) {
     if (Array.isArray(arr)) {
       for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -87,6 +125,18 @@
 
   var iso = function iso(value) {
     return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object;
+  };
+
+  var spaceship = function spaceship(a, b) {
+    if (a > b) {
+      return 1;
+    }
+
+    if (a < b) {
+      return -1;
+    }
+
+    return 0;
   };
 
   var normalizeCallback = function normalizeCallback(callback) {
@@ -511,6 +561,38 @@
     return result;
   };
 
+  var sort = function sort(items) {
+    var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+    if (!callback) {
+      callback = function callback(a, b) {
+        return spaceship.apply(undefined, toConsumableArray(map([a, b], function (item) {
+          return iso(item) ? values(item) : item;
+        })));
+      };
+    }
+
+    if (isa(items)) {
+      return items.sort(callback);
+    }
+
+    var result = values(map(items, function (value, key) {
+      return [key, value];
+    }));
+
+    result = result.sort(function (a, b) {
+      return callback(a[1], b[1]);
+    });
+
+    return mapWithKeys(result, function (_ref2) {
+      var _ref3 = slicedToArray(_ref2, 2),
+          key = _ref3[0],
+          value = _ref3[1];
+
+      return defineProperty({}, key, value);
+    });
+  };
+
   var methods = {
     keys: keys,
     values: values,
@@ -550,7 +632,8 @@
     intersectByKeys: intersectByKeys,
     merge: merge,
     keyBy: keyBy,
-    groupBy: groupBy
+    groupBy: groupBy,
+    sort: sort
   };
 
   var collection = (function (method, items) {

@@ -6,6 +6,18 @@ const isa = value => value && typeof value === 'object' && value.constructor ===
 
 const iso = value => value && typeof value === 'object' && value.constructor === Object
 
+const spaceship = (a, b) => {
+  if (a > b) {
+    return 1
+  }
+
+  if (a < b) {
+    return -1
+  }
+
+  return 0
+}
+
 const normalizeCallback = (callback) => {
   if (isf(callback)) {
     return callback
@@ -347,6 +359,22 @@ const groupBy = (items, key) => {
   return result
 }
 
+const sort = (items, callback = null) => {
+  if (!callback) {
+    callback = (a, b) => spaceship(...map([a, b], item => iso(item) ? values(item) : item))
+  }
+
+  if (isa(items)) {
+    return items.sort(callback)
+  }
+
+  let result = values(map(items, (value, key) => [key, value]))
+
+  result = result.sort((a, b) => callback(a[1], b[1]))
+
+  return mapWithKeys(result, ([key, value]) => ({ [key]: value }))
+}
+
 const methods = {
   keys,
   values,
@@ -386,7 +414,8 @@ const methods = {
   intersectByKeys,
   merge,
   keyBy,
-  groupBy
+  groupBy,
+  sort
 }
 
 export default (method, items, ...args) => {
