@@ -639,6 +639,29 @@
     return isa(items) ? [value].concat(toConsumableArray(items)) : _extends(defineProperty({}, key, value), items);
   };
 
+  var index = function index(items, needle) {
+    var haystack = values(items);
+    var result = haystack.indexOf(needle);
+
+    if (result === -1) {
+      return null;
+    }
+
+    return iso(items) ? keys(items)[result] : result;
+  };
+
+  var insert = function insert(items, target, value) {
+    var key = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+    if (isa(items)) {
+      return [].concat(toConsumableArray(slice(items, 0, target)), [value], toConsumableArray(slice(items, target)));
+    }
+
+    target = index(keys(items), target);
+
+    return _extends({}, slice(items, 0, target), defineProperty({}, key, value), slice(items, target));
+  };
+
   var methods = {
     keys: keys,
     values: values,
@@ -682,7 +705,9 @@
     sort: sort,
     sortBy: sortBy,
     append: append,
-    prepend: prepend
+    prepend: prepend,
+    index: index,
+    insert: insert
   };
 
   var collection = (function (method, items) {
@@ -857,8 +882,8 @@
 
   global.DateInterval = DateInterval;
 
-  var index = { Helpers: { collection: collection } };
+  var index$1 = { Helpers: { collection: collection } };
 
-  return index;
+  return index$1;
 
 })));

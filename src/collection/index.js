@@ -397,6 +397,27 @@ const append = (items, value, key = null) => isa(items) ? [...items, value] : { 
 
 const prepend = (items, value, key = null) => isa(items) ? [value, ...items] : { [key]: value, ...items }
 
+const index = (items, needle) => {
+  let haystack = values(items)
+  let result = haystack.indexOf(needle)
+
+  if (result === -1) {
+    return null
+  }
+
+  return iso(items) ? keys(items)[result] : result
+}
+
+const insert = (items, target, value, key = null) => {
+  if (isa(items)) {
+    return [...slice(items, 0, target), value, ...slice(items, target)]
+  }
+
+  target = index(keys(items), target)
+
+  return { ...slice(items, 0, target), [key]: value, ...slice(items, target) }
+}
+
 const methods = {
   keys,
   values,
@@ -440,7 +461,9 @@ const methods = {
   sort,
   sortBy,
   append,
-  prepend
+  prepend,
+  index,
+  insert
 }
 
 export default (method, items, ...args) => {

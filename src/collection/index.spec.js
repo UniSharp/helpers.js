@@ -584,4 +584,22 @@ describe('Collection', () => {
       expect(JSON.stringify(c('prepend', { b: 2, c: 3 }, 1, 'a'))).toEqual(JSON.stringify({ a: 1, b: 2, c: 3 }))
     })
   })
+
+  describe('#index', () => {
+    it('should return the index of the first item in collection', () => {
+      expect(c('index', [1, 2, 3, 4, 5], 3)).toEqual(2)
+      expect(c('index', [1, 2, 3, 4, 5], 0)).toEqual(null)
+      expect(c('index', { a: 1, b: 2, c: 3 }, 2)).toEqual('b')
+      expect(c('index', { a: 1, b: 2, c: 3 }, 0)).toEqual(null)
+    })
+  })
+
+  describe('#insert', () => {
+    it('should insert an item before the element with the given index of the collection', () => {
+      expect(c('insert', [1, 2, 4, 5], 2, 3)).toEqual([1, 2, 3, 4, 5])
+      expect(c('insert', [1, 2, 4, 5], 5, 3)).toEqual([1, 2, 4, 5, 3])
+      expect(JSON.stringify(c('insert', { a: 1, c: 3 }, 'c', 2, 'b'))).toEqual(JSON.stringify({ a: 1, b: 2, c: 3 }))
+      expect(JSON.stringify(c('insert', { a: 1, c: 3 }, 'e', 2, 'b'))).toEqual(JSON.stringify({ a: 1, c: 3, b: 2 }))
+    })
+  })
 })
