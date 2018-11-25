@@ -76,6 +76,8 @@ require('@unisharp/helpers.js')
   - [reject](#reject)
   - [shuffle](#shuffle)
   - [slice](#slice)
+  - [sort](#sort)
+  - [sortBy](#sortby)
   - [sum](#sum)
   - [swap](#swap)
   - [take](#take)
@@ -109,8 +111,9 @@ require('@unisharp/helpers.js')
 #### avg
 
 ```javascript
-[1, 2, 3, 4, 5].avg()      // 3
-{ a: 1, b: 2, c: 3 }.avg() // 2
+[1, 2, 3, 4, 5].avg()                     // 3
+{ a: 1, b: 2, c: 3 }.avg()                // 2
+[{ a: 1, b: 2 }, { a: 3, b: 4 }].avg('a') // 2
 ```
 
 #### chunk
@@ -362,11 +365,36 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.slice(1, -1) // { b: 2 }
 ```
 
+#### sort
+
+```javascript
+[5, 4, 3, 2, 1].sort()                          // [1, 2, 3, 4, 5]
+[[5, 5], [5, 4]].sort()                         // [[5, 4], [5, 5]]
+[{ a: 5, b: 5 }, { a: 5, b: 4 }].sort()         // [{ a: 5, b: 4 }, { a: 5, b: 5 }]
+{ a: 3, b: 2, c: 1 }.sort()                     // { c: 1, b: 2, a: 3 }
+{ a: [3, 3], b: [3, 2] }.sort()                 // { b: [3, 2], a: [3, 3] }
+{ a: { a: 3, b: 3 }, b: { a: 3, b: 2 } }.sort() // { b: { a: 3, b: 2 }, a: { a: 3, b: 3 } }
+[1, 2, 3, 4, 5].sort((a, b) => b - a)           // [5, 4, 3, 2, 1]
+{ a: 1, b: 2, c: 3 }.sort((a, b) => b - a)      // { c: 3, b: 2, a: 1 }
+```
+
+#### sortBy
+
+```javascript
+[[5, 5], [5, 4]].sortBy(1)                              // [[5, 4], [5, 5]]
+[{ a: 5, b: 5 }, { a: 5, b: 4 }].sortBy('b')            // [{ a: 5, b: 4 }, { a: 5, b: 5 }]
+{ a: [3, 3], b: [3, 2] }.sortBy(1)                      // { b: [3, 2], a: [3, 3] }
+{ a: { a: 3, b: 3 }, b: { a: 3, b: 2 } }.sortBy('b')    // { b: { a: 3, b: 2 }, a: { a: 3, b: 3 } }
+[[5, 5], [5, 4]].sortBy(item => item[1])                // [[5, 4], [5, 5]]
+[{ a: 5, b: 5 }, { a: 5, b: 4 }].sortBy(item => item.b) // [{ a: 5, b: 4 }, { a: 5, b: 5 }]
+```
+
 #### sum
 
 ```javascript
-[1, 2, 3, 4, 5].sum()      // 15
-{ a: 1, b: 2, c: 3 }.sum() // 6
+[1, 2, 3, 4, 5].sum()                     // 15
+{ a: 1, b: 2, c: 3 }.sum()                // 6
+[{ a: 1, b: 2 }, { a: 3, b: 4 }].sum('a') // 4
 ```
 
 #### swap
