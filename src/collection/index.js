@@ -180,12 +180,6 @@ const chunk = (items, size) => reduce(
   []
 )
 
-const except = (items, ...keys) => {
-  keys = flatten(keys)
-
-  return filter(items, (value, key) => !contains(keys, key))
-}
-
 const filter = (items, callback = null) => {
   callback = normalizeCallback(callback)
 
@@ -198,6 +192,12 @@ const filter = (items, callback = null) => {
   }, {})
 
   return iso(items) ? result : values(result)
+}
+
+const except = (items, ...keys) => {
+  keys = flatten(keys)
+
+  return filter(items, (value, key) => !contains(keys, key))
 }
 
 const isEmpty = (items) => !count(items)
@@ -393,29 +393,9 @@ const sortBy = (items, callback) => {
   return mapWithKeys(result, ([key, item]) => ({ [key]: item }))
 }
 
-const append = (items, value, key = null) => {
-  let result = slice(items)
+const append = (items, value, key = null) => isa(items) ? [...items, value] : { ...items, [key]: value }
 
-  if (isa(items)) {
-    result.push(value)
-  } else {
-    result[key] = value
-  }
-
-  return result
-}
-
-const prepend = (items, value, key = null) => {
-  let result = slice(items)
-
-  if (isa(items)) {
-    result.unshift(value)
-  } else {
-    result = { [key]: value, ...result }
-  }
-
-  return result
-}
+const prepend = (items, value, key = null) => isa(items) ? [value, ...items] : { [key]: value, ...items }
 
 const methods = {
   keys,

@@ -325,18 +325,6 @@
     }, []);
   };
 
-  var except = function except(items) {
-    for (var _len = arguments.length, keys = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      keys[_key - 1] = arguments[_key];
-    }
-
-    keys = flatten(keys);
-
-    return filter(items, function (value, key) {
-      return !contains(keys, key);
-    });
-  };
-
   var filter = function filter(items) {
     var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
@@ -351,6 +339,18 @@
     }, {});
 
     return iso(items) ? result : values(result);
+  };
+
+  var except = function except(items) {
+    for (var _len = arguments.length, keys = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      keys[_key - 1] = arguments[_key];
+    }
+
+    keys = flatten(keys);
+
+    return filter(items, function (value, key) {
+      return !contains(keys, key);
+    });
   };
 
   var isEmpty = function isEmpty(items) {
@@ -631,30 +631,12 @@
 
   var append = function append(items, value) {
     var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
-    var result = slice(items);
-
-    if (isa(items)) {
-      result.push(value);
-    } else {
-      result[key] = value;
-    }
-
-    return result;
+    return isa(items) ? [].concat(toConsumableArray(items), [value]) : _extends({}, items, defineProperty({}, key, value));
   };
 
   var prepend = function prepend(items, value) {
     var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
-    var result = slice(items);
-
-    if (isa(items)) {
-      result.unshift(value);
-    } else {
-      result = _extends(defineProperty({}, key, value), result);
-    }
-
-    return result;
+    return isa(items) ? [value].concat(toConsumableArray(items)) : _extends(defineProperty({}, key, value), items);
   };
 
   var methods = {
