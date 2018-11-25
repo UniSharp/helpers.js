@@ -629,6 +629,34 @@
     });
   };
 
+  var append = function append(items, value) {
+    var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+    var result = slice(items);
+
+    if (isa(items)) {
+      result.push(value);
+    } else {
+      result[key] = value;
+    }
+
+    return result;
+  };
+
+  var prepend = function prepend(items, value) {
+    var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+    var result = slice(items);
+
+    if (isa(items)) {
+      result.unshift(value);
+    } else {
+      result = _extends(defineProperty({}, key, value), result);
+    }
+
+    return result;
+  };
+
   var methods = {
     keys: keys,
     values: values,
@@ -670,7 +698,9 @@
     keyBy: keyBy,
     groupBy: groupBy,
     sort: sort,
-    sortBy: sortBy
+    sortBy: sortBy,
+    append: append,
+    prepend: prepend
   };
 
   var collection = (function (method, items) {

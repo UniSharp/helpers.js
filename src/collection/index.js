@@ -393,6 +393,30 @@ const sortBy = (items, callback) => {
   return mapWithKeys(result, ([key, item]) => ({ [key]: item }))
 }
 
+const append = (items, value, key = null) => {
+  let result = slice(items)
+
+  if (isa(items)) {
+    result.push(value)
+  } else {
+    result[key] = value
+  }
+
+  return result
+}
+
+const prepend = (items, value, key = null) => {
+  let result = slice(items)
+
+  if (isa(items)) {
+    result.unshift(value)
+  } else {
+    result = { [key]: value, ...result }
+  }
+
+  return result
+}
+
 const methods = {
   keys,
   values,
@@ -434,7 +458,9 @@ const methods = {
   keyBy,
   groupBy,
   sort,
-  sortBy
+  sortBy,
+  append,
+  prepend
 }
 
 export default (method, items, ...args) => {

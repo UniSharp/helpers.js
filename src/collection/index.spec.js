@@ -570,4 +570,18 @@ describe('Collection', () => {
       expect(JSON.stringify(c('sortBy', { a: { a: 1, b: 4 }, b: { a: 2, b: 3 } }, item => item.b))).toEqual(JSON.stringify({ b: { a: 2, b: 3 }, a: { a: 1, b: 4 } }))
     })
   })
+
+  describe('#append', () => {
+    it('should appends an item to the end of the collection', () => {
+      expect(c('append', [1, 2, 3, 4], 5)).toEqual([1, 2, 3, 4, 5])
+      expect(JSON.stringify(c('append', { a: 1, b: 2 }, 3, 'c'))).toEqual(JSON.stringify({ a: 1, b: 2, c: 3 }))
+    })
+  })
+
+  describe('#prepend', () => {
+    it('should adds an item to the beginning of the collection', () => {
+      expect(c('prepend', [2, 3, 4, 5], 1)).toEqual([1, 2, 3, 4, 5])
+      expect(JSON.stringify(c('prepend', { b: 2, c: 3 }, 1, 'a'))).toEqual(JSON.stringify({ a: 1, b: 2, c: 3 }))
+    })
+  })
 })
