@@ -576,8 +576,8 @@
       return items.sort(callback);
     }
 
-    var result = values(map(items, function (value, key) {
-      return [key, value];
+    var result = values(map(items, function (item, key) {
+      return [key, item];
     }));
 
     result = result.sort(function (a, b) {
@@ -587,9 +587,45 @@
     return mapWithKeys(result, function (_ref2) {
       var _ref3 = slicedToArray(_ref2, 2),
           key = _ref3[0],
-          value = _ref3[1];
+          item = _ref3[1];
 
-      return defineProperty({}, key, value);
+      return defineProperty({}, key, item);
+    });
+  };
+
+  var sortBy = function sortBy(items, callback) {
+    if (!isf(callback)) {
+      var key = callback;
+
+      callback = function callback(item) {
+        return get$1(item, key);
+      };
+    }
+
+    var result = values(map(items, function (item, key) {
+      return [key, item, callback(item)];
+    }));
+
+    result = sort(result, function (a, b) {
+      return spaceship(a[2], b[2]);
+    });
+
+    if (isa(items)) {
+      return map(result, function (_ref5) {
+        var _ref6 = slicedToArray(_ref5, 2),
+            key = _ref6[0],
+            item = _ref6[1];
+
+        return item;
+      });
+    }
+
+    return mapWithKeys(result, function (_ref7) {
+      var _ref8 = slicedToArray(_ref7, 2),
+          key = _ref8[0],
+          item = _ref8[1];
+
+      return defineProperty({}, key, item);
     });
   };
 
@@ -633,7 +669,8 @@
     merge: merge,
     keyBy: keyBy,
     groupBy: groupBy,
-    sort: sort
+    sort: sort,
+    sortBy: sortBy
   };
 
   var collection = (function (method, items) {

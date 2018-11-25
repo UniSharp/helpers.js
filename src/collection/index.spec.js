@@ -554,4 +554,20 @@ describe('Collection', () => {
       expect(JSON.stringify(c('sort', { a: 'c', b: 'b', c: 'a' }))).toEqual(JSON.stringify({ c: 'a', b: 'b', a: 'c' }))
     })
   })
+
+  describe('#sortBy', () => {
+    it('should sort the collection by the given key', () => {
+      expect(c('sortBy', [[1, 4], [2, 3]], 1)).toEqual([[2, 3], [1, 4]])
+      expect(c('sortBy', [{ a: 1, b: 4 }, { a: 2, b: 3 }], 'b')).toEqual([{ a: 2, b: 3 }, { a: 1, b: 4 }])
+      expect(JSON.stringify(c('sortBy', { a: [1, 4], b: [2, 3] }, 1))).toEqual(JSON.stringify({ b: [2, 3], a: [1, 4] }))
+      expect(JSON.stringify(c('sortBy', { a: { a: 1, b: 4 }, b: { a: 2, b: 3 } }, 'b'))).toEqual(JSON.stringify({ b: { a: 2, b: 3 }, a: { a: 1, b: 4 } }))
+    })
+
+    it('should sort the collection using the given callback', () => {
+      expect(c('sortBy', [[1, 4], [2, 3]], item => item[1])).toEqual([[2, 3], [1, 4]])
+      expect(c('sortBy', [{ a: 1, b: 4 }, { a: 2, b: 3 }], item => item.b)).toEqual([{ a: 2, b: 3 }, { a: 1, b: 4 }])
+      expect(JSON.stringify(c('sortBy', { a: [1, 4], b: [2, 3] }, item => item[1]))).toEqual(JSON.stringify({ b: [2, 3], a: [1, 4] }))
+      expect(JSON.stringify(c('sortBy', { a: { a: 1, b: 4 }, b: { a: 2, b: 3 } }, item => item.b))).toEqual(JSON.stringify({ b: { a: 2, b: 3 }, a: { a: 1, b: 4 } }))
+    })
+  })
 })

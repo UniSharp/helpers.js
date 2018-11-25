@@ -368,11 +368,29 @@ const sort = (items, callback = null) => {
     return items.sort(callback)
   }
 
-  let result = values(map(items, (value, key) => [key, value]))
+  let result = values(map(items, (item, key) => [key, item]))
 
   result = result.sort((a, b) => callback(a[1], b[1]))
 
-  return mapWithKeys(result, ([key, value]) => ({ [key]: value }))
+  return mapWithKeys(result, ([key, item]) => ({ [key]: item }))
+}
+
+const sortBy = (items, callback) => {
+  if (!isf(callback)) {
+    let key = callback
+
+    callback = item => get(item, key)
+  }
+
+  let result = values(map(items, (item, key) => [key, item, callback(item)]))
+
+  result = sort(result, (a, b) => spaceship(a[2], b[2]))
+
+  if (isa(items)) {
+    return map(result, ([key, item]) => item)
+  }
+
+  return mapWithKeys(result, ([key, item]) => ({ [key]: item }))
 }
 
 const methods = {
@@ -415,7 +433,8 @@ const methods = {
   merge,
   keyBy,
   groupBy,
-  sort
+  sort,
+  sortBy
 }
 
 export default (method, items, ...args) => {
