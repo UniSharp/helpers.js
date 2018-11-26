@@ -43,6 +43,7 @@ require('@unisharp/helpers.js')
 ## Available Methods
 
 - [**Collection**](#collection)
+  - [append](#append)
   - [avg](#avg)
   - [chunk](#chunk)
   - [contains](#contains)
@@ -57,6 +58,8 @@ require('@unisharp/helpers.js')
   - [get](#get)
   - [groupBy](#groupby)
   - [has](#has)
+  - [index](#index)
+  - [insert](#insert)
   - [intersect](#intersect)
   - [intersectByKeys](#intersectbykeys)
   - [isEmpty](#isempty)
@@ -72,6 +75,7 @@ require('@unisharp/helpers.js')
   - [only](#only)
   - [pipe](#pipe)
   - [pluck](#pluck)
+  - [prepend](#prepend)
   - [reduce](#reduce)
   - [reject](#reject)
   - [shuffle](#shuffle)
@@ -107,6 +111,13 @@ require('@unisharp/helpers.js')
 ## Usage
 
 ### Collection
+
+#### append
+
+```javascript
+[1, 2, 3, 4].append(5)        // [1, 2, 3, 4, 5]
+{ a: 1, b: 2 }.append(3, 'c') // { a: 1, b: 2, c: 3 }
+```
 
 #### avg
 
@@ -215,6 +226,20 @@ require('@unisharp/helpers.js')
 [1, 2, 3, 4, 5].has(5)              // false
 { a: { b: { c: 1 } } }.has('a.b.c') // true
 { a: { b: { c: 1 } } }.has('a.b.d') // false
+```
+
+#### index
+
+```javascript
+[1, 2, 3, 4, 5].index(3)       // 2
+{ a: 1, b: 2, c: 3 }.insert(2) // b
+```
+
+#### insert
+
+```javascript
+[1, 2, 4, 5].insert(2, 3)          // [1, 2, 3, 4, 5]
+{ a: 1, c: 3 }.insert('c', 2, 'b') // { a: 1, b: 2, c: 3 }
 ```
 
 #### intersect
@@ -330,6 +355,13 @@ require('@unisharp/helpers.js')
 [{ a: 1, b: 2 }, { a: 1, b: 2 }].pluck('a')          // [1, 1]
 { a: { a: 1, b: 2 }, b: { a: 1, b: 2 } }.pluck('a')  // [1, 1]
 [{ a: 1, b: 'a' }, { a: 2, b: 'b' }].pluck('a', 'b') // { a: 1, b: 2 }
+```
+
+#### prepend
+
+```javascript
+[2, 3, 4, 5].prepend(1)        // [1, 2, 3, 4, 5]
+{ b: 2, c: 3 }.prepend(1, 'a') // { a: 1, b: 2, c: 3 }
 ```
 
 #### reduce
