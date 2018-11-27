@@ -231,8 +231,8 @@ require('@unisharp/helpers.js')
 #### index
 
 ```javascript
-[1, 2, 3, 4, 5].index(3)       // 2
-{ a: 1, b: 2, c: 3 }.insert(2) // b
+[1, 2, 3, 4, 5].index(3)      // 2
+{ a: 1, b: 2, c: 3 }.index(2) // b
 ```
 
 #### insert
