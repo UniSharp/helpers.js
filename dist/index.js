@@ -541,7 +541,7 @@
 
   var groupBy = function groupBy(items, key) {
     var result = reduce(items, function (result, row, index) {
-      var group = get$1(row, key);
+      var group = isf(key) ? key(row) : get$1(row, key);
 
       if (!result[group]) {
         result[group] = {};

@@ -528,6 +528,11 @@ describe('Collection', () => {
       expect(c('groupBy', [{ a: 'a' }, { a: 'a' }], 'a')).toEqual({ a: [{ a: 'a' }, { a: 'a' }] })
       expect(c('groupBy', { a: { a: 'a' }, b: { a: 'a' } }, 'a')).toEqual({ a: { a: { a: 'a' }, b: { a: 'a' } } })
     })
+
+    it('should groups the collection by the given callback', () => {
+      expect(c('groupBy', [{ a: 'a' }, { a: 'a' }], row => row.a)).toEqual({ a: [{ a: 'a' }, { a: 'a' }] })
+      expect(c('groupBy', { a: { a: 'a' }, b: { a: 'a' } }, row => row.a)).toEqual({ a: { a: { a: 'a' }, b: { a: 'a' } } })
+    })
   })
 
   describe('#sort', () => {

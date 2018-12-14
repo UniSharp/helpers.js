@@ -341,7 +341,7 @@ const keyBy = (items, key) => reduce(
 
 const groupBy = (items, key) => {
   let result = reduce(items, (result, row, index) => {
-    let group = get(row, key)
+    let group = isf(key) ? key(row) : get(row, key)
 
     if (!result[group]) {
       result[group] = {}
