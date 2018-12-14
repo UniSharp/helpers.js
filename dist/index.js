@@ -662,6 +662,16 @@
     return _extends({}, slice(items, 0, target), defineProperty({}, key, value), slice(items, target));
   };
 
+  var join = function join(items) {
+    var glue = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ', ';
+
+    if (iso(items)) {
+      items = values(items);
+    }
+
+    return items.join(glue);
+  };
+
   var methods = {
     keys: keys,
     values: values,
@@ -707,7 +717,8 @@
     append: append,
     prepend: prepend,
     index: index,
-    insert: insert
+    insert: insert,
+    join: join
   };
 
   var collection = (function (method, items) {

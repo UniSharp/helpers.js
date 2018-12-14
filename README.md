@@ -64,6 +64,7 @@ require('@unisharp/helpers.js')
   - [intersectByKeys](#intersectbykeys)
   - [isEmpty](#isempty)
   - [isNotEmpty](#isnotempty)
+  - [join](#join)
   - [keyBy](#keyby)
   - [keys](#keys)
   - [last](#last)
@@ -272,6 +273,15 @@ require('@unisharp/helpers.js')
 [1, 2, 3, 4, 5].isNotEmpty()      // true
 {}.isNotEmpty()                   // false
 { a: 1, b: 2, c: 3 }.isNotEmpty() // true
+```
+
+#### join
+
+```javascript
+[1, 2, 3, 4, 5].join()         // 1, 2, 3, 4, 5
+{ a: 1, b: 2, c: 3 }.join()    // 1, 2, 3
+[1, 2, 3, 4, 5].join('-')      // 1-2-3-4-5
+{ a: 1, b: 2, c: 3 }.join('-') // 1-2-3
 ```
 
 #### keyBy

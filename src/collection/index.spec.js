@@ -607,4 +607,16 @@ describe('Collection', () => {
       expect(JSON.stringify(c('insert', { a: 1, c: 3 }, 'e', 2, 'b'))).toEqual(JSON.stringify({ a: 1, c: 3, b: 2 }))
     })
   })
+
+  describe('#join', () => {
+    it('should join the items in a collection', () => {
+      expect(c('join', [1, 2, 3, 4, 5])).toEqual('1, 2, 3, 4, 5')
+      expect(c('join', { a: 1, b: 2, c: 3 })).toEqual('1, 2, 3')
+    })
+
+    it('should join the items in a collection with a given glue', () => {
+      expect(c('join', [1, 2, 3, 4, 5], '-')).toEqual('1-2-3-4-5')
+      expect(c('join', { a: 1, b: 2, c: 3 }, '-')).toEqual('1-2-3')
+    })
+  })
 })

@@ -418,6 +418,14 @@ const insert = (items, target, value, key = null) => {
   return { ...slice(items, 0, target), [key]: value, ...slice(items, target) }
 }
 
+const join = (items, glue = ', ') => {
+  if (iso(items)) {
+    items = values(items)
+  }
+
+  return items.join(glue)
+}
+
 const methods = {
   keys,
   values,
@@ -463,7 +471,8 @@ const methods = {
   append,
   prepend,
   index,
-  insert
+  insert,
+  join
 }
 
 export default (method, items, ...args) => {
