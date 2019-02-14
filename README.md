@@ -317,8 +317,8 @@ require('@unisharp/helpers.js')
 #### mapWithKeys
 
 ```javascript
-[1, 2, 3].map((value, index) => ({ [value]: index }))               // { 1: 0, 2: 1, 3: 2 }
-{ a: 1, b: 2, c: 3 }.map((value, key, index) => ({ [value]: key })) // { 1: 'a', 2: 'b', 3: 'c' }
+[1, 2, 3].mapWithKeys((value, index) => ({ [value]: index }))               // { 1: 0, 2: 1, 3: 2 }
+{ a: 1, b: 2, c: 3 }.mapWithKeys((value, key, index) => ({ [value]: key })) // { 1: 'a', 2: 'b', 3: 'c' }
 ```
 
 #### max
