@@ -672,6 +672,18 @@
     return items.join(glue);
   };
 
+  var partition = function partition(items, callback) {
+    var result = reduce(items, function (carry, value, key, index) {
+      carry[+!callback(value, key, index)][key] = value;
+
+      return carry;
+    }, [{}, {}]);
+
+    return iso(items) ? result : map(result, function (part) {
+      return values(part);
+    });
+  };
+
   var methods = {
     keys: keys,
     values: values,
@@ -718,7 +730,8 @@
     prepend: prepend,
     index: index,
     insert: insert,
-    join: join
+    join: join,
+    partition: partition
   };
 
   var collection = (function (method, items) {

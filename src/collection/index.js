@@ -426,6 +426,16 @@ const join = (items, glue = ', ') => {
   return items.join(glue)
 }
 
+const partition = (items, callback) => {
+  let result = reduce(items, (carry, value, key, index) => {
+    carry[+!callback(value, key, index)][key] = value
+
+    return carry
+  }, [{}, {}])
+
+  return iso(items) ? result : map(result, part => values(part))
+}
+
 const methods = {
   keys,
   values,
@@ -472,7 +482,8 @@ const methods = {
   prepend,
   index,
   insert,
-  join
+  join,
+  partition
 }
 
 export default (method, items, ...args) => {

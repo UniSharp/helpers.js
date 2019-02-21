@@ -619,4 +619,11 @@ describe('Collection', () => {
       expect(c('join', { a: 1, b: 2, c: 3 }, '-')).toBe('1-2-3')
     })
   })
+
+  describe('#partition', () => {
+    it('should separate elements that pass a given truth test from those that do not', () => {
+      expect(c('partition', [1, 2, 3, 4, 5], (value, key) => key < 2 && value < 3)).toEqual([[1, 2], [3, 4, 5]])
+      expect(c('partition', { a: 1, b: 2, c: 3 }, (value, key) => key === 'a' && value === 1)).toEqual([{ a: 1 }, { b: 2, c: 3 }])
+    })
+  })
 })

@@ -74,6 +74,7 @@ require('@unisharp/helpers.js')
   - [merge](#merge)
   - [min](#min)
   - [only](#only)
+  - [partition](#partition)
   - [pipe](#pipe)
   - [pluck](#pluck)
   - [prepend](#prepend)
@@ -349,6 +350,13 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.only('a', 'b')   // { a: 1, b: 2 }
 [1, 2, 3, 4, 5].only([0, 1, 2])       // [1, 2, 3]
 { a: 1, b: 2, c: 3 }.only(['a', 'b']) // { a: 1, b: 2 }
+```
+
+#### partition
+
+```javascript
+[1, 2, 3, 4, 5].partition((value, key) => key < 2 && value < 3)             // [[1, 2], [3, 4, 5]]
+{ a: 1, b: 2, c: 3 }.partition((value, key) => key === 'a' && value === 1)) // [{ a: 1 }, { b: 2, c: 3 }]
 ```
 
 #### pipe
