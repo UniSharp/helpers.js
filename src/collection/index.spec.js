@@ -540,23 +540,23 @@ describe('Collection', () => {
       expect(c('sort', [3, 5, 3, 4, 2, 1])).toEqual([1, 2, 3, 3, 4, 5])
       expect(c('sort', [[5, 4], [5, 3]])).toEqual([[5, 3], [5, 4]])
       expect(c('sort', [{ a: 5, b: 4 }, { a: 5, b: 3 }])).toEqual([{ a: 5, b: 3 }, { a: 5, b: 4 }])
-      expect(JSON.stringify(c('sort', { a: 5, b: 4, c: 3 }))).toEqual(JSON.stringify({ c: 3, b: 4, a: 5 }))
-      expect(JSON.stringify(c('sort', { a: [5, 4], b: [5, 3] }))).toEqual(JSON.stringify({ b: [5, 3], a: [5, 4] }))
-      expect(JSON.stringify(c('sort', { a: { a: 5, b: 4 }, b: { a: 5, b: 3 } }))).toEqual(JSON.stringify({ b: { a: 5, b: 3 }, a: { a: 5, b: 4 } }))
+      expect(JSON.stringify(c('sort', { a: 5, b: 4, c: 3 }))).toBe(JSON.stringify({ c: 3, b: 4, a: 5 }))
+      expect(JSON.stringify(c('sort', { a: [5, 4], b: [5, 3] }))).toBe(JSON.stringify({ b: [5, 3], a: [5, 4] }))
+      expect(JSON.stringify(c('sort', { a: { a: 5, b: 4 }, b: { a: 5, b: 3 } }))).toBe(JSON.stringify({ b: { a: 5, b: 3 }, a: { a: 5, b: 4 } }))
     })
 
     it('should sort the collection using the given callback', () => {
       expect(c('sort', [1, 2, 4, 3, 5, 3], (a, b) => b - a)).toEqual([5, 4, 3, 3, 2, 1])
       expect(c('sort', [[1, 2], [3, 4]], (a, b) => b[0] - a[0])).toEqual([[3, 4], [1, 2]])
       expect(c('sort', [{ a: 1, b: 2 }, { a: 3, b: 4 }], (a, b) => b.a - a.a)).toEqual([{ a: 3, b: 4 }, { a: 1, b: 2 }])
-      expect(JSON.stringify(c('sort', { a: 1, b: 2, c: 3 }, (a, b) => b - a))).toEqual(JSON.stringify({ c: 3, b: 2, a: 1 }))
-      expect(JSON.stringify(c('sort', { a: [1, 2], b: [3, 4] }, (a, b) => b[0] - a[0]))).toEqual(JSON.stringify({ b: [3, 4], a: [1, 2] }))
-      expect(JSON.stringify(c('sort', { a: { a: 1, b: 2 }, b: { a: 3, b: 4 } }, (a, b) => b.a - a.a))).toEqual(JSON.stringify({ b: { a: 3, b: 4 }, a: { a: 1, b: 2 } }))
+      expect(JSON.stringify(c('sort', { a: 1, b: 2, c: 3 }, (a, b) => b - a))).toBe(JSON.stringify({ c: 3, b: 2, a: 1 }))
+      expect(JSON.stringify(c('sort', { a: [1, 2], b: [3, 4] }, (a, b) => b[0] - a[0]))).toBe(JSON.stringify({ b: [3, 4], a: [1, 2] }))
+      expect(JSON.stringify(c('sort', { a: { a: 1, b: 2 }, b: { a: 3, b: 4 } }, (a, b) => b.a - a.a))).toBe(JSON.stringify({ b: { a: 3, b: 4 }, a: { a: 1, b: 2 } }))
     })
 
     it('should sort the collection which contains string', () => {
       expect(c('sort', ['c', 'b', 'a'])).toEqual(['a', 'b', 'c'])
-      expect(JSON.stringify(c('sort', { a: 'c', b: 'b', c: 'a' }))).toEqual(JSON.stringify({ c: 'a', b: 'b', a: 'c' }))
+      expect(JSON.stringify(c('sort', { a: 'c', b: 'b', c: 'a' }))).toBe(JSON.stringify({ c: 'a', b: 'b', a: 'c' }))
     })
   })
 
@@ -564,38 +564,38 @@ describe('Collection', () => {
     it('should sort the collection by the given key', () => {
       expect(c('sortBy', [[1, 4], [2, 3]], 1)).toEqual([[2, 3], [1, 4]])
       expect(c('sortBy', [{ a: 1, b: 4 }, { a: 2, b: 3 }], 'b')).toEqual([{ a: 2, b: 3 }, { a: 1, b: 4 }])
-      expect(JSON.stringify(c('sortBy', { a: [1, 4], b: [2, 3] }, 1))).toEqual(JSON.stringify({ b: [2, 3], a: [1, 4] }))
-      expect(JSON.stringify(c('sortBy', { a: { a: 1, b: 4 }, b: { a: 2, b: 3 } }, 'b'))).toEqual(JSON.stringify({ b: { a: 2, b: 3 }, a: { a: 1, b: 4 } }))
+      expect(JSON.stringify(c('sortBy', { a: [1, 4], b: [2, 3] }, 1))).toBe(JSON.stringify({ b: [2, 3], a: [1, 4] }))
+      expect(JSON.stringify(c('sortBy', { a: { a: 1, b: 4 }, b: { a: 2, b: 3 } }, 'b'))).toBe(JSON.stringify({ b: { a: 2, b: 3 }, a: { a: 1, b: 4 } }))
     })
 
     it('should sort the collection using the given callback', () => {
       expect(c('sortBy', [[1, 4], [2, 3]], item => item[1])).toEqual([[2, 3], [1, 4]])
       expect(c('sortBy', [{ a: 1, b: 4 }, { a: 2, b: 3 }], item => item.b)).toEqual([{ a: 2, b: 3 }, { a: 1, b: 4 }])
-      expect(JSON.stringify(c('sortBy', { a: [1, 4], b: [2, 3] }, item => item[1]))).toEqual(JSON.stringify({ b: [2, 3], a: [1, 4] }))
-      expect(JSON.stringify(c('sortBy', { a: { a: 1, b: 4 }, b: { a: 2, b: 3 } }, item => item.b))).toEqual(JSON.stringify({ b: { a: 2, b: 3 }, a: { a: 1, b: 4 } }))
+      expect(JSON.stringify(c('sortBy', { a: [1, 4], b: [2, 3] }, item => item[1]))).toBe(JSON.stringify({ b: [2, 3], a: [1, 4] }))
+      expect(JSON.stringify(c('sortBy', { a: { a: 1, b: 4 }, b: { a: 2, b: 3 } }, item => item.b))).toBe(JSON.stringify({ b: { a: 2, b: 3 }, a: { a: 1, b: 4 } }))
     })
   })
 
   describe('#append', () => {
     it('should appends an item to the end of the collection', () => {
       expect(c('append', [1, 2, 3, 4], 5)).toEqual([1, 2, 3, 4, 5])
-      expect(JSON.stringify(c('append', { a: 1, b: 2 }, 3, 'c'))).toEqual(JSON.stringify({ a: 1, b: 2, c: 3 }))
+      expect(JSON.stringify(c('append', { a: 1, b: 2 }, 3, 'c'))).toBe(JSON.stringify({ a: 1, b: 2, c: 3 }))
     })
   })
 
   describe('#prepend', () => {
     it('should adds an item to the beginning of the collection', () => {
       expect(c('prepend', [2, 3, 4, 5], 1)).toEqual([1, 2, 3, 4, 5])
-      expect(JSON.stringify(c('prepend', { b: 2, c: 3 }, 1, 'a'))).toEqual(JSON.stringify({ a: 1, b: 2, c: 3 }))
+      expect(JSON.stringify(c('prepend', { b: 2, c: 3 }, 1, 'a'))).toBe(JSON.stringify({ a: 1, b: 2, c: 3 }))
     })
   })
 
   describe('#index', () => {
     it('should return the index of the first item in collection', () => {
-      expect(c('index', [1, 2, 3, 4, 5], 3)).toEqual(2)
-      expect(c('index', [1, 2, 3, 4, 5], 0)).toEqual(null)
-      expect(c('index', { a: 1, b: 2, c: 3 }, 2)).toEqual('b')
-      expect(c('index', { a: 1, b: 2, c: 3 }, 0)).toEqual(null)
+      expect(c('index', [1, 2, 3, 4, 5], 3)).toBe(2)
+      expect(c('index', [1, 2, 3, 4, 5], 0)).toBe(null)
+      expect(c('index', { a: 1, b: 2, c: 3 }, 2)).toBe('b')
+      expect(c('index', { a: 1, b: 2, c: 3 }, 0)).toBe(null)
     })
   })
 
@@ -603,20 +603,20 @@ describe('Collection', () => {
     it('should insert an item before the element with the given index of the collection', () => {
       expect(c('insert', [1, 2, 4, 5], 2, 3)).toEqual([1, 2, 3, 4, 5])
       expect(c('insert', [1, 2, 4, 5], 5, 3)).toEqual([1, 2, 4, 5, 3])
-      expect(JSON.stringify(c('insert', { a: 1, c: 3 }, 'c', 2, 'b'))).toEqual(JSON.stringify({ a: 1, b: 2, c: 3 }))
-      expect(JSON.stringify(c('insert', { a: 1, c: 3 }, 'e', 2, 'b'))).toEqual(JSON.stringify({ a: 1, c: 3, b: 2 }))
+      expect(JSON.stringify(c('insert', { a: 1, c: 3 }, 'c', 2, 'b'))).toBe(JSON.stringify({ a: 1, b: 2, c: 3 }))
+      expect(JSON.stringify(c('insert', { a: 1, c: 3 }, 'e', 2, 'b'))).toBe(JSON.stringify({ a: 1, c: 3, b: 2 }))
     })
   })
 
   describe('#join', () => {
     it('should join the items in a collection', () => {
-      expect(c('join', [1, 2, 3, 4, 5])).toEqual('1, 2, 3, 4, 5')
-      expect(c('join', { a: 1, b: 2, c: 3 })).toEqual('1, 2, 3')
+      expect(c('join', [1, 2, 3, 4, 5])).toBe('1, 2, 3, 4, 5')
+      expect(c('join', { a: 1, b: 2, c: 3 })).toBe('1, 2, 3')
     })
 
     it('should join the items in a collection with a given glue', () => {
-      expect(c('join', [1, 2, 3, 4, 5], '-')).toEqual('1-2-3-4-5')
-      expect(c('join', { a: 1, b: 2, c: 3 }, '-')).toEqual('1-2-3')
+      expect(c('join', [1, 2, 3, 4, 5], '-')).toBe('1-2-3-4-5')
+      expect(c('join', { a: 1, b: 2, c: 3 }, '-')).toBe('1-2-3')
     })
   })
 })
