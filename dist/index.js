@@ -870,10 +870,6 @@
     return Math.abs(this);
   };
 
-  Object.isObject = function (value) {
-    return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object;
-  };
-
   String.random = function () {
     var length = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 16;
 
