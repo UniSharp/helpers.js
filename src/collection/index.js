@@ -2,9 +2,9 @@ const isf = value => typeof value === 'function'
 
 const isn = value => typeof value === 'number' && isFinite(value)
 
-const isa = value => value && typeof value === 'object' && value.constructor === Array
+const isa = value => value && Array.isArray(value)
 
-const iso = value => value && typeof value === 'object' && value.constructor === Object
+const iso = value => value && typeof value === 'object' && value.constructor.name === 'Object'
 
 const spaceship = (a, b) => {
   if (a > b) {

@@ -120,11 +120,11 @@
   };
 
   var isa = function isa(value) {
-    return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Array;
+    return value && Array.isArray(value);
   };
 
   var iso = function iso(value) {
-    return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor === Object;
+    return value && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object' && value.constructor.name === 'Object';
   };
 
   var spaceship = function spaceship(a, b) {
