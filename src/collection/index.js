@@ -436,7 +436,7 @@ const partition = (items, callback) => {
   return iso(items) ? result : map(result, part => values(part))
 }
 
-const methods = {
+export const methods = {
   keys,
   values,
   contains,
@@ -486,7 +486,7 @@ const methods = {
   partition
 }
 
-export default (method, items, ...args) => {
+export const call = (method, items, ...args) => {
   if ((!isa(items) && !iso(items)) ||
       (iso(items) && has(items, method))) {
     return items[method](...args)

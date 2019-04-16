@@ -1,18 +1,24 @@
-const PROPERTIES = ['year', 'month', 'day', 'hour', 'minute', 'second', 'millisecond']
-
-class DateInterval {
+export default class DateInterval {
   constructor () {
-    PROPERTIES.forEach(key => {
-      this[`${key}s`] = 0
-    })
+    this.years = 0
+    this.months = 0
+    this.days = 0
+    this.hours = 0
+    this.minutes = 0
+    this.seconds = 0
+    this.milliseconds = 0
   }
 
   invert () {
     let newInterval = new DateInterval()
 
-    PROPERTIES.forEach(key => {
-      newInterval[`${key}s`] = this[`${key}s`] * -1
-    })
+    newInterval.years = this.years * -1
+    newInterval.months = this.months * -1
+    newInterval.days = this.days * -1
+    newInterval.hours = this.hours * -1
+    newInterval.minutes = this.minutes * -1
+    newInterval.seconds = this.seconds * -1
+    newInterval.milliseconds = this.milliseconds * -1
 
     return newInterval
   }
@@ -35,19 +41,3 @@ class DateInterval {
     return date
   }
 }
-
-PROPERTIES.forEach(key => {
-  Number.prototype[key] = function () {
-    return this[`${key}s`]()
-  }
-
-  Number.prototype[`${key}s`] = function () {
-    let interval = new DateInterval()
-
-    interval[`${key}s`] = this
-
-    return interval
-  }
-})
-
-export default DateInterval

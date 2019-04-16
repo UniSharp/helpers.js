@@ -1,4 +1,4 @@
-String.random = function (length = 16) {
+const random = function (length = 16) {
   let string = ''
 
   while (string.length < length) {
@@ -8,18 +8,29 @@ String.random = function (length = 16) {
   return string.slice(-length)
 }
 
-String.prototype.slugify = function () {
+const slugify = function () {
   return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
 }
 
-String.prototype.stripTags = function () {
+const stripTags = function () {
   return this.replace(/<\/?[a-z0-9]+.*?>/ig, '')
 }
 
-String.prototype.limit = function (length, suffix = '...') {
+const limit = function (length, suffix = '...') {
   return this.slice(0, length) + suffix
 }
 
-String.prototype.nl2br = function () {
+const nl2br = function () {
   return this.replace(/\r\n|\n\r|\n|\r/g, '<br>')
+}
+
+export const staticMethods = {
+  random
+}
+
+export const methods = {
+  slugify,
+  stripTags,
+  limit,
+  nl2br
 }

@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global.UniSharp = factory());
-}(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (factory((global.UniSharp = {})));
+}(this, (function (exports) { 'use strict';
 
   var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
     return typeof obj;
@@ -110,6 +110,62 @@
       return Array.from(arr);
     }
   };
+
+  var DateInterval = function () {
+    function DateInterval() {
+      classCallCheck(this, DateInterval);
+
+      this.years = 0;
+      this.months = 0;
+      this.days = 0;
+      this.hours = 0;
+      this.minutes = 0;
+      this.seconds = 0;
+      this.milliseconds = 0;
+    }
+
+    createClass(DateInterval, [{
+      key: "invert",
+      value: function invert() {
+        var newInterval = new DateInterval();
+
+        newInterval.years = this.years * -1;
+        newInterval.months = this.months * -1;
+        newInterval.days = this.days * -1;
+        newInterval.hours = this.hours * -1;
+        newInterval.minutes = this.minutes * -1;
+        newInterval.seconds = this.seconds * -1;
+        newInterval.milliseconds = this.milliseconds * -1;
+
+        return newInterval;
+      }
+    }, {
+      key: "ago",
+      value: function ago() {
+        var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+        return this.invert().after(date);
+      }
+    }, {
+      key: "after",
+      value: function after() {
+        var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+        date = date || new Date();
+
+        date.setFullYear(date.getFullYear() + this.years);
+        date.setMonth(date.getMonth() + this.months);
+        date.setDate(date.getDate() + this.days);
+        date.setHours(date.getHours() + this.hours);
+        date.setMinutes(date.getMinutes() + this.minutes);
+        date.setSeconds(date.getSeconds() + this.seconds);
+        date.setMilliseconds(date.getMilliseconds() + this.milliseconds);
+
+        return date;
+      }
+    }]);
+    return DateInterval;
+  }();
 
   var isf = function isf(value) {
     return typeof value === 'function';
@@ -734,7 +790,7 @@
     partition: partition
   };
 
-  var collection = (function (method, items) {
+  var call = function call(method, items) {
     for (var _len4 = arguments.length, args = Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
       args[_key4 - 2] = arguments[_key4];
     }
@@ -744,81 +800,13 @@
     }
 
     return methods[method].apply(methods, [items].concat(args));
-  });
-
-  var PROPERTIES = ['year', 'month', 'day', 'hour', 'minute', 'second', 'millisecond'];
-
-  var DateInterval = function () {
-    function DateInterval() {
-      var _this = this;
-
-      classCallCheck(this, DateInterval);
-
-      PROPERTIES.forEach(function (key) {
-        _this[key + 's'] = 0;
-      });
-    }
-
-    createClass(DateInterval, [{
-      key: 'invert',
-      value: function invert() {
-        var _this2 = this;
-
-        var newInterval = new DateInterval();
-
-        PROPERTIES.forEach(function (key) {
-          newInterval[key + 's'] = _this2[key + 's'] * -1;
-        });
-
-        return newInterval;
-      }
-    }, {
-      key: 'ago',
-      value: function ago() {
-        var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-        return this.invert().after(date);
-      }
-    }, {
-      key: 'after',
-      value: function after() {
-        var date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-        date = date || new Date();
-
-        date.setFullYear(date.getFullYear() + this.years);
-        date.setMonth(date.getMonth() + this.months);
-        date.setDate(date.getDate() + this.days);
-        date.setHours(date.getHours() + this.hours);
-        date.setMinutes(date.getMinutes() + this.minutes);
-        date.setSeconds(date.getSeconds() + this.seconds);
-        date.setMilliseconds(date.getMilliseconds() + this.milliseconds);
-
-        return date;
-      }
-    }]);
-    return DateInterval;
-  }();
-
-  PROPERTIES.forEach(function (key) {
-    Number.prototype[key] = function () {
-      return this[key + 's']();
-    };
-
-    Number.prototype[key + 's'] = function () {
-      var interval = new DateInterval();
-
-      interval[key + 's'] = this;
-
-      return interval;
-    };
-  });
+  };
 
   var isf$1 = function isf(n) {
     return Number(n) === n && n % 1 !== 0;
   };
 
-  Number.random = function () {
+  var random = function random() {
     var max = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
     var result = Math.random() * (max || 1);
@@ -826,17 +814,17 @@
     return max === null || isf$1(max) ? result : Math.floor(result);
   };
 
-  Number.prototype.format = function () {
+  var format = function format() {
     return this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,');
   };
 
-  Number.prototype.times = function (callback) {
+  var times = function times(callback) {
     return [].concat(toConsumableArray(Array(+this).keys())).map(function (n) {
       return n + 1;
     }).map(callback);
   };
 
-  Number.prototype.upto = function (limit, callback) {
+  var upto = function upto(limit, callback) {
     var _this = this;
 
     return (limit - this + 1).times(function (n) {
@@ -844,7 +832,7 @@
     }).map(callback);
   };
 
-  Number.prototype.downto = function (limit, callback) {
+  var downto = function downto(limit, callback) {
     var _this2 = this;
 
     return (this - limit + 1).times(function (n) {
@@ -852,25 +840,118 @@
     }).map(callback);
   };
 
-  Number.prototype.round = function () {
+  var round = function round() {
     var precision = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
     return Math.round(this * Math.pow(10, precision)) / Math.pow(10, precision);
   };
 
-  Number.prototype.floor = function () {
+  var floor = function floor() {
     return Math.floor(this);
   };
 
-  Number.prototype.ceil = function () {
+  var ceil = function ceil() {
     return Math.ceil(this);
   };
 
-  Number.prototype.abs = function () {
+  var abs = function abs() {
     return Math.abs(this);
   };
 
-  String.random = function () {
+  var createInterval = function createInterval(type, value) {
+    var interval = new DateInterval();
+
+    interval[type] = value;
+
+    return interval;
+  };
+
+  var year = function year() {
+    return createInterval('years', this);
+  };
+
+  var month = function month() {
+    return createInterval('months', this);
+  };
+
+  var day = function day() {
+    return createInterval('days', this);
+  };
+
+  var hour = function hour() {
+    return createInterval('hours', this);
+  };
+
+  var minute = function minute() {
+    return createInterval('minutes', this);
+  };
+
+  var second = function second() {
+    return createInterval('seconds', this);
+  };
+
+  var millisecond = function millisecond() {
+    return createInterval('milliseconds', this);
+  };
+
+  var years = function years() {
+    return this.year();
+  };
+
+  var months = function months() {
+    return this.month();
+  };
+
+  var days = function days() {
+    return this.day();
+  };
+
+  var hours = function hours() {
+    return this.hour();
+  };
+
+  var minutes = function minutes() {
+    return this.minute();
+  };
+
+  var seconds = function seconds() {
+    return this.second();
+  };
+
+  var milliseconds = function milliseconds() {
+    return this.millisecond();
+  };
+
+  var staticMethods = {
+    random: random
+  };
+
+  var methods$1 = {
+    format: format,
+    times: times,
+    upto: upto,
+    downto: downto,
+    round: round,
+    floor: floor,
+    ceil: ceil,
+    abs: abs,
+    year: year,
+    month: month,
+    day: day,
+    hour: hour,
+    minute: minute,
+    second: second,
+    millisecond: millisecond,
+    years: years,
+    months: months,
+    days: days,
+    hours: hours,
+    minutes: minutes,
+    seconds: seconds,
+    milliseconds: milliseconds
+  };
+
+  var random$1 = function random() {
     var length = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 16;
 
     var string = '';
@@ -882,28 +963,72 @@
     return string.slice(-length);
   };
 
-  String.prototype.slugify = function () {
+  var slugify = function slugify() {
     return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
   };
 
-  String.prototype.stripTags = function () {
+  var stripTags = function stripTags() {
     return this.replace(/<\/?[a-z0-9]+.*?>/ig, '');
   };
 
-  String.prototype.limit = function (length) {
+  var limit = function limit(length) {
     var suffix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '...';
 
     return this.slice(0, length) + suffix;
   };
 
-  String.prototype.nl2br = function () {
+  var nl2br = function nl2br() {
     return this.replace(/\r\n|\n\r|\n|\r/g, '<br>');
   };
 
-  global.DateInterval = DateInterval;
+  var staticMethods$1 = {
+    random: random$1
+  };
 
-  var index$1 = { Helpers: { collection: collection } };
+  var methods$2 = {
+    slugify: slugify,
+    stripTags: stripTags,
+    limit: limit,
+    nl2br: nl2br
+  };
 
-  return index$1;
+  var Helpers = {
+    Collection: _extends({ call: call }, methods),
+    Number: _extends({}, staticMethods, methods$1),
+    String: _extends({}, staticMethods$1, methods$2),
+    init: function init() {
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref$Number = _ref.Number,
+          Number = _ref$Number === undefined ? global.Number : _ref$Number,
+          _ref$String = _ref.String,
+          String = _ref$String === undefined ? global.String : _ref$String;
+
+      global.DateInterval = DateInterval;
+      global.UniSharp = { Helpers: Helpers };
+
+      for (var method in staticMethods) {
+        Number[method] = staticMethods[method];
+      }
+
+      for (var _method in methods$1) {
+        Number.prototype[_method] = methods$1[_method];
+      }
+
+      for (var _method2 in staticMethods$1) {
+        String[_method2] = staticMethods$1[_method2];
+      }
+
+      for (var _method3 in methods$2) {
+        String.prototype[_method3] = methods$2[_method3];
+      }
+    }
+  };
+
+  var index$1 = { Helpers: Helpers };
+
+  exports.Helpers = Helpers;
+  exports.default = index$1;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
 
 })));

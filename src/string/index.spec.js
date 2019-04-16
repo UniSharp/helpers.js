@@ -1,4 +1,6 @@
-import './'
+import { Helpers } from '../'
+
+Helpers.init()
 
 describe('String', () => {
   describe('#random()', () => {

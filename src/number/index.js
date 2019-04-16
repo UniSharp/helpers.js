@@ -1,39 +1,134 @@
+import DateInterval from '../date'
+
 const isf = n => Number(n) === n && n % 1 !== 0
 
-Number.random = function (max = null) {
+const random = function (max = null) {
   let result = Math.random() * (max || 1)
 
   return max === null || isf(max) ? result : Math.floor(result)
 }
 
-Number.prototype.format = function () {
+const format = function () {
   return this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,')
 }
 
-Number.prototype.times = function (callback) {
+const times = function (callback) {
   return [...Array(+this).keys()].map(n => n + 1).map(callback)
 }
 
-Number.prototype.upto = function (limit, callback) {
+const upto = function (limit, callback) {
   return (limit - this + 1).times(n => n + this - 1).map(callback)
 }
 
-Number.prototype.downto = function (limit, callback) {
+const downto = function (limit, callback) {
   return (this - limit + 1).times(n => this - n + 1).map(callback)
 }
 
-Number.prototype.round = function (precision = 0) {
+const round = function (precision = 0) {
   return Math.round(this * 10 ** precision) / 10 ** precision
 }
 
-Number.prototype.floor = function () {
+const floor = function () {
   return Math.floor(this)
 }
 
-Number.prototype.ceil = function () {
+const ceil = function () {
   return Math.ceil(this)
 }
 
-Number.prototype.abs = function () {
+const abs = function () {
   return Math.abs(this)
+}
+
+const createInterval = function (type, value) {
+  let interval = new DateInterval()
+
+  interval[type] = value
+
+  return interval
+}
+
+const year = function () {
+  return createInterval('years', this)
+}
+
+const month = function () {
+  return createInterval('months', this)
+}
+
+const day = function () {
+  return createInterval('days', this)
+}
+
+const hour = function () {
+  return createInterval('hours', this)
+}
+
+const minute = function () {
+  return createInterval('minutes', this)
+}
+
+const second = function () {
+  return createInterval('seconds', this)
+}
+
+const millisecond = function () {
+  return createInterval('milliseconds', this)
+}
+
+const years = function () {
+  return this.year()
+}
+
+const months = function () {
+  return this.month()
+}
+
+const days = function () {
+  return this.day()
+}
+
+const hours = function () {
+  return this.hour()
+}
+
+const minutes = function () {
+  return this.minute()
+}
+
+const seconds = function () {
+  return this.second()
+}
+
+const milliseconds = function () {
+  return this.millisecond()
+}
+
+export const staticMethods = {
+  random
+}
+
+export const methods = {
+  format,
+  times,
+  upto,
+  downto,
+  round,
+  floor,
+  ceil,
+  abs,
+  year,
+  month,
+  day,
+  hour,
+  minute,
+  second,
+  millisecond,
+  years,
+  months,
+  days,
+  hours,
+  minutes,
+  seconds,
+  milliseconds
 }
