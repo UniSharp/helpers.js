@@ -17,11 +17,11 @@ const times = function (callback) {
 }
 
 const upto = function (limit, callback) {
-  return (limit - this + 1).times(n => n + this - 1).map(callback)
+  return times.call(limit - this + 1, n => n + this - 1).map(callback)
 }
 
 const downto = function (limit, callback) {
-  return (this - limit + 1).times(n => this - n + 1).map(callback)
+  return times.call(this - limit + 1, n => this - n + 1).map(callback)
 }
 
 const round = function (precision = 0) {

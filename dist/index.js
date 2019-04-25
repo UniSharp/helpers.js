@@ -827,7 +827,7 @@
   var upto = function upto(limit, callback) {
     var _this = this;
 
-    return (limit - this + 1).times(function (n) {
+    return times.call(limit - this + 1, function (n) {
       return n + _this - 1;
     }).map(callback);
   };
@@ -835,7 +835,7 @@
   var downto = function downto(limit, callback) {
     var _this2 = this;
 
-    return (this - limit + 1).times(function (n) {
+    return times.call(this - limit + 1, function (n) {
       return _this2 - n + 1;
     }).map(callback);
   };
