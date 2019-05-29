@@ -316,11 +316,15 @@
   };
 
   var each = function each(items, callback) {
-    var c = 0;
-    var k = keys(items);
+    var index = 0;
+    var isArray = isa(items);
 
-    for (var i = 0; i < count(k); i++) {
-      if (callback(items[k[i]], k[i], c++) === false) {
+    for (var key in items) {
+      if (isArray) {
+        key = +key;
+      }
+
+      if (callback(items[key], key, index++) === false) {
         break;
       }
     }
@@ -361,10 +365,16 @@
 
   var reduce = function reduce(items, callback, initValue) {
     var result = initValue;
+    var index = 0;
+    var isArray = isa(items);
 
-    each(items, function (value, key, index) {
-      result = callback(result, value, key, index);
-    });
+    for (var key in items) {
+      if (isArray) {
+        key = +key;
+      }
+
+      result = callback(result, items[key], key, index++);
+    }
 
     return result;
   };
@@ -384,17 +394,23 @@
   var filter = function filter(items) {
     var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
+    var result = {};
+    var index = 0;
+    var isArray = isa(items);
+
     callback = normalizeCallback(callback);
 
-    var result = reduce(items, function (carry, value, key, index) {
-      if (callback(value, key, index)) {
-        carry[key] = value;
+    for (var key in items) {
+      if (isArray) {
+        key = +key;
       }
 
-      return carry;
-    }, {});
+      if (callback(items[key], key, index++)) {
+        result[key] = items[key];
+      }
+    }
 
-    return iso(items) ? result : values(result);
+    return isArray ? values(result) : result;
   };
 
   var except = function except(items) {
@@ -402,11 +418,22 @@
       keys[_key - 1] = arguments[_key];
     }
 
+    var result = {};
+    var isArray = isa(items);
+
     keys = flatten(keys);
 
-    return filter(items, function (value, key) {
-      return !contains(keys, key);
-    });
+    for (var key in items) {
+      if (isArray) {
+        key = +key;
+      }
+
+      if (keys.indexOf(key) === -1) {
+        result[key] = items[key];
+      }
+    }
+
+    return iso(items) ? result : values(result);
   };
 
   var isEmpty = function isEmpty(items) {
@@ -438,23 +465,37 @@
   };
 
   var map = function map(items, callback) {
-    var result = reduce(items, function (result, value, key, index) {
-      return _extends({}, result, defineProperty({}, key, callback(value, key, index)));
-    }, {});
+    var result = {};
+    var index = 0;
+
+    for (var key in items) {
+      result[key] = callback(items[key], key, index++);
+    }
 
     return iso(items) ? result : values(result);
   };
 
   var mapWithKeys = function mapWithKeys(items, callback) {
-    return reduce(items, function (result, value, key, index) {
-      return _extends({}, result, callback(value, key, index));
-    }, {});
+    var result = {};
+    var index = 0;
+
+    for (var key in items) {
+      result = _extends({}, result, callback(items[key], key, index++));
+    }
+
+    return result;
   };
 
   var flatten = function flatten(items) {
-    return reduce(items, function (carry, value) {
-      return isa(value) || iso(value) ? [].concat(toConsumableArray(carry), toConsumableArray(flatten(value))) : [].concat(toConsumableArray(carry), [value]);
-    }, []);
+    var result = [];
+
+    for (var key in items) {
+      var value = items[key];
+
+      result = isa(value) || iso(value) ? [].concat(toConsumableArray(result), toConsumableArray(flatten(value))) : [].concat(toConsumableArray(result), [value]);
+    }
+
+    return result;
   };
 
   var min = function min(items) {
@@ -470,11 +511,22 @@
       keys[_key2 - 1] = arguments[_key2];
     }
 
+    var result = {};
+    var isArray = isa(items);
+
     keys = flatten(keys);
 
-    return filter(items, function (value, key) {
-      return contains(keys, key);
-    });
+    for (var key in items) {
+      if (isArray) {
+        key = +key;
+      }
+
+      if (keys.indexOf(key) !== -1) {
+        result[key] = items[key];
+      }
+    }
+
+    return iso(items) ? result : values(result);
   };
 
   var pipe = function pipe(items, callback) {
@@ -483,13 +535,17 @@
 
   var pluck = function pluck(items, value) {
     var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-    return reduce(items, function (result, row) {
-      if (key === null) {
-        return [].concat(toConsumableArray(result), [get$1(row, value)]);
-      }
 
-      return _extends({}, result, defineProperty({}, get$1(row, key), get$1(row, value)));
-    }, key === null ? [] : {});
+    var isArray = key === null;
+    var result = isArray ? [] : {};
+
+    for (var k in items) {
+      var row = items[k];
+
+      result = isArray ? [].concat(toConsumableArray(result), [get$1(row, value)]) : _extends({}, result, defineProperty({}, get$1(row, key), get$1(row, value)));
+    }
+
+    return result;
   };
 
   var reject = function reject(items) {
@@ -499,11 +555,23 @@
       throw new Error('Callback function is required.');
     }
 
+    var result = {};
+    var index = 0;
+    var isArray = isa(items);
+
     callback = normalizeCallback(callback);
 
-    return filter(items, function (value, key, index) {
-      return !callback(value, key, index);
-    });
+    for (var key in items) {
+      if (isArray) {
+        key = +key;
+      }
+
+      if (!callback(items[key], key, index++)) {
+        result[key] = items[key];
+      }
+    }
+
+    return iso(items) ? result : values(result);
   };
 
   var swap = function swap(items, from, to) {
@@ -530,9 +598,7 @@
       result = swap(result, i, target);
     }
 
-    return reduce(result, function (carry, item) {
-      return [].concat(toConsumableArray(carry), [item]);
-    }, []);
+    return result;
   };
 
   var take = function take(items, limit) {
@@ -542,15 +608,19 @@
   var unique = function unique(items) {
     var haystack = [];
     var result = {};
+    var isArray = isa(items);
 
-    each(items, function (value, key) {
-      if (!contains(haystack, value)) {
+    for (var key in items) {
+      var value = items[key];
+
+      if (haystack.indexOf(value) === -1) {
         result[key] = value;
+
         haystack.push(value);
       }
-    });
+    }
 
-    return iso(items) ? result : values(result);
+    return isArray ? values(result) : result;
   };
 
   var diff = function diff(items, compared) {

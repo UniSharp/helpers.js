@@ -118,11 +118,15 @@ const avg = (items, key = null) => {
 }
 
 const each = (items, callback) => {
-  let c = 0
-  let k = keys(items)
+  let index = 0
+  let isArray = isa(items)
 
-  for (let i = 0; i < count(k); i++) {
-    if (callback(items[k[i]], k[i], c++) === false) {
+  for (let key in items) {
+    if (isArray) {
+      key = +key
+    }
+
+    if (callback(items[key], key, index++) === false) {
       break
     }
   }
@@ -160,10 +164,16 @@ const slice = (items, begin = 0, end = null) => {
 
 const reduce = (items, callback, initValue) => {
   let result = initValue
+  let index = 0
+  let isArray = isa(items)
 
-  each(items, (value, key, index) => {
-    result = callback(result, value, key, index)
-  })
+  for (let key in items) {
+    if (isArray) {
+      key = +key
+    }
+
+    result = callback(result, items[key], key, index++)
+  }
 
   return result
 }
@@ -181,23 +191,42 @@ const chunk = (items, size) => reduce(
 )
 
 const filter = (items, callback = null) => {
+  let result = {}
+  let index = 0
+  let isArray = isa(items)
+
   callback = normalizeCallback(callback)
 
-  let result = reduce(items, (carry, value, key, index) => {
-    if (callback(value, key, index)) {
-      carry[key] = value
+  for (let key in items) {
+    if (isArray) {
+      key = +key
     }
 
-    return carry
-  }, {})
+    if (callback(items[key], key, index++)) {
+      result[key] = items[key]
+    }
+  }
 
-  return iso(items) ? result : values(result)
+  return isArray ? values(result) : result
 }
 
 const except = (items, ...keys) => {
+  let result = {}
+  let isArray = isa(items)
+
   keys = flatten(keys)
 
-  return filter(items, (value, key) => !contains(keys, key))
+  for (let key in items) {
+    if (isArray) {
+      key = +key
+    }
+
+    if (keys.indexOf(key) === -1) {
+      result[key] = items[key]
+    }
+  }
+
+  return iso(items) ? result : values(result)
 }
 
 const isEmpty = (items) => !count(items)
@@ -221,59 +250,99 @@ const last = (items, callback = null) => {
 }
 
 const map = (items, callback) => {
-  let result = reduce(
-    items,
-    (result, value, key, index) => ({ ...result, [key]: callback(value, key, index) }),
-    {}
-  )
+  let result = {}
+  let index = 0
+
+  for (let key in items) {
+    result[key] = callback(items[key], key, index++)
+  }
 
   return iso(items) ? result : values(result)
 }
 
-const mapWithKeys = (items, callback) => reduce(
-  items,
-  (result, value, key, index) => ({ ...result, ...callback(value, key, index) }),
-  {}
-)
+const mapWithKeys = (items, callback) => {
+  let result = {}
+  let index = 0
 
-const flatten = items => reduce(
-  items,
-  (carry, value) => isa(value) || iso(value) ? [...carry, ...flatten(value)] : [...carry, value],
-  []
-)
+  for (let key in items) {
+    result = { ...result, ...callback(items[key], key, index++) }
+  }
+
+  return result
+}
+
+const flatten = items => {
+  let result = []
+
+  for (let key in items) {
+    let value = items[key]
+
+    result = isa(value) || iso(value) ? [...result, ...flatten(value)] : [...result, value]
+  }
+
+  return result
+}
 
 const min = items => Math.min(...values(items))
 
 const max = items => Math.max(...values(items))
 
 const only = (items, ...keys) => {
+  let result = {}
+  let isArray = isa(items)
+
   keys = flatten(keys)
 
-  return filter(items, (value, key) => contains(keys, key))
+  for (let key in items) {
+    if (isArray) {
+      key = +key
+    }
+
+    if (keys.indexOf(key) !== -1) {
+      result[key] = items[key]
+    }
+  }
+
+  return iso(items) ? result : values(result)
 }
 
 const pipe = (items, callback) => callback(items)
 
-const pluck = (items, value, key = null) => reduce(
-  items,
-  (result, row) => {
-    if (key === null) {
-      return [...result, get(row, value)]
-    }
+const pluck = (items, value, key = null) => {
+  let isArray = key === null
+  let result = isArray ? [] : {}
 
-    return { ...result, [get(row, key)]: get(row, value) }
-  },
-  key === null ? [] : {}
-)
+  for (let k in items) {
+    let row = items[k]
+
+    result = isArray ? [...result, get(row, value)] : { ...result, [get(row, key)]: get(row, value) }
+  }
+
+  return result
+}
 
 const reject = (items, callback = null) => {
   if (callback === null) {
     throw new Error('Callback function is required.')
   }
 
+  let result = {}
+  let index = 0
+  let isArray = isa(items)
+
   callback = normalizeCallback(callback)
 
-  return filter(items, (value, key, index) => !callback(value, key, index))
+  for (let key in items) {
+    if (isArray) {
+      key = +key
+    }
+
+    if (!callback(items[key], key, index++)) {
+      result[key] = items[key]
+    }
+  }
+
+  return iso(items) ? result : values(result)
 }
 
 const swap = (items, from, to) => {
@@ -300,7 +369,7 @@ const shuffle = items => {
     result = swap(result, i, target)
   }
 
-  return reduce(result, (carry, item) => ([...carry, item]), [])
+  return result
 }
 
 const take = (items, limit) => slice(items, 0, limit)
@@ -308,15 +377,19 @@ const take = (items, limit) => slice(items, 0, limit)
 const unique = items => {
   let haystack = []
   let result = {}
+  let isArray = isa(items)
 
-  each(items, (value, key) => {
-    if (!contains(haystack, value)) {
+  for (let key in items) {
+    let value = items[key]
+
+    if (haystack.indexOf(value) === -1) {
       result[key] = value
+
       haystack.push(value)
     }
-  })
+  }
 
-  return iso(items) ? result : values(result)
+  return isArray ? values(result) : result
 }
 
 const diff = (items, compared) => filter(items, item => !contains(compared, item))
