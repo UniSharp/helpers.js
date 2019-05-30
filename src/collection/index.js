@@ -252,8 +252,13 @@ const last = (items, callback = null) => {
 const map = (items, callback) => {
   let result = {}
   let index = 0
+  let isArray = isa(items)
 
   for (let key in items) {
+    if (isArray) {
+      key = +key
+    }
+
     result[key] = callback(items[key], key, index++)
   }
 
@@ -263,8 +268,13 @@ const map = (items, callback) => {
 const mapWithKeys = (items, callback) => {
   let result = {}
   let index = 0
+  let isArray = isa(items)
 
   for (let key in items) {
+    if (isArray) {
+      key = +key
+    }
+
     result = { ...result, ...callback(items[key], key, index++) }
   }
 
@@ -377,7 +387,6 @@ const take = (items, limit) => slice(items, 0, limit)
 const unique = items => {
   let haystack = []
   let result = {}
-  let isArray = isa(items)
 
   for (let key in items) {
     let value = items[key]
@@ -389,7 +398,7 @@ const unique = items => {
     }
   }
 
-  return isArray ? values(result) : result
+  return iso(items) ? result : values(result)
 }
 
 const diff = (items, compared) => filter(items, item => !contains(compared, item))

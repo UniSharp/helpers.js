@@ -2,6 +2,48 @@ import { Helpers } from '../'
 
 const call = Helpers.Collection.call
 
+const testIterator = (method, callback) => {
+  it('should iterate correct key, value and index with array', () => {
+    let count = 0
+    let array = ['a', 'b', 'c']
+
+    call(method, array, (value, key, index) => {
+      expect(value).toBe(array[count])
+      expect(key).toBe(count)
+      expect(index).toBe(count++)
+
+      if (callback) {
+        return callback(value, key, index)
+      }
+
+      return true
+    })
+
+    expect(count).toBe(3)
+  })
+
+  it('should iterate correct key, value and index with object', () => {
+    let count = 0
+    let object = { a: 1, b: 2, c: 3 }
+    let keys = ['a', 'b', 'c']
+    let values = [1, 2, 3]
+
+    call(method, object, (value, key, index) => {
+      expect(value).toBe(values[count])
+      expect(key).toBe(keys[count])
+      expect(index).toBe(count++)
+
+      if (callback) {
+        return callback(value, key, index)
+      }
+
+      return true
+    })
+
+    expect(count).toBe(3)
+  })
+}
+
 describe('Collection', () => {
   it('Accept only Array or Object', () => {
     expect(call('slice', 'Hello World')).toBe('Hello World')
@@ -147,31 +189,7 @@ describe('Collection', () => {
   })
 
   describe('#each()', () => {
-    it('should iterate over the array', () => {
-      let count = 0
-      let obj = [1, 2, 3]
-
-      call('each', obj, (value, key, index) => {
-        expect(key).toBe(count)
-        expect(index).toBe(count)
-        expect(value).toBe(++count)
-      })
-
-      expect(count).toBe(3)
-    })
-
-    it('should iterate over the object', () => {
-      let count = 0
-      let obj = { a: 1, b: 2, c: 3 }
-
-      call('each', obj, (value, key, index) => {
-        expect(key).toBe(['a', 'b', 'c'][count])
-        expect(index).toBe(count)
-        expect(value).toBe(++count)
-      })
-
-      expect(count).toBe(3)
-    })
+    testIterator('each')
 
     it('should stop iterating when callback function return false', () => {
       let count = 0
@@ -226,15 +244,18 @@ describe('Collection', () => {
   describe('#reduce()', () => {
     it('should iterate over the items and reduce to a single value', () => {
       expect(
-        call('reduce', [1, 2, 3], (carry, value) => carry + value, 0)
-      ).toBe(6)
+        call('reduce', [1, 2, 3], (carry, value) => [...carry, value], [])
+      ).toEqual([1, 2, 3])
+      expect(
+        call('reduce', [1, 2, 3], (carry, value, key) => ([...carry, key]), [])
+      ).toEqual([0, 1, 2])
       expect(
         call('reduce', [1, 2, 3], (carry, value, key, index) => `${carry} - ${index} - ${key} - ${value}`, 'x')
       ).toBe('x - 0 - 0 - 1 - 1 - 1 - 2 - 2 - 2 - 3')
 
       expect(
-        call('reduce', { a: 1, b: 2, c: 3 }, (carry, value) => carry + value, 0)
-      ).toBe(6)
+        call('reduce', { a: 1, b: 2, c: 3 }, (carry, value) => [...carry, value], [])
+      ).toEqual([1, 2, 3])
       expect(
         call('reduce', { a: 1, b: 2, c: 3 }, (carry, value, key, index) => `${carry} - ${index} - ${key} - ${value}`, 'x')
       ).toBe('x - 0 - a - 1 - 1 - b - 2 - 2 - c - 3')
@@ -268,6 +289,8 @@ describe('Collection', () => {
   })
 
   describe('#filter', () => {
+    testIterator('filter')
+
     it('should filter the items using the given callback', () => {
       expect(call('filter', [1, 2, 3], value => value > 1)).toEqual([2, 3])
       expect(call('filter', [1, 2, 3], (value, key, index) => key === 1 && index === 1)).toEqual([2])
@@ -305,6 +328,8 @@ describe('Collection', () => {
   })
 
   describe('#first()', () => {
+    testIterator('first')
+
     it('should return the first element', () => {
       expect(call('first', [1, 2, 3])).toBe(1)
       expect(call('first', { a: 1, b: 2, c: 3 })).toBe(1)
@@ -322,6 +347,8 @@ describe('Collection', () => {
   })
 
   describe('#last()', () => {
+    testIterator('last')
+
     it('should return the last element', () => {
       expect(call('last', [1, 2, 3])).toBe(3)
       expect(call('last', { a: 1, b: 2, c: 3 })).toBe(3)
@@ -339,6 +366,8 @@ describe('Collection', () => {
   })
 
   describe('#map()', () => {
+    testIterator('map')
+
     it('should iterate over the items and replace value from callback', () => {
       expect(call('map', [1, 2, 3], (value, key, index) => `${index} - ${key} - ${value}`))
         .toEqual(['0 - 0 - 1', '1 - 1 - 2', '2 - 2 - 3'])
@@ -348,6 +377,8 @@ describe('Collection', () => {
   })
 
   describe('#mapWithKeys()', () => {
+    testIterator('mapWithKeys', () => ({ foo: 'bar' }))
+
     it('should iterate over the items and replace key and value from callback', () => {
       expect(call('mapWithKeys', [1, 2], (value, key, index) => ({ [`${index} - ${key}`]: `${index} - ${key} - ${value}` })))
         .toEqual({ '0 - 0': '0 - 0 - 1', '1 - 1': '1 - 1 - 2' })
@@ -407,6 +438,8 @@ describe('Collection', () => {
   })
 
   describe('#reject', () => {
+    testIterator('reject')
+
     it('should reject the items using the given callback', () => {
       expect(call('reject', [1, 2, 3], value => value > 1)).toEqual([1])
       expect(call('reject', [1, 2, 3], (value, key, index) => key === 1 && index === 1)).toEqual([1, 3])
