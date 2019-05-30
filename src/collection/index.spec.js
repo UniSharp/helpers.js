@@ -560,13 +560,13 @@ describe('Collection', () => {
 
   describe('#groupBy', () => {
     it('should groups the collection by the given key', () => {
-      expect(call('groupBy', [{ a: 'a' }, { a: 'a' }], 'a')).toEqual({ a: [{ a: 'a' }, { a: 'a' }] })
-      expect(call('groupBy', { a: { a: 'a' }, b: { a: 'a' } }, 'a')).toEqual({ a: { a: { a: 'a' }, b: { a: 'a' } } })
+      expect(call('groupBy', [{ a: 'a' }, { a: 'a' }, { a: 'b' }], 'a')).toEqual({ a: [{ a: 'a' }, { a: 'a' }], b: [{ a: 'b' }] })
+      expect(call('groupBy', { a: { a: 'a' }, b: { a: 'b' } }, 'a')).toEqual({ a: { a: { a: 'a' } }, b: { b: { a: 'b' } } })
     })
 
     it('should groups the collection by the given callback', () => {
-      expect(call('groupBy', [{ a: 'a' }, { a: 'a' }], row => row.a)).toEqual({ a: [{ a: 'a' }, { a: 'a' }] })
-      expect(call('groupBy', { a: { a: 'a' }, b: { a: 'a' } }, row => row.a)).toEqual({ a: { a: { a: 'a' }, b: { a: 'a' } } })
+      expect(call('groupBy', [{ a: 'a' }, { a: 'a' }, { a: 'b' }], row => row.a)).toEqual({ a: [{ a: 'a' }, { a: 'a' }], b: [{ a: 'b' }] })
+      expect(call('groupBy', { a: { a: 'a' }, b: { a: 'b' } }, row => row.a)).toEqual({ a: { a: { a: 'a' } }, b: { b: { a: 'b' } } })
     })
   })
 
@@ -656,6 +656,8 @@ describe('Collection', () => {
   })
 
   describe('#partition', () => {
+    testIterator('partition')
+
     it('should separate elements that pass a given truth test from those that do not', () => {
       expect(call('partition', [1, 2, 3, 4, 5], (value, key) => key < 2 && value < 3)).toEqual([[1, 2], [3, 4, 5]])
       expect(call('partition', { a: 1, b: 2, c: 3 }, (value, key) => key === 'a' && value === 1)).toEqual([{ a: 1 }, { b: 2, c: 3 }])

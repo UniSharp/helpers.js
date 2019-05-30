@@ -118,11 +118,12 @@ const avg = (items, key = null) => {
 }
 
 const each = (items, callback) => {
+  const itemsIsArray = isa(items)
+
   let index = 0
-  let isArray = isa(items)
 
   for (let key in items) {
-    if (isArray) {
+    if (itemsIsArray) {
       key = +key
     }
 
@@ -163,12 +164,13 @@ const slice = (items, begin = 0, end = null) => {
 }
 
 const reduce = (items, callback, initValue) => {
+  const itemsIsArray = isa(items)
+
   let result = initValue
   let index = 0
-  let isArray = isa(items)
 
   for (let key in items) {
-    if (isArray) {
+    if (itemsIsArray) {
       key = +key
     }
 
@@ -191,33 +193,37 @@ const chunk = (items, size) => reduce(
 )
 
 const filter = (items, callback = null) => {
+  const itemsIsArray = isa(items)
+
   let result = {}
   let index = 0
-  let isArray = isa(items)
 
   callback = normalizeCallback(callback)
 
   for (let key in items) {
-    if (isArray) {
+    let value = items[key]
+
+    if (itemsIsArray) {
       key = +key
     }
 
-    if (callback(items[key], key, index++)) {
-      result[key] = items[key]
+    if (callback(value, key, index++)) {
+      result[key] = value
     }
   }
 
-  return isArray ? values(result) : result
+  return itemsIsArray ? values(result) : result
 }
 
 const except = (items, ...keys) => {
+  const itemsIsArray = isa(items)
+
   let result = {}
-  let isArray = isa(items)
 
   keys = flatten(keys)
 
   for (let key in items) {
-    if (isArray) {
+    if (itemsIsArray) {
       key = +key
     }
 
@@ -226,7 +232,7 @@ const except = (items, ...keys) => {
     }
   }
 
-  return iso(items) ? result : values(result)
+  return itemsIsArray ? values(result) : result
 }
 
 const isEmpty = (items) => !count(items)
@@ -250,12 +256,13 @@ const last = (items, callback = null) => {
 }
 
 const map = (items, callback) => {
+  const itemsIsArray = isa(items)
+
   let result = {}
   let index = 0
-  let isArray = isa(items)
 
   for (let key in items) {
-    if (isArray) {
+    if (itemsIsArray) {
       key = +key
     }
 
@@ -266,12 +273,13 @@ const map = (items, callback) => {
 }
 
 const mapWithKeys = (items, callback) => {
+  const itemsIsArray = isa(items)
+
   let result = {}
   let index = 0
-  let isArray = isa(items)
 
   for (let key in items) {
-    if (isArray) {
+    if (itemsIsArray) {
       key = +key
     }
 
@@ -298,13 +306,14 @@ const min = items => Math.min(...values(items))
 const max = items => Math.max(...values(items))
 
 const only = (items, ...keys) => {
+  const itemsIsArray = isa(items)
+
   let result = {}
-  let isArray = isa(items)
 
   keys = flatten(keys)
 
   for (let key in items) {
-    if (isArray) {
+    if (itemsIsArray) {
       key = +key
     }
 
@@ -319,13 +328,14 @@ const only = (items, ...keys) => {
 const pipe = (items, callback) => callback(items)
 
 const pluck = (items, value, key = null) => {
-  let isArray = key === null
-  let result = isArray ? [] : {}
+  const keyIsNull = key === null
+
+  let result = keyIsNull ? [] : {}
 
   for (let k in items) {
-    let row = items[k]
+    const row = items[k]
 
-    result = isArray ? [...result, get(row, value)] : { ...result, [get(row, key)]: get(row, value) }
+    result = keyIsNull ? [...result, get(row, value)] : { ...result, [get(row, key)]: get(row, value) }
   }
 
   return result
@@ -336,14 +346,15 @@ const reject = (items, callback = null) => {
     throw new Error('Callback function is required.')
   }
 
+  const itemsIsArray = isa(items)
+
   let result = {}
   let index = 0
-  let isArray = isa(items)
 
   callback = normalizeCallback(callback)
 
   for (let key in items) {
-    if (isArray) {
+    if (itemsIsArray) {
       key = +key
     }
 
@@ -415,27 +426,33 @@ const merge = (items, ...merged) => reduce(
   { flag: isa(items) ? count(items) : 0, result: items }
 ).result
 
-const keyBy = (items, key) => reduce(
-  items,
-  (result, row) => ({ ...result, [get(row, key)]: row }),
-  {}
-)
+const keyBy = (items, key) => {
+  let result = {}
+
+  for (let k in items) {
+    const row = items[k]
+
+    result[get(row, key)] = row
+  }
+
+  return result
+}
 
 const groupBy = (items, key) => {
-  let result = reduce(items, (result, row, index) => {
-    let group = isf(key) ? key(row) : get(row, key)
+  const keyIsFunction = isf(key)
+  const itemsIsArray = isa(items)
+
+  let result = {}
+
+  for (let k in items) {
+    const row = items[k]
+    const group = keyIsFunction ? key(row) : get(row, key)
 
     if (!result[group]) {
-      result[group] = {}
+      result[group] = itemsIsArray ? [] : {}
     }
 
-    result[group][index] = row
-
-    return result
-  }, {})
-
-  if (isa(items)) {
-    result = map(result, row => values(row))
+    itemsIsArray ? result[group].push(row) : result[group][k] = row
   }
 
   return result
@@ -509,13 +526,23 @@ const join = (items, glue = ', ') => {
 }
 
 const partition = (items, callback) => {
-  let result = reduce(items, (carry, value, key, index) => {
-    carry[+!callback(value, key, index)][key] = value
+  const itemsIsArray = isa(items)
 
-    return carry
-  }, [{}, {}])
+  let result = itemsIsArray ? [[], []] : [{}, {}]
+  let index = 0
 
-  return iso(items) ? result : map(result, part => values(part))
+  for (let key in items) {
+    if (itemsIsArray) {
+      key = +key
+    }
+
+    const value = items[key]
+    const part = +!callback(value, key, index++)
+
+    itemsIsArray ? result[part].push(value) : result[part][key] = value
+  }
+
+  return result
 }
 
 export const methods = {

@@ -316,11 +316,12 @@
   };
 
   var each = function each(items, callback) {
+    var itemsIsArray = isa(items);
+
     var index = 0;
-    var isArray = isa(items);
 
     for (var key in items) {
-      if (isArray) {
+      if (itemsIsArray) {
         key = +key;
       }
 
@@ -364,12 +365,13 @@
   };
 
   var reduce = function reduce(items, callback, initValue) {
+    var itemsIsArray = isa(items);
+
     var result = initValue;
     var index = 0;
-    var isArray = isa(items);
 
     for (var key in items) {
-      if (isArray) {
+      if (itemsIsArray) {
         key = +key;
       }
 
@@ -394,23 +396,26 @@
   var filter = function filter(items) {
     var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
+    var itemsIsArray = isa(items);
+
     var result = {};
     var index = 0;
-    var isArray = isa(items);
 
     callback = normalizeCallback(callback);
 
     for (var key in items) {
-      if (isArray) {
+      var value = items[key];
+
+      if (itemsIsArray) {
         key = +key;
       }
 
-      if (callback(items[key], key, index++)) {
-        result[key] = items[key];
+      if (callback(value, key, index++)) {
+        result[key] = value;
       }
     }
 
-    return isArray ? values(result) : result;
+    return itemsIsArray ? values(result) : result;
   };
 
   var except = function except(items) {
@@ -418,13 +423,14 @@
       keys[_key - 1] = arguments[_key];
     }
 
+    var itemsIsArray = isa(items);
+
     var result = {};
-    var isArray = isa(items);
 
     keys = flatten(keys);
 
     for (var key in items) {
-      if (isArray) {
+      if (itemsIsArray) {
         key = +key;
       }
 
@@ -433,7 +439,7 @@
       }
     }
 
-    return iso(items) ? result : values(result);
+    return itemsIsArray ? values(result) : result;
   };
 
   var isEmpty = function isEmpty(items) {
@@ -465,10 +471,16 @@
   };
 
   var map = function map(items, callback) {
+    var itemsIsArray = isa(items);
+
     var result = {};
     var index = 0;
 
     for (var key in items) {
+      if (itemsIsArray) {
+        key = +key;
+      }
+
       result[key] = callback(items[key], key, index++);
     }
 
@@ -476,10 +488,16 @@
   };
 
   var mapWithKeys = function mapWithKeys(items, callback) {
+    var itemsIsArray = isa(items);
+
     var result = {};
     var index = 0;
 
     for (var key in items) {
+      if (itemsIsArray) {
+        key = +key;
+      }
+
       result = _extends({}, result, callback(items[key], key, index++));
     }
 
@@ -511,13 +529,14 @@
       keys[_key2 - 1] = arguments[_key2];
     }
 
+    var itemsIsArray = isa(items);
+
     var result = {};
-    var isArray = isa(items);
 
     keys = flatten(keys);
 
     for (var key in items) {
-      if (isArray) {
+      if (itemsIsArray) {
         key = +key;
       }
 
@@ -536,13 +555,14 @@
   var pluck = function pluck(items, value) {
     var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
-    var isArray = key === null;
-    var result = isArray ? [] : {};
+    var keyIsNull = key === null;
+
+    var result = keyIsNull ? [] : {};
 
     for (var k in items) {
       var row = items[k];
 
-      result = isArray ? [].concat(toConsumableArray(result), [get$1(row, value)]) : _extends({}, result, defineProperty({}, get$1(row, key), get$1(row, value)));
+      result = keyIsNull ? [].concat(toConsumableArray(result), [get$1(row, value)]) : _extends({}, result, defineProperty({}, get$1(row, key), get$1(row, value)));
     }
 
     return result;
@@ -555,14 +575,15 @@
       throw new Error('Callback function is required.');
     }
 
+    var itemsIsArray = isa(items);
+
     var result = {};
     var index = 0;
-    var isArray = isa(items);
 
     callback = normalizeCallback(callback);
 
     for (var key in items) {
-      if (isArray) {
+      if (itemsIsArray) {
         key = +key;
       }
 
@@ -608,7 +629,6 @@
   var unique = function unique(items) {
     var haystack = [];
     var result = {};
-    var isArray = isa(items);
 
     for (var key in items) {
       var value = items[key];
@@ -620,7 +640,7 @@
       }
     }
 
-    return isArray ? values(result) : result;
+    return iso(items) ? result : values(result);
   };
 
   var diff = function diff(items, compared) {
@@ -660,28 +680,32 @@
   };
 
   var keyBy = function keyBy(items, key) {
-    return reduce(items, function (result, row) {
-      return _extends({}, result, defineProperty({}, get$1(row, key), row));
-    }, {});
+    var result = {};
+
+    for (var k in items) {
+      var row = items[k];
+
+      result[get$1(row, key)] = row;
+    }
+
+    return result;
   };
 
   var groupBy = function groupBy(items, key) {
-    var result = reduce(items, function (result, row, index) {
-      var group = isf(key) ? key(row) : get$1(row, key);
+    var keyIsFunction = isf(key);
+    var itemsIsArray = isa(items);
+
+    var result = {};
+
+    for (var k in items) {
+      var row = items[k];
+      var group = keyIsFunction ? key(row) : get$1(row, key);
 
       if (!result[group]) {
-        result[group] = {};
+        result[group] = itemsIsArray ? [] : {};
       }
 
-      result[group][index] = row;
-
-      return result;
-    }, {});
-
-    if (isa(items)) {
-      result = map(result, function (row) {
-        return values(row);
-      });
+      itemsIsArray ? result[group].push(row) : result[group][k] = row;
     }
 
     return result;
@@ -799,15 +823,23 @@
   };
 
   var partition = function partition(items, callback) {
-    var result = reduce(items, function (carry, value, key, index) {
-      carry[+!callback(value, key, index)][key] = value;
+    var itemsIsArray = isa(items);
 
-      return carry;
-    }, [{}, {}]);
+    var result = itemsIsArray ? [[], []] : [{}, {}];
+    var index = 0;
 
-    return iso(items) ? result : map(result, function (part) {
-      return values(part);
-    });
+    for (var key in items) {
+      if (itemsIsArray) {
+        key = +key;
+      }
+
+      var value = items[key];
+      var part = +!callback(value, key, index++);
+
+      itemsIsArray ? result[part].push(value) : result[part][key] = value;
+    }
+
+    return result;
   };
 
   var methods = {
