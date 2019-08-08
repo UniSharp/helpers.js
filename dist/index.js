@@ -211,14 +211,18 @@
     };
   };
 
-  var _has = function _has(items, key) {
-    var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
+  var normalizeKey = function normalizeKey(key) {
     if (!isa(key)) {
       key = ('' + key).replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.');
     }
 
-    key = [].concat(toConsumableArray(key));
+    return [].concat(toConsumableArray(key));
+  };
+
+  var _has = function _has(items, key) {
+    var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+    key = normalizeKey(key);
 
     var segment = '' + key.shift();
 
@@ -285,6 +289,31 @@
   var get$1 = function get$$1(items, key) {
     var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
     return _has(items, key, defaultValue)[1];
+  };
+
+  var set$1 = function set$$1(items, key, value) {
+    key = normalizeKey(key);
+
+    var previous = items;
+    var previousKey = key.shift();
+    var current = items[previousKey];
+
+    while (key.length) {
+      var k = key.shift();
+
+      if (!iso(current) && !isa(current)) {
+        previous[previousKey] = isn(+k) ? [] : {};
+        current = previous[previousKey];
+      }
+
+      previousKey = k;
+      previous = current;
+      current = current[k];
+    }
+
+    previous[previousKey] = value;
+
+    return items;
   };
 
   var sum = function sum(items) {
@@ -849,6 +878,7 @@
     count: count,
     has: has,
     get: get$1,
+    set: set$1,
     sum: sum,
     avg: avg,
     each: each,

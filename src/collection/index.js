@@ -30,12 +30,16 @@ const normalizeCallback = (callback) => {
   return value => value === callback
 }
 
-const _has = (items, key, defaultValue = null) => {
+const normalizeKey = (key) => {
   if (!isa(key)) {
     key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
   }
 
-  key = [...key]
+  return [...key]
+}
+
+const _has = (items, key, defaultValue = null) => {
+  key = normalizeKey(key)
 
   let segment = `${key.shift()}`
 
@@ -94,6 +98,31 @@ const count = items => keys(items).length
 const has = (items, key) => _has(items, key)[0]
 
 const get = (items, key, defaultValue = null) => _has(items, key, defaultValue)[1]
+
+const set = (items, key, value) => {
+  key = normalizeKey(key)
+
+  let previous = items
+  let previousKey = key.shift()
+  let current = items[previousKey]
+
+  while (key.length) {
+    const k = key.shift()
+
+    if (!iso(current) && !isa(current)) {
+      previous[previousKey] = isn(+k) ? [] : {}
+      current = previous[previousKey]
+    }
+
+    previousKey = k
+    previous = current
+    current = current[k]
+  }
+
+  previous[previousKey] = value
+
+  return items
+}
 
 const sum = (items, key = null) => {
   if (key) {
@@ -552,6 +581,7 @@ export const methods = {
   count,
   has,
   get,
+  set,
   sum,
   avg,
   each,

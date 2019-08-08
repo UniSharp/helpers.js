@@ -80,6 +80,7 @@ require('@unisharp/helpers.js')
   - [prepend](#prepend)
   - [reduce](#reduce)
   - [reject](#reject)
+  - [set](#set)
   - [shuffle](#shuffle)
   - [slice](#slice)
   - [sort](#sort)
@@ -394,6 +395,13 @@ require('@unisharp/helpers.js')
 ```javascript
 [1, 2, 3, 4, 5].reject((value, index) => value > 4)           // [1, 2, 3, 4]
 { a: 1, b: 2, c: 3 }.reject((value, key, index) => value > 2) // { a: 1, b: 2 }
+```
+
+#### set
+
+```javascript
+[1, 2, 0, 4, 5].set(2, 3)              // [1, 2, 3, 4, 5]
+{ a: { b: { c: 0 } } }.set('a.b.c', 1) // { a: { b: { c: 1 } } }
 ```
 
 #### shuffle

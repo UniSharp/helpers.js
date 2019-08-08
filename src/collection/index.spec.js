@@ -155,6 +155,37 @@ describe('Collection', () => {
     })
   })
 
+  describe('#set()', () => {
+    it('should set the value at a given key', () => {
+      expect(call('set', [0, 2, 3, 4, 5], 0, 1)).toEqual([1, 2, 3, 4, 5])
+      expect(call('set', [0, 2, 3, 4, 5], '0', 1)).toEqual([1, 2, 3, 4, 5])
+      expect(call('set', [[0, 2, 3, 4, 5]], '0.0', 1)).toEqual([[1, 2, 3, 4, 5]])
+      expect(call('set', [[{ a: 0, b: 2, c: 3 }]], '0.0.a', 1)).toEqual([[{ a: 1, b: 2, c: 3 }]])
+
+      expect(call('set', [0, 2, 3, 4, 5], '[0]', 1)).toEqual([1, 2, 3, 4, 5])
+      expect(call('set', [[0, 2, 3, 4, 5]], '[0][0]', 1)).toEqual([[1, 2, 3, 4, 5]])
+      expect(call('set', [[{ a: 0, b: 2, c: 3 }]], '[0][0].a', 1)).toEqual([[{ a: 1, b: 2, c: 3 }]])
+
+      expect(call('set', [0, 2, 3, 4, 5], [0], 1)).toEqual([1, 2, 3, 4, 5])
+      expect(call('set', [[0, 2, 3, 4, 5]], [0, 0], 1)).toEqual([[1, 2, 3, 4, 5]])
+      expect(call('set', [[{ a: 0, b: 2, c: 3 }]], [0, 0, 'a'], 1)).toEqual([[{ a: 1, b: 2, c: 3 }]])
+
+      expect(call('set', { a: 0, b: 2, c: 3 }, 'a', 1)).toEqual({ a: 1, b: 2, c: 3 })
+      expect(call('set', { a: { b: { c: 0 } } }, 'a.b.c', 1)).toEqual({ a: { b: { c: 1 } } })
+      expect(call('set', { a: { b: { c: [0, 2, 3] } } }, 'a.b.c.0', 1)).toEqual({ a: { b: { c: [1, 2, 3] } } })
+      expect(call('set', { a: { b: { c: [0, 2, 3] } } }, 'a.b.c[0]', 1)).toEqual({ a: { b: { c: [1, 2, 3] } } })
+
+      expect(call('set', { a: 0, b: 2, c: 3 }, ['a'], 1)).toEqual({ a: 1, b: 2, c: 3 })
+      expect(call('set', { a: { b: { c: 0 } } }, ['a', 'b', 'c'], 1)).toEqual({ a: { b: { c: 1 } } })
+      expect(call('set', { a: { b: { c: [0, 2, 3] } } }, ['a', 'b', 'c', 0], 1)).toEqual({ a: { b: { c: [1, 2, 3] } } })
+
+      expect(call('set', [], '0.0.a', 1)).toEqual([[{ a: 1 }]])
+      expect(call('set', [], '[0][0].a', 1)).toEqual([[{ a: 1 }]])
+      expect(call('set', {}, 'a.b.c[0]', 1)).toEqual({ a: { b: { c: [1] } } })
+      expect(call('set', {}, ['a', 'b', 'c', 0], 1)).toEqual({ a: { b: { c: [1] } } })
+    })
+  })
+
   describe('#sum()', () => {
     it('should return the sum', () => {
       expect(call('sum', [1, 2, 3])).toBe(6)
