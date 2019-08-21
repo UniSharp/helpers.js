@@ -574,6 +574,18 @@ const partition = (items, callback) => {
   return result
 }
 
+const flip = items => {
+  const itemsIsArray = isa(items)
+
+  let result = {}
+
+  for (let key in items) {
+    result[items[key]] = itemsIsArray ? +key : key
+  }
+
+  return result
+}
+
 export const methods = {
   keys,
   values,
@@ -622,7 +634,8 @@ export const methods = {
   index,
   insert,
   join,
-  partition
+  partition,
+  flip
 }
 
 export const call = (method, items, ...args) => {

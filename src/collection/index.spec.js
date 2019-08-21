@@ -694,4 +694,11 @@ describe('Collection', () => {
       expect(call('partition', { a: 1, b: 2, c: 3 }, (value, key) => key === 'a' && value === 1)).toEqual([{ a: 1 }, { b: 2, c: 3 }])
     })
   })
+
+  describe('#flip', () => {
+    it('should swap keys with their corresponding values', () => {
+      expect(call('flip', ['a', 'b', 'c'])).toEqual({ a: 0, b: 1, c: 2 })
+      expect(call('flip', { a: 0, b: 1, c: 2 })).toEqual({ 0: 'a', 1: 'b', 2: 'c' })
+    })
+  })
 })
