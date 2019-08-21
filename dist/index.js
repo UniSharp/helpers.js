@@ -871,6 +871,18 @@
     return result;
   };
 
+  var flip = function flip(items) {
+    var itemsIsArray = isa(items);
+
+    var result = {};
+
+    for (var key in items) {
+      result[items[key]] = itemsIsArray ? +key : key;
+    }
+
+    return result;
+  };
+
   var methods = {
     keys: keys,
     values: values,
@@ -919,7 +931,8 @@
     index: index,
     insert: insert,
     join: join,
-    partition: partition
+    partition: partition,
+    flip: flip
   };
 
   var call = function call(method, items) {
