@@ -55,6 +55,7 @@ require('@unisharp/helpers.js')
   - [filter](#filter)
   - [first](#first)
   - [flatten](#flatten)
+  - [flip](#flip)
   - [get](#get)
   - [groupBy](#groupby)
   - [has](#has)
@@ -160,11 +161,11 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.diff({ a: 1, b: 2 }) // { c: 3 }
 ```
 
-#### diffWithKeys
+#### diffKeys
 
 ```javascript
-[1, 2, 3, 4, 5].diffWithKeys([1, 2, 3])           // { 3: 4, 4: 5 }
-{ a: 1, b: 2, c: 3 }.diffWithKeys({ a: 1, b: 2 }) // { c: 3 }
+[1, 2, 3, 4, 5].diffKeys([1, 2, 3])           // { 3: 4, 4: 5 }
+{ a: 1, b: 2, c: 3 }.diffKeys({ a: 1, b: 2 }) // { c: 3 }
 ```
 
 #### each
@@ -202,8 +203,15 @@ require('@unisharp/helpers.js')
 #### flatten
 
 ```javascript
-[[1, 2], [3, 4], [5]].flatten() // [1, 2, 3, 4, 5]
+[[1, 2], [3, 4], [5]].flatten()              // [1, 2, 3, 4, 5]
 { a: { a: 1, b: 2 }, b: { c: 3 } }.flatten() // [1, 2, 3]
+```
+
+#### flip
+
+```javascript
+['a', 'b', 'c'].flip()         // { a: 0, b: 1, c: 2 }
+{ a: 1, b: 2, c: 3 }.flatten() // { 1: 'a', 2: 'b', 3: 'c' }
 ```
 
 #### get
