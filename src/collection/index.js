@@ -18,7 +18,7 @@ const spaceship = (a, b) => {
   return 0
 }
 
-const normalizeCallback = (callback) => {
+const normalizeCallback = callback => {
   if (isf(callback)) {
     return callback
   }
@@ -30,13 +30,15 @@ const normalizeCallback = (callback) => {
   return value => value === callback
 }
 
-const normalizeKey = (key) => {
+const normalizeKey = key => {
   if (!isa(key)) {
     key = `${key}`.replace(/^\[|\]/g, '').replace(/\[/g, '.').split('.')
   }
 
   return [...key]
 }
+
+const stringKeys = items => map(keys(items), key => `${key}`)
 
 const _has = (items, key, defaultValue = null) => {
   key = normalizeKey(key)
@@ -443,11 +445,19 @@ const unique = items => {
 
 const diff = (items, compared) => filter(items, item => !contains(compared, item))
 
-const diffKeys = (items, compared) => filter({ ...items }, (item, key) => !has(compared, key))
+const diffKeys = (items, compared) => {
+  const comparedKeys = stringKeys(compared)
+
+  return filter({ ...items }, (item, key) => !contains(comparedKeys, key))
+}
 
 const intersect = (items, compared) => filter(items, item => contains(compared, item))
 
-const intersectByKeys = (items, compared) => filter({ ...items }, (item, key) => has(compared, key))
+const intersectByKeys = (items, compared) => {
+  const comparedKeys = stringKeys(compared)
+
+  return filter({ ...items }, (item, key) => contains(comparedKeys, key))
+}
 
 const merge = (items, ...merged) => reduce(
   merged,

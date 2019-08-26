@@ -543,6 +543,10 @@ describe('Collection', () => {
       expect(call('diffKeys', [1, 2, 3], { a: 1, b: 2 })).toEqual({ 0:1, 1: 2, 2: 3 })
       expect(call('diffKeys', { a: 1, b: 2, c: 3 }, [1, 2])).toEqual({ a: 1, b: 2, c: 3 })
     })
+
+    it('should computes the difference of collections using keys for comparison if key contains dot', () => {
+      expect(call('diffKeys', { a: 1, 'a.b': 2, 'a.b.c': 3 }, { a: 1, 'a.b.c': 3 })).toEqual({ 'a.b': 2 })
+    })
   })
 
   describe('#intersect()', () => {
@@ -564,6 +568,10 @@ describe('Collection', () => {
       expect(call('intersectByKeys', { a: 1, b: 2, c: 2, d: 3 }, { a: 1, b: 2 })).toEqual({ a: 1, b: 2 })
       expect(call('intersectByKeys', [1, 2, 3], { a: 1, b: 2 })).toEqual({})
       expect(call('intersectByKeys', { a: 1, b: 2, c: 3 }, [1, 2])).toEqual({})
+    })
+
+    it('should computes the intersection of collections using keys for comparison if key contains dot', () => {
+      expect(call('intersectByKeys', { a: 1, 'a.b': 2, 'a.b.c': 3 }, { a: 1, 'a.b.c': 3 })).toEqual({ a: 1, 'a.b.c': 3 })
     })
   })
 
