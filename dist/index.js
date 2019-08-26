@@ -219,6 +219,12 @@
     return [].concat(toConsumableArray(key));
   };
 
+  var stringKeys = function stringKeys(items) {
+    return map(keys(items), function (key) {
+      return '' + key;
+    });
+  };
+
   var _has = function _has(items, key) {
     var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
@@ -679,8 +685,10 @@
   };
 
   var diffKeys = function diffKeys(items, compared) {
+    var comparedKeys = stringKeys(compared);
+
     return filter(_extends({}, items), function (item, key) {
-      return !has(compared, key);
+      return !contains(comparedKeys, key);
     });
   };
 
@@ -691,8 +699,10 @@
   };
 
   var intersectByKeys = function intersectByKeys(items, compared) {
+    var comparedKeys = stringKeys(compared);
+
     return filter(_extends({}, items), function (item, key) {
-      return has(compared, key);
+      return contains(comparedKeys, key);
     });
   };
 
