@@ -113,15 +113,31 @@
 
   var DateInterval = function () {
     function DateInterval() {
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref$years = _ref.years,
+          years = _ref$years === undefined ? 0 : _ref$years,
+          _ref$months = _ref.months,
+          months = _ref$months === undefined ? 0 : _ref$months,
+          _ref$days = _ref.days,
+          days = _ref$days === undefined ? 0 : _ref$days,
+          _ref$hours = _ref.hours,
+          hours = _ref$hours === undefined ? 0 : _ref$hours,
+          _ref$minutes = _ref.minutes,
+          minutes = _ref$minutes === undefined ? 0 : _ref$minutes,
+          _ref$seconds = _ref.seconds,
+          seconds = _ref$seconds === undefined ? 0 : _ref$seconds,
+          _ref$milliseconds = _ref.milliseconds,
+          milliseconds = _ref$milliseconds === undefined ? 0 : _ref$milliseconds;
+
       classCallCheck(this, DateInterval);
 
-      this.years = 0;
-      this.months = 0;
-      this.days = 0;
-      this.hours = 0;
-      this.minutes = 0;
-      this.seconds = 0;
-      this.milliseconds = 0;
+      this.years = years;
+      this.months = months;
+      this.days = days;
+      this.hours = hours;
+      this.minutes = minutes;
+      this.seconds = seconds;
+      this.milliseconds = milliseconds;
     }
 
     createClass(DateInterval, [{
@@ -162,6 +178,13 @@
         date.setMilliseconds(date.getMilliseconds() + this.milliseconds);
 
         return date;
+      }
+    }, {
+      key: "valueOf",
+      value: function valueOf() {
+        /* eslint-disable */
+        return this.years * 1000 * 60 * 60 * 24 * 30 * 365 + this.months * 1000 * 60 * 60 * 24 * 30 + this.days * 1000 * 60 * 60 * 24 + this.hours * 1000 * 60 * 60 + this.minutes * 1000 * 60 + this.seconds * 1000 + this.milliseconds;
+        /* eslint-enable */
       }
     }]);
     return DateInterval;

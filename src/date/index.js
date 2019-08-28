@@ -1,12 +1,12 @@
 export default class DateInterval {
-  constructor () {
-    this.years = 0
-    this.months = 0
-    this.days = 0
-    this.hours = 0
-    this.minutes = 0
-    this.seconds = 0
-    this.milliseconds = 0
+  constructor ({ years = 0, months = 0, days = 0, hours = 0, minutes = 0, seconds = 0, milliseconds = 0 } = {}) {
+    this.years = years
+    this.months = months
+    this.days = days
+    this.hours = hours
+    this.minutes = minutes
+    this.seconds = seconds
+    this.milliseconds = milliseconds
   }
 
   invert () {
@@ -39,5 +39,17 @@ export default class DateInterval {
     date.setMilliseconds(date.getMilliseconds() + this.milliseconds)
 
     return date
+  }
+
+  valueOf () {
+    /* eslint-disable */
+    return this.years   * 1000 * 60 * 60 * 24 * 30 * 365 +
+           this.months  * 1000 * 60 * 60 * 24 * 30 +
+           this.days    * 1000 * 60 * 60 * 24 +
+           this.hours   * 1000 * 60 * 60 +
+           this.minutes * 1000 * 60 +
+           this.seconds * 1000 +
+           this.milliseconds
+    /* eslint-enable */
   }
 }
