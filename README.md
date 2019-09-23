@@ -554,7 +554,7 @@ String.random(10) // 'erbzjw0rks'
 #### snake
 
 ```javascript
-'Hello World'.kebab() // 'hello_world'
+'Hello World'.snake() // 'hello_world'
 ```
 
 #### stripTags
