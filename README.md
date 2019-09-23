@@ -95,11 +95,15 @@ require('@unisharp/helpers.js')
 - [**Object**](#object)
   - [isObject](#isobject)
 - [**String**](#string)
+  - [camel](#camel)
+  - [kebab](#kebab)
   - [limit](#limit)
   - [nl2br](#nl2br)
   - [random](#random)
   - [slugify](#slugify)
+  - [snake](#snake)
   - [stripTags](#striptags)
+  - [studly](#studly)
 - [**Number**](#number)
   - [abs](#abs)
   - [ceil](#ceil)
@@ -509,6 +513,18 @@ Object.isObject([]) // false
 
 ### String
 
+#### camel
+
+```javascript
+'hello-world'.camel() // 'helloWorld'
+```
+
+#### kebab
+
+```javascript
+'Hello World'.kebab() // 'hello-world'
+```
+
 #### limit
 
 ```javascript
@@ -535,10 +551,22 @@ String.random(10) // 'erbzjw0rks'
 'Hello World'.slugify() // 'hello-world'
 ```
 
+#### snake
+
+```javascript
+'Hello World'.kebab() // 'hello_world'
+```
+
 #### stripTags
 
 ```javascript
 '<h1>Hello World</h1>'.stripTags() // 'Hello World'
+```
+
+#### studly
+
+```javascript
+'hello-world'.studly() // 'HelloWorld'
 ```
 
 ### Number

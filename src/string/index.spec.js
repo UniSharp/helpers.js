@@ -50,4 +50,54 @@ describe('String', () => {
       expect('a\r\nb\r\nc'.nl2br()).toBe('a<br>b<br>c')
     })
   })
+
+  describe('#studly()', () => {
+    it('should convert the given string to studly case', () => {
+      expect('foo bar baz'.studly()).toBe('FooBarBaz')
+      expect('foo-bar-baz'.studly()).toBe('FooBarBaz')
+      expect('foo_bar_baz'.studly()).toBe('FooBarBaz')
+      expect('Foo_Bar_Baz'.studly()).toBe('FooBarBaz')
+      expect('   foo   bar   baz   '.studly()).toBe('FooBarBaz')
+      expect('___foo___bar___baz___'.studly()).toBe('FooBarBaz')
+      expect(' foo -_- bar -_- baz '.studly()).toBe('FooBarBaz')
+    })
+  })
+
+  describe('#camel()', () => {
+    it('should convert the given string to camel case', () => {
+      expect('foo bar baz'.camel()).toBe('fooBarBaz')
+      expect('foo-bar-baz'.camel()).toBe('fooBarBaz')
+      expect('foo_bar_baz'.camel()).toBe('fooBarBaz')
+      expect('Foo_Bar_Baz'.camel()).toBe('fooBarBaz')
+      expect('   foo   bar   baz   '.camel()).toBe('fooBarBaz')
+      expect('___foo___bar___baz___'.camel()).toBe('fooBarBaz')
+      expect(' foo -_- bar -_- baz '.camel()).toBe('fooBarBaz')
+    })
+  })
+
+  describe('#snake()', () => {
+    it('should convert the given string to snake case', () => {
+      expect('fooBarBaz'.snake()).toBe('foo_bar_baz')
+      expect('FooBarBaz'.snake()).toBe('foo_bar_baz')
+      expect('foo bar baz'.snake()).toBe('foo_bar_baz')
+      expect('foo_bar_baz'.snake()).toBe('foo_bar_baz')
+      expect('Foo_Bar_Baz'.snake()).toBe('foo_bar_baz')
+      expect('___foo___bar___baz___'.snake()).toBe('foo_bar_baz')
+      expect('   foo   bar   baz   '.snake()).toBe('foo_bar_baz')
+      expect(' foo -_- bar -_- baz '.snake()).toBe('foo_bar_baz')
+    })
+  })
+
+  describe('#kebab()', () => {
+    it('should convert the given string to kebab case', () => {
+      expect('fooBarBaz'.kebab()).toBe('foo-bar-baz')
+      expect('FooBarBaz'.kebab()).toBe('foo-bar-baz')
+      expect('foo bar baz'.kebab()).toBe('foo-bar-baz')
+      expect('foo_bar_baz'.kebab()).toBe('foo-bar-baz')
+      expect('Foo_Bar_Baz'.kebab()).toBe('foo-bar-baz')
+      expect('___foo___bar___baz___'.kebab()).toBe('foo-bar-baz')
+      expect('   foo   bar   baz   '.kebab()).toBe('foo-bar-baz')
+      expect(' foo -_- bar -_- baz '.kebab()).toBe('foo-bar-baz')
+    })
+  })
 })

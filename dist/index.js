@@ -1159,6 +1159,38 @@
     return this.replace(/\r\n|\n\r|\n|\r/g, '<br>');
   };
 
+  var studly = function studly() {
+    var ucfirst = function ucfirst(word) {
+      return word.replace(/^(.)/, function (match) {
+        return match.toUpperCase();
+      });
+    };
+
+    return this.split(/[-_ ]/).filter(function (word) {
+      return word;
+    }).map(ucfirst).join('');
+  };
+
+  var camel = function camel() {
+    var lcfirst = function lcfirst(word) {
+      return word.replace(/^(.)/, function (match) {
+        return match.toLowerCase();
+      });
+    };
+
+    return lcfirst(this.studly());
+  };
+
+  var snake = function snake() {
+    return this.split(/(?=[A-Z])|[-_ ]/g).filter(function (word) {
+      return word;
+    }).join('_').toLowerCase();
+  };
+
+  var kebab = function kebab() {
+    return this.snake().replace(/_/g, '-');
+  };
+
   var staticMethods$1 = {
     random: random$1
   };
@@ -1167,7 +1199,11 @@
     slugify: slugify,
     stripTags: stripTags,
     limit: limit,
-    nl2br: nl2br
+    nl2br: nl2br,
+    studly: studly,
+    camel: camel,
+    snake: snake,
+    kebab: kebab
   };
 
   var Helpers = {
