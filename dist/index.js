@@ -916,6 +916,29 @@
     return result;
   };
 
+  var fill = function fill(items, value) {
+    var start = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+    var end = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+    if (!end) {
+      end = count(items);
+    }
+
+    if (isa(items)) {
+      return items.fill(value, start, end);
+    }
+
+    var index = 0;
+    var result = {};
+
+    for (var key in items) {
+      result[key] = start <= index && index < end ? value : items[key];
+      index++;
+    }
+
+    return result;
+  };
+
   var methods = {
     keys: keys,
     values: values,
@@ -965,7 +988,8 @@
     insert: insert,
     join: join,
     partition: partition,
-    flip: flip
+    flip: flip,
+    fill: fill
   };
 
   var call = function call(method, items) {

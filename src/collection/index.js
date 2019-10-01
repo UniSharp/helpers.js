@@ -596,6 +596,26 @@ const flip = items => {
   return result
 }
 
+const fill = (items, value, start = 0, end = null) => {
+  if (!end) {
+    end = count(items)
+  }
+
+  if (isa(items)) {
+    return items.fill(value, start, end)
+  }
+
+  let index = 0
+  let result = {}
+
+  for (let key in items) {
+    result[key] = start <= index && index < end ? value : items[key]
+    index++
+  }
+
+  return result
+}
+
 export const methods = {
   keys,
   values,
@@ -645,7 +665,8 @@ export const methods = {
   insert,
   join,
   partition,
-  flip
+  flip,
+  fill
 }
 
 export const call = (method, items, ...args) => {

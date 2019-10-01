@@ -52,6 +52,7 @@ require('@unisharp/helpers.js')
   - [diffKeys](#diffkeys)
   - [each](#each)
   - [except](#except)
+  - [fill](#fill)
   - [filter](#filter)
   - [first](#first)
   - [flatten](#flatten)
@@ -186,6 +187,13 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.except('a', 'b')   // { c: 3 }
 [1, 2, 3, 4, 5].except([0, 1, 2])       // [4, 5]
 { a: 1, b: 2, c: 3 }.except(['a', 'b']) // { c: 3 }
+```
+
+#### fill
+
+```javascript
+[1, 2, 3, 4, 5].fill(6)      // [6, 6, 6, 6, 6]
+{ a: 1, b: 2, c: 3 }.fill(6) // { a: 6, b: 6, c: 6 }
 ```
 
 #### filter

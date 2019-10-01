@@ -709,4 +709,15 @@ describe('Collection', () => {
       expect(call('flip', { a: 0, b: 1, c: 2 })).toEqual({ 0: 'a', 1: 'b', 2: 'c' })
     })
   })
+
+  describe('#fill', () => {
+    it('should fill all elements with a given value', () => {
+      expect(call('fill', ['a', 'b', 'c'], 'd')).toEqual(['d', 'd', 'd'])
+      expect(call('fill', ['a', 'b', 'c'], 'd', 1)).toEqual(['a', 'd', 'd'])
+      expect(call('fill', ['a', 'b', 'c'], 'd', 1, 2)).toEqual(['a', 'd', 'c'])
+      expect(call('fill', { a: 0, b: 1, c: 2 }, 3)).toEqual({ a: 3, b: 3, c: 3 })
+      expect(call('fill', { a: 0, b: 1, c: 2 }, 3, 1)).toEqual({ a: 0, b: 3, c: 3 })
+      expect(call('fill', { a: 0, b: 1, c: 2 }, 3, 1, 2)).toEqual({ a: 0, b: 3, c: 2 })
+    })
+  })
 })
