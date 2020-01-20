@@ -1183,26 +1183,28 @@
     return this.replace(/\r\n|\n\r|\n|\r/g, '<br>');
   };
 
-  var studly = function studly() {
-    var ucfirst = function ucfirst(word) {
-      return word.replace(/^(.)/, function (match) {
-        return match.toUpperCase();
-      });
-    };
+  var ucfirst = function ucfirst() {
+    return this.replace(/^(.)/, function (match) {
+      return match.toUpperCase();
+    });
+  };
 
+  var lcfirst = function lcfirst() {
+    return this.replace(/^(.)/, function (match) {
+      return match.toLowerCase();
+    });
+  };
+
+  var studly = function studly() {
     return this.split(/[-_ ]/).filter(function (word) {
       return word;
-    }).map(ucfirst).join('');
+    }).map(function (word) {
+      return word.ucfirst();
+    }).join('');
   };
 
   var camel = function camel() {
-    var lcfirst = function lcfirst(word) {
-      return word.replace(/^(.)/, function (match) {
-        return match.toLowerCase();
-      });
-    };
-
-    return lcfirst(this.studly());
+    return this.studly().lcfirst();
   };
 
   var snake = function snake() {
@@ -1227,7 +1229,9 @@
     studly: studly,
     camel: camel,
     snake: snake,
-    kebab: kebab
+    kebab: kebab,
+    ucfirst: ucfirst,
+    lcfirst: lcfirst
   };
 
   var Helpers = {

@@ -100,4 +100,20 @@ describe('String', () => {
       expect(' foo -_- bar -_- baz '.kebab()).toBe('foo-bar-baz')
     })
   })
+
+  describe('#ucfirst()', () => {
+    it('should convert first character of the given string to uppercase', () => {
+      expect('foo'.ucfirst()).toBe('Foo')
+      expect('fOo'.ucfirst()).toBe('FOo')
+      expect('foO'.ucfirst()).toBe('FoO')
+    })
+  })
+
+  describe('#lcfirst()', () => {
+    it('should convert first character of the given string to lowercase', () => {
+      expect('Foo'.lcfirst()).toBe('foo')
+      expect('FOo'.lcfirst()).toBe('fOo')
+      expect('FoO'.lcfirst()).toBe('foO')
+    })
+  })
 })

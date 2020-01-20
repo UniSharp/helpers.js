@@ -24,16 +24,20 @@ const nl2br = function () {
   return this.replace(/\r\n|\n\r|\n|\r/g, '<br>')
 }
 
-const studly = function () {
-  const ucfirst = word => word.replace(/^(.)/, match => match.toUpperCase())
+const ucfirst = function () {
+  return this.replace(/^(.)/, match => match.toUpperCase())
+}
 
-  return this.split(/[-_ ]/).filter(word => word).map(ucfirst).join('')
+const lcfirst = function () {
+  return this.replace(/^(.)/, match => match.toLowerCase())
+}
+
+const studly = function () {
+  return this.split(/[-_ ]/).filter(word => word).map(word => word.ucfirst()).join('')
 }
 
 const camel = function () {
-  const lcfirst = word => word.replace(/^(.)/, match => match.toLowerCase())
-
-  return lcfirst(this.studly())
+  return this.studly().lcfirst()
 }
 
 const snake = function () {
@@ -56,5 +60,7 @@ export const methods = {
   studly,
   camel,
   snake,
-  kebab
+  kebab,
+  ucfirst,
+  lcfirst
 }

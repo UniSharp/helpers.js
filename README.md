@@ -98,6 +98,7 @@ require('@unisharp/helpers.js')
 - [**String**](#string)
   - [camel](#camel)
   - [kebab](#kebab)
+  - [lcfirst](#lcfirst)
   - [limit](#limit)
   - [nl2br](#nl2br)
   - [random](#random)
@@ -105,6 +106,7 @@ require('@unisharp/helpers.js')
   - [snake](#snake)
   - [stripTags](#striptags)
   - [studly](#studly)
+  - [ucfirst](#ucfirst)
 - [**Number**](#number)
   - [abs](#abs)
   - [ceil](#ceil)
@@ -533,6 +535,12 @@ Object.isObject([]) // false
 'Hello World'.kebab() // 'hello-world'
 ```
 
+#### lcfirst
+
+```javascript
+'Hello World'.lcfirst() // 'hello World'
+```
+
 #### limit
 
 ```javascript
@@ -575,6 +583,12 @@ String.random(10) // 'erbzjw0rks'
 
 ```javascript
 'hello-world'.studly() // 'HelloWorld'
+```
+
+#### ucfirst
+
+```javascript
+'hello world'.ucfirst() // 'Hello world'
 ```
 
 ### Number
