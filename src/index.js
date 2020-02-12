@@ -12,23 +12,27 @@ export const Helpers = {
     global.UniSharp = { Helpers }
 
     for (const method in numberStaticMethods) {
-      Number[method] = numberStaticMethods[method]
+      Object.assign(Number, { [method]: numberStaticMethods[method] })
     }
 
     for (const method in numberMethods) {
-      Number.prototype[method] = function (...args) {
-        return numberMethods[method].apply(this, args)
-      }
+      Object.assign(Number.prototype, {
+        [method]: function (...args) {
+          return numberMethods[method].apply(this, args)
+        }
+      })
     }
 
     for (const method in stringStaticMethods) {
-      String[method] = stringStaticMethods[method]
+      Object.assign(String, { [method]: stringStaticMethods[method] })
     }
 
     for (const method in stringMethods) {
-      String.prototype[method] = function (...args) {
-        return stringMethods[method].apply(this, args)
-      }
+      Object.assign(String.prototype, {
+        [method]: function (...args) {
+          return stringMethods[method].apply(this, args)
+        }
+      })
     }
   }
 }

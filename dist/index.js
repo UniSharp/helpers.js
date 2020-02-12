@@ -1249,17 +1249,17 @@
       global.UniSharp = { Helpers: Helpers };
 
       for (var method in staticMethods) {
-        Number[method] = staticMethods[method];
+        Object.assign(Number, defineProperty({}, method, staticMethods[method]));
       }
 
       var _loop = function _loop(_method) {
-        Number.prototype[_method] = function () {
+        Object.assign(Number.prototype, defineProperty({}, _method, function () {
           for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
 
           return methods$1[_method].apply(this, args);
-        };
+        }));
       };
 
       for (var _method in methods$1) {
@@ -1267,17 +1267,17 @@
       }
 
       for (var _method2 in staticMethods$1) {
-        String[_method2] = staticMethods$1[_method2];
+        Object.assign(String, defineProperty({}, _method2, staticMethods$1[_method2]));
       }
 
       var _loop2 = function _loop2(_method3) {
-        String.prototype[_method3] = function () {
+        Object.assign(String.prototype, defineProperty({}, _method3, function () {
           for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
             args[_key2] = arguments[_key2];
           }
 
           return methods$2[_method3].apply(this, args);
-        };
+        }));
       };
 
       for (var _method3 in methods$2) {
