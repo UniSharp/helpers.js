@@ -11,20 +11,24 @@ export const Helpers = {
     global.DateInterval = DateInterval
     global.UniSharp = { Helpers }
 
-    for (let method in numberStaticMethods) {
+    for (const method in numberStaticMethods) {
       Number[method] = numberStaticMethods[method]
     }
 
-    for (let method in numberMethods) {
-      Number.prototype[method] = numberMethods[method]
+    for (const method in numberMethods) {
+      Number.prototype[method] = function (...args) {
+        return numberMethods[method].apply(this, args)
+      }
     }
 
-    for (let method in stringStaticMethods) {
+    for (const method in stringStaticMethods) {
       String[method] = stringStaticMethods[method]
     }
 
-    for (let method in stringMethods) {
-      String.prototype[method] = stringMethods[method]
+    for (const method in stringMethods) {
+      String.prototype[method] = function (...args) {
+        return stringMethods[method].apply(this, args)
+      }
     }
   }
 }
