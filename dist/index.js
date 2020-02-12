@@ -1097,31 +1097,31 @@
   };
 
   var years = function years() {
-    return this.year();
+    return year.call(this);
   };
 
   var months = function months() {
-    return this.month();
+    return month.call(this);
   };
 
   var days = function days() {
-    return this.day();
+    return day.call(this);
   };
 
   var hours = function hours() {
-    return this.hour();
+    return hour.call(this);
   };
 
   var minutes = function minutes() {
-    return this.minute();
+    return minute.call(this);
   };
 
   var seconds = function seconds() {
-    return this.second();
+    return second.call(this);
   };
 
   var milliseconds = function milliseconds() {
-    return this.millisecond();
+    return millisecond.call(this);
   };
 
   var staticMethods = {
@@ -1199,12 +1199,12 @@
     return this.split(/[-_ ]/).filter(function (word) {
       return word;
     }).map(function (word) {
-      return word.ucfirst();
+      return ucfirst.call(word);
     }).join('');
   };
 
   var camel = function camel() {
-    return this.studly().lcfirst();
+    return lcfirst.call(studly.call(this));
   };
 
   var snake = function snake() {
@@ -1214,7 +1214,7 @@
   };
 
   var kebab = function kebab() {
-    return this.snake().replace(/_/g, '-');
+    return snake.call(this).replace(/_/g, '-');
   };
 
   var staticMethods$1 = {
@@ -1248,41 +1248,10 @@
       global.DateInterval = DateInterval;
       global.UniSharp = { Helpers: Helpers };
 
-      for (var method in staticMethods) {
-        Object.assign(Number, defineProperty({}, method, staticMethods[method]));
-      }
-
-      var _loop = function _loop(_method) {
-        Object.assign(Number.prototype, defineProperty({}, _method, function () {
-          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-
-          return methods$1[_method].apply(this, args);
-        }));
-      };
-
-      for (var _method in methods$1) {
-        _loop(_method);
-      }
-
-      for (var _method2 in staticMethods$1) {
-        Object.assign(String, defineProperty({}, _method2, staticMethods$1[_method2]));
-      }
-
-      var _loop2 = function _loop2(_method3) {
-        Object.assign(String.prototype, defineProperty({}, _method3, function () {
-          for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-            args[_key2] = arguments[_key2];
-          }
-
-          return methods$2[_method3].apply(this, args);
-        }));
-      };
-
-      for (var _method3 in methods$2) {
-        _loop2(_method3);
-      }
+      Object.assign(Number, staticMethods);
+      Object.assign(Number.prototype, methods$1);
+      Object.assign(String, staticMethods$1);
+      Object.assign(String.prototype, methods$2);
     }
   };
 

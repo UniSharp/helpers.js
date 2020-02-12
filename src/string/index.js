@@ -33,11 +33,11 @@ const lcfirst = function () {
 }
 
 const studly = function () {
-  return this.split(/[-_ ]/).filter(word => word).map(word => word.ucfirst()).join('')
+  return this.split(/[-_ ]/).filter(word => word).map(word => ucfirst.call(word)).join('')
 }
 
 const camel = function () {
-  return this.studly().lcfirst()
+  return lcfirst.call(studly.call(this))
 }
 
 const snake = function () {
@@ -45,7 +45,7 @@ const snake = function () {
 }
 
 const kebab = function () {
-  return this.snake().replace(/_/g, '-')
+  return snake.call(this).replace(/_/g, '-')
 }
 
 export const staticMethods = {

@@ -77,31 +77,31 @@ const millisecond = function () {
 }
 
 const years = function () {
-  return this.year()
+  return year.call(this)
 }
 
 const months = function () {
-  return this.month()
+  return month.call(this)
 }
 
 const days = function () {
-  return this.day()
+  return day.call(this)
 }
 
 const hours = function () {
-  return this.hour()
+  return hour.call(this)
 }
 
 const minutes = function () {
-  return this.minute()
+  return minute.call(this)
 }
 
 const seconds = function () {
-  return this.second()
+  return second.call(this)
 }
 
 const milliseconds = function () {
-  return this.millisecond()
+  return millisecond.call(this)
 }
 
 export const staticMethods = {
