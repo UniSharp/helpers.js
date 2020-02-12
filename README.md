@@ -93,8 +93,6 @@ require('@unisharp/helpers.js')
   - [toArray](#toarray)
   - [unique](#unique)
   - [values](#values)
-- [**Object**](#object)
-  - [isObject](#isobject)
 - [**String**](#string)
   - [camel](#camel)
   - [kebab](#kebab)
@@ -510,15 +508,6 @@ require('@unisharp/helpers.js')
 ```javascript
 [1, 2, 3, 4, 5].values()      // [1, 2, 3, 4, 5]
 { a: 1, b: 2, c: 3 }.values() // [1, 2, 3]
-```
-
-### Object
-
-#### isObject
-
-```javascript
-Object.isObject({}) // true
-Object.isObject([]) // false
 ```
 
 ### String
