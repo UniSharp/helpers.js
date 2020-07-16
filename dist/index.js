@@ -1166,7 +1166,7 @@
   };
 
   var slugify = function slugify() {
-    return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
+    return this.toLowerCase().replace(/[:/.?=&#\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '');
   };
 
   var stripTags = function stripTags() {

@@ -9,7 +9,7 @@ const random = function (length = 16) {
 }
 
 const slugify = function () {
-  return this.toLowerCase().replace(/[:/.?=&\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
+  return this.toLowerCase().replace(/[:/.?=&#\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
 }
 
 const stripTags = function () {
