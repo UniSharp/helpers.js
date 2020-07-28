@@ -720,4 +720,36 @@ describe('Collection', () => {
       expect(call('fill', { a: 0, b: 1, c: 2 }, 3, 1, 2)).toEqual({ a: 0, b: 3, c: 2 })
     })
   })
+
+  describe('#freeze', () => {
+    it('should freeze the collection', () => {
+      let array = []
+      let object = []
+
+      expect(Object.isFrozen(array)).toEqual(false)
+      expect(Object.isFrozen(object)).toEqual(false)
+
+      call('freeze', array)
+      call('freeze', object)
+
+      expect(Object.isFrozen(array)).toEqual(true)
+      expect(Object.isFrozen(object)).toEqual(true)
+    })
+  })
+
+  describe('#freeze', () => {
+    it('should return the collection is forzen or not', () => {
+      let array = []
+      let object = []
+
+      expect(call('isFrozen', array)).toEqual(false)
+      expect(call('isFrozen', object)).toEqual(false)
+
+      Object.freeze(array)
+      Object.freeze(object)
+
+      expect(call('isFrozen', array)).toEqual(true)
+      expect(call('isFrozen', object)).toEqual(true)
+    })
+  })
 })

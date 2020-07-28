@@ -57,6 +57,7 @@ require('@unisharp/helpers.js')
   - [first](#first)
   - [flatten](#flatten)
   - [flip](#flip)
+  - [freeze](#freeze)
   - [get](#get)
   - [groupBy](#groupby)
   - [has](#has)
@@ -65,6 +66,7 @@ require('@unisharp/helpers.js')
   - [intersect](#intersect)
   - [intersectByKeys](#intersectbykeys)
   - [isEmpty](#isempty)
+  - [isFrozen](#isfrozen)
   - [isNotEmpty](#isnotempty)
   - [join](#join)
   - [keyBy](#keyby)
@@ -226,6 +228,13 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.flatten() // { 1: 'a', 2: 'b', 3: 'c' }
 ```
 
+#### freeze
+
+```javascript
+['a', 'b', 'c'].freeze()      // ['a', 'b', 'c']
+{ a: 1, b: 2, c: 3 }.freeze() // { a: 1, b: 2, c: 3 }
+```
+
 #### get
 
 ```javascript
@@ -286,6 +295,13 @@ require('@unisharp/helpers.js')
 [1, 2, 3, 4, 5].isEmpty()      // false
 {}.isEmpty()                   // true
 { a: 1, b: 2, c: 3 }.isEmpty() // false
+```
+
+#### isFrozen
+
+```javascript
+[1, 2, 3, 4, 5].isFrozen()      // false
+{ a: 1, b: 2, c: 3 }.isFrozen() // false
 ```
 
 #### isNotEmpty

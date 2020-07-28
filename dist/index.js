@@ -939,6 +939,14 @@
     return result;
   };
 
+  var freeze = function freeze(items) {
+    return Object.freeze(items);
+  };
+
+  var isFrozen = function isFrozen(items) {
+    return Object.isFrozen(items);
+  };
+
   var methods = {
     keys: keys,
     values: values,
@@ -989,7 +997,9 @@
     join: join,
     partition: partition,
     flip: flip,
-    fill: fill
+    fill: fill,
+    freeze: freeze,
+    isFrozen: isFrozen
   };
 
   var call = function call(method, items) {

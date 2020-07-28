@@ -616,6 +616,14 @@ const fill = (items, value, start = 0, end = null) => {
   return result
 }
 
+const freeze = (items) => {
+  return Object.freeze(items)
+}
+
+const isFrozen = (items) => {
+  return Object.isFrozen(items)
+}
+
 export const methods = {
   keys,
   values,
@@ -666,7 +674,9 @@ export const methods = {
   join,
   partition,
   flip,
-  fill
+  fill,
+  freeze,
+  isFrozen
 }
 
 export const call = (method, items, ...args) => {
