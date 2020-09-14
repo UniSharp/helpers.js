@@ -737,7 +737,7 @@ describe('Collection', () => {
     })
   })
 
-  describe('#freeze', () => {
+  describe('#isFrozen', () => {
     it('should return the collection is forzen or not', () => {
       let array = []
       let object = []
