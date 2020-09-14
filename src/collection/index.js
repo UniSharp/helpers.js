@@ -681,7 +681,7 @@ export const methods = {
 
 export const call = (method, items, ...args) => {
   if ((!isa(items) && !iso(items)) ||
-      (iso(items) && has(items, method))) {
+      (iso(items) && method in items)) {
     return items[method](...args)
   }
 

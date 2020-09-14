@@ -50,6 +50,10 @@ describe('Collection', () => {
   })
 
   it('Run own method first', () => {
+    const Foo = () => {}
+    Foo.prototype = { count: () => 10 }
+
+    expect(call('count', new Foo)).toBe(10)
     expect(call('count', { count: () => 10 })).toBe(10)
   })
 

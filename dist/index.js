@@ -1007,7 +1007,7 @@
       args[_key4 - 2] = arguments[_key4];
     }
 
-    if (!isa(items) && !iso(items) || iso(items) && has(items, method)) {
+    if (!isa(items) && !iso(items) || iso(items) && method in items) {
       return items[method].apply(items, args);
     }
 
