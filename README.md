@@ -88,7 +88,9 @@ require('@unisharp/helpers.js')
   - [shuffle](#shuffle)
   - [slice](#slice)
   - [sort](#sort)
+  - [sortDesc](#sortdesc)
   - [sortBy](#sortby)
+  - [sortByDesc](#sortbydesc)
   - [sum](#sum)
   - [swap](#swap)
   - [take](#take)
@@ -472,6 +474,17 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.sort((a, b) => b - a)      // { c: 3, b: 2, a: 1 }
 ```
 
+#### sortDesc
+
+```javascript
+[1, 2, 3, 4, 5].sortDesc()                          // [5, 4, 3, 2, 1]
+[[5, 4], [5, 5]].sortDesc()                         // [[5, 5], [5, 4]]
+[{ a: 5, b: 4 }, { a: 5, b: 5 }].sortDesc()         // [{ a: 5, b: 5 }, { a: 5, b: 4 }]
+{ a: 1, b: 2, c: 3 }.sortDesc()                     // { c: 3, b: 2, a: 1 }
+{ a: [3, 2], b: [3, 3] }.sortDesc()                 // { b: [3, 3], a: [3, 3] }
+{ a: { a: 3, b: 2 }, b: { a: 3, b: 3 } }.sortDesc() // { b: { a: 3, b: 3 }, a: { a: 3, b: 2 } }
+```
+
 #### sortBy
 
 ```javascript
@@ -481,6 +494,17 @@ require('@unisharp/helpers.js')
 { a: { a: 3, b: 3 }, b: { a: 3, b: 2 } }.sortBy('b')    // { b: { a: 3, b: 2 }, a: { a: 3, b: 3 } }
 [[5, 5], [5, 4]].sortBy(item => item[1])                // [[5, 4], [5, 5]]
 [{ a: 5, b: 5 }, { a: 5, b: 4 }].sortBy(item => item.b) // [{ a: 5, b: 4 }, { a: 5, b: 5 }]
+```
+
+#### sortByDesc
+
+```javascript
+[[5, 4], [5, 5]].sortByDesc(1)                              // [[5, 5], [5, 4]]
+[{ a: 5, b: 4 }, { a: 5, b: 5 }].sortByDesc('b')            // [{ a: 5, b: 5 }, { a: 5, b: 4 }]
+{ a: [3, 2], b: [3, 3] }.sortByDesc(1)                      // { b: [3, 3], a: [3, 2] }
+{ a: { a: 3, b: 2 }, b: { a: 3, b: 3 } }.sortByDesc('b')    // { b: { a: 3, b: 3 }, a: { a: 3, b: 2 } }
+[[5, 4], [5, 5]].sortByDesc(item => item[1])                // [[5, 5], [5, 4]]
+[{ a: 5, b: 4 }, { a: 5, b: 5 }].sortByDesc(item => item.b) // [{ a: 5, b: 5 }, { a: 5, b: 4 }]
 ```
 
 #### sum

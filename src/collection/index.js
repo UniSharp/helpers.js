@@ -75,6 +75,31 @@ const _merge = (items, merged, flag) => {
   }
 }
 
+const _sort = (items, callback = null, afterSort = null) => {
+  let descending = false
+
+  if (callback === true) {
+    callback = null
+    descending = true
+  }
+
+  let result = values(map(items, (value, key) => ({ key, value })))
+
+  result = result.sort((a, b) => {
+    if (callback) {
+      return callback(a.value, b.value)
+    }
+
+    return spaceship(...map([a.value, b.value], item => iso(item) ? values(item) : item)) * [1, -1][+descending]
+  })
+
+  if (afterSort) {
+    result = map(result, afterSort)
+  }
+
+  return iso(items) ? pluck(result, 'value', 'key') : pluck(result, 'value')
+}
+
 const keys = (items) => {
   let keys = Object.keys(items)
 
@@ -498,37 +523,33 @@ const groupBy = (items, key) => {
 }
 
 const sort = (items, callback = null) => {
-  if (!callback) {
-    callback = (a, b) => spaceship(...map([a, b], item => iso(item) ? values(item) : item))
-  }
-
-  if (isa(items)) {
+  if (isa(items) && callback) {
     return items.sort(callback)
   }
 
-  let result = values(map(items, (item, key) => [key, item]))
-
-  result = result.sort((a, b) => callback(a[1], b[1]))
-
-  return mapWithKeys(result, ([key, item]) => ({ [key]: item }))
+  return _sort(items, callback)
 }
 
-const sortBy = (items, callback) => {
+const sortDesc = (items) => {
+  return _sort(items, true)
+}
+
+const sortBy = (items, callback, descending = false) => {
   if (!isf(callback)) {
-    let key = callback
+    const key = callback
 
     callback = item => get(item, key)
   }
 
-  let result = values(map(items, (item, key) => [key, item, callback(item)]))
+  return _sort(
+    map(items, value => callback(value)),
+    descending,
+    ({ key, value }) => ({ key, value: items[key] })
+  )
+}
 
-  result = sort(result, (a, b) => spaceship(a[2], b[2]))
-
-  if (isa(items)) {
-    return map(result, ([key, item]) => item)
-  }
-
-  return mapWithKeys(result, ([key, item]) => ({ [key]: item }))
+const sortByDesc = (items, callback) => {
+  return sortBy(items, callback, true)
 }
 
 const append = (items, value, key = null) => isa(items) ? [...items, value] : { ...items, [key]: value }
@@ -666,7 +687,9 @@ export const methods = {
   keyBy,
   groupBy,
   sort,
+  sortDesc,
   sortBy,
+  sortByDesc,
   append,
   prepend,
   index,

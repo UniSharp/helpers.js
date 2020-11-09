@@ -638,6 +638,22 @@ describe('Collection', () => {
     })
   })
 
+  describe('#sortDesc', () => {
+    it('should sort the collection', () => {
+      expect(call('sortDesc', [3, 5, 3, 4, 2, 1])).toEqual([5, 4, 3, 3, 2, 1])
+      expect(call('sortDesc', [[1, 2], [3, 4]])).toEqual([[3, 4], [1, 2]])
+      expect(call('sortDesc', [{ a: 1, b: 2 }, { a: 3, b: 4 }])).toEqual([{ a: 3, b: 4 }, { a: 1, b: 2 }])
+      expect(JSON.stringify(call('sortDesc', { a: 1, b: 2, c: 3 }))).toBe(JSON.stringify({ c: 3, b: 2, a: 1 }))
+      expect(JSON.stringify(call('sortDesc', { a: [1, 2], b: [3, 4] }))).toBe(JSON.stringify({ b: [3, 4], a: [1, 2] }))
+      expect(JSON.stringify(call('sortDesc', { a: { a: 1, b: 2 }, b: { a: 3, b: 4 } }))).toBe(JSON.stringify({ b: { a: 3, b: 4 }, a: { a: 1, b: 2 } }))
+    })
+
+    it('should sort the collection which contains string', () => {
+      expect(call('sortDesc', ['a', 'b', 'c'])).toEqual(['c', 'b', 'a'])
+      expect(JSON.stringify(call('sortDesc', { a: 'a', b: 'b', c: 'c' }))).toBe(JSON.stringify({ c: 'c', b: 'b', a: 'a' }))
+    })
+  })
+
   describe('#sortBy', () => {
     it('should sort the collection by the given key', () => {
       expect(call('sortBy', [[1, 4], [2, 3]], 1)).toEqual([[2, 3], [1, 4]])
@@ -651,6 +667,36 @@ describe('Collection', () => {
       expect(call('sortBy', [{ a: 1, b: 4 }, { a: 2, b: 3 }], item => item.b)).toEqual([{ a: 2, b: 3 }, { a: 1, b: 4 }])
       expect(JSON.stringify(call('sortBy', { a: [1, 4], b: [2, 3] }, item => item[1]))).toBe(JSON.stringify({ b: [2, 3], a: [1, 4] }))
       expect(JSON.stringify(call('sortBy', { a: { a: 1, b: 4 }, b: { a: 2, b: 3 } }, item => item.b))).toBe(JSON.stringify({ b: { a: 2, b: 3 }, a: { a: 1, b: 4 } }))
+    })
+
+    it('should sort the collection by the given key descending', () => {
+      expect(call('sortBy', [[2, 3], [1, 4]], 1, true)).toEqual([[1, 4], [2, 3]])
+      expect(call('sortBy', [{ a: 2, b: 3 }, { a: 1, b: 4 }], 'b', true)).toEqual([{ a: 1, b: 4 }, { a: 2, b: 3 }])
+      expect(JSON.stringify(call('sortBy', { a: [2, 3], b: [1, 4] }, 1, true))).toBe(JSON.stringify({ b: [1, 4], a: [2, 3] }))
+      expect(JSON.stringify(call('sortBy', { a: { a: 2, b: 3 }, b: { a: 1, b: 4 } }, 'b', true))).toBe(JSON.stringify({ b: { a: 1, b: 4 }, a: { a: 2, b: 3 } }))
+    })
+
+    it('should sort the collection using the given callback descending', () => {
+      expect(call('sortBy', [[2, 3], [1, 4]], item => item[1], true)).toEqual([[1, 4], [2, 3]])
+      expect(call('sortBy', [{ a: 2, b: 3 }, { a: 1, b: 4 }], item => item.b, true)).toEqual([{ a: 1, b: 4 }, { a: 2, b: 3 }])
+      expect(JSON.stringify(call('sortBy', { a: [2, 3], b: [1, 4] }, item => item[1], true))).toBe(JSON.stringify({ b: [1, 4], a: [2, 3] }))
+      expect(JSON.stringify(call('sortBy', { a: { a: 2, b: 3 }, b: { a: 1, b: 4 } }, item => item.b, true))).toBe(JSON.stringify({ b: { a: 1, b: 4 }, a: { a: 2, b: 3 } }))
+    })
+  })
+
+  describe('#sortByDesc', () => {
+    it('should sort the collection by the given key', () => {
+      expect(call('sortByDesc', [[2, 3], [1, 4]], 1)).toEqual([[1, 4], [2, 3]])
+      expect(call('sortByDesc', [{ a: 2, b: 3 }, { a: 1, b: 4 }], 'b')).toEqual([{ a: 1, b: 4 }, { a: 2, b: 3 }])
+      expect(JSON.stringify(call('sortByDesc', { a: [2, 3], b: [1, 4] }, 1))).toBe(JSON.stringify({ b: [1, 4], a: [2, 3] }))
+      expect(JSON.stringify(call('sortByDesc', { a: { a: 2, b: 3 }, b: { a: 1, b: 4 } }, 'b'))).toBe(JSON.stringify({ b: { a: 1, b: 4 }, a: { a: 2, b: 3 } }))
+    })
+
+    it('should sort the collection using the given callback', () => {
+      expect(call('sortByDesc', [[2, 3], [1, 4]], item => item[1])).toEqual([[1, 4], [2, 3]])
+      expect(call('sortByDesc', [{ a: 2, b: 3 }, { a: 1, b: 4 }], item => item.b)).toEqual([{ a: 1, b: 4 }, { a: 2, b: 3 }])
+      expect(JSON.stringify(call('sortByDesc', { a: [2, 3], b: [1, 4] }, item => item[1]))).toBe(JSON.stringify({ b: [1, 4], a: [2, 3] }))
+      expect(JSON.stringify(call('sortByDesc', { a: { a: 2, b: 3 }, b: { a: 1, b: 4 } }, item => item.b))).toBe(JSON.stringify({ b: { a: 1, b: 4 }, a: { a: 2, b: 3 } }))
     })
   })
 
