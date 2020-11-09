@@ -1,7 +1,10 @@
 language: node_js
 
 node_js:
-  - '8.9'
+  - '8.17'
+  - '10.23'
+  - '12.19'
+  - '14.15'
 
 install:
   - travis_retry npm install
