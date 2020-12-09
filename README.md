@@ -227,7 +227,7 @@ require('@unisharp/helpers.js')
 
 ```javascript
 ['a', 'b', 'c'].flip()         // { a: 0, b: 1, c: 2 }
-{ a: 1, b: 2, c: 3 }.flatten() // { 1: 'a', 2: 'b', 3: 'c' }
+{ a: 1, b: 2, c: 3 }.flip() // { 1: 'a', 2: 'b', 3: 'c' }
 ```
 
 #### freeze
