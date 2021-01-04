@@ -48,6 +48,10 @@ const kebab = function () {
   return snake.call(this).replace(/_/g, '-')
 }
 
+const title = function () {
+  return snake.call(this).split(/_/).map(word => ucfirst.call(word)).join(' ')
+}
+
 export const staticMethods = {
   random
 }
@@ -61,6 +65,7 @@ export const methods = {
   camel,
   snake,
   kebab,
+  title,
   ucfirst,
   lcfirst
 }

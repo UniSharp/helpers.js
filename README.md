@@ -108,6 +108,7 @@ require('@unisharp/helpers.js')
   - [snake](#snake)
   - [stripTags](#striptags)
   - [studly](#studly)
+  - [title](#title)
   - [ucfirst](#ucfirst)
 - [**Number**](#number)
   - [abs](#abs)
@@ -612,6 +613,12 @@ String.random(10) // 'erbzjw0rks'
 
 ```javascript
 'hello-world'.studly() // 'HelloWorld'
+```
+
+#### title
+
+```javascript
+'hello-world'.title() // 'Hello World'
 ```
 
 #### ucfirst

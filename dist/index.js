@@ -1193,6 +1193,12 @@
     return snake.call(this).replace(/_/g, '-');
   };
 
+  var title = function title() {
+    return snake.call(this).split(/_/).map(function (word) {
+      return ucfirst.call(word);
+    }).join(' ');
+  };
+
   var staticMethods$1 = {
     random: random$1
   };
@@ -1206,6 +1212,7 @@
     camel: camel,
     snake: snake,
     kebab: kebab,
+    title: title,
     ucfirst: ucfirst,
     lcfirst: lcfirst
   };

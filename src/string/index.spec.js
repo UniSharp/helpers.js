@@ -101,6 +101,19 @@ describe('String', () => {
     })
   })
 
+  describe('#title()', () => {
+    it('should convert the given string to title string', () => {
+      expect('fooBarBaz'.title()).toBe('Foo Bar Baz')
+      expect('FooBarBaz'.title()).toBe('Foo Bar Baz')
+      expect('foo bar baz'.title()).toBe('Foo Bar Baz')
+      expect('foo_bar_baz'.title()).toBe('Foo Bar Baz')
+      expect('Foo_Bar_Baz'.title()).toBe('Foo Bar Baz')
+      expect('___foo___bar___baz___'.title()).toBe('Foo Bar Baz')
+      expect('   foo   bar   baz   '.title()).toBe('Foo Bar Baz')
+      expect(' foo -_- bar -_- baz '.title()).toBe('Foo Bar Baz')
+    })
+  })
+
   describe('#ucfirst()', () => {
     it('should convert first character of the given string to uppercase', () => {
       expect('foo'.ucfirst()).toBe('Foo')
