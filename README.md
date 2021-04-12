@@ -527,7 +527,7 @@ require('@unisharp/helpers.js')
 
 ```javascript
 [1, 2, 3, 4, 5].take(2)      // [1, 2]
-{ a: 1, b: 2, c: 3 }.swap(2) // { a: 1, b: 2 }
+{ a: 1, b: 2, c: 3 }.take(2) // { a: 1, b: 2 }
 ```
 
 #### toArray
