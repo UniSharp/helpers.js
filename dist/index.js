@@ -557,12 +557,26 @@
   };
 
   var flatten = function flatten(items) {
+    var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Infinity;
+
     var result = [];
 
     for (var key in items) {
-      var value = items[key];
+      var item = items[key];
 
-      result = isa(value) || iso(value) ? [].concat(toConsumableArray(result), toConsumableArray(flatten(value))) : [].concat(toConsumableArray(result), [value]);
+      if (!isa(item) && !iso(item)) {
+        result.push(item);
+
+        continue;
+      }
+
+      if (depth === 1) {
+        result = [].concat(toConsumableArray(result), toConsumableArray(values(item)));
+
+        continue;
+      }
+
+      result = [].concat(toConsumableArray(result), toConsumableArray(flatten(item, depth - 1)));
     }
 
     return result;

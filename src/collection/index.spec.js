@@ -428,6 +428,12 @@ describe('Collection', () => {
       expect(call('flatten', [{ a: 1, b: 2 }, { c: 3, d: 4 }, { e: 5 }])).toEqual([1, 2, 3, 4, 5])
       expect(call('flatten', { a: { a: 1, b: 2 }, b: { c: 3, d: 4 }, c: { e: 5 } })).toEqual([1, 2, 3, 4, 5])
     })
+
+    it('should flatten a multi dimensional object into specified depth dimension', () => {
+      expect(call('flatten', [[[1], [2]], [[3], [4]], [[5]]], 1)).toEqual([[1], [2], [3], [4], [5]])
+      expect(call('flatten', [{ a: [1], b: [2] }, { c: [3], d: [4] }, { e: [5] }], 1)).toEqual([[1], [2], [3], [4], [5]])
+      expect(call('flatten', { a: { a: [1], b: [2] }, b: { c: [3], d: [4] }, c: { e: [5] } }, 1)).toEqual([[1], [2], [3], [4], [5]])
+    })
   })
 
   describe('#min()', () => {

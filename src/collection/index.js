@@ -345,13 +345,25 @@ const mapWithKeys = (items, callback) => {
   return result
 }
 
-const flatten = items => {
+const flatten = (items, depth = Infinity) => {
   let result = []
 
   for (let key in items) {
-    let value = items[key]
+    let item = items[key]
 
-    result = isa(value) || iso(value) ? [...result, ...flatten(value)] : [...result, value]
+    if (!isa(item) && !iso(item)) {
+      result.push(item)
+
+      continue
+    }
+
+    if (depth === 1) {
+      result = [...result, ...values(item)]
+
+      continue
+    }
+
+    result = [...result, ...flatten(item, depth - 1)]
   }
 
   return result
