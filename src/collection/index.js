@@ -657,6 +657,17 @@ const isFrozen = (items) => {
   return Object.isFrozen(items)
 }
 
+const flatMap = (items, callback) => {
+  let result = []
+  let index = 0
+
+  for (let key in items) {
+    result = merge(result, callback(items[key], isn(+key) ? +key : key, index++))
+  }
+
+  return result
+}
+
 export const methods = {
   keys,
   values,
@@ -711,7 +722,8 @@ export const methods = {
   flip,
   fill,
   freeze,
-  isFrozen
+  isFrozen,
+  flatMap
 }
 
 export const call = (method, items, ...args) => {

@@ -808,4 +808,19 @@ describe('Collection', () => {
       expect(call('isFrozen', object)).toEqual(true)
     })
   })
+
+  describe('#flatMap', () => {
+    testIterator('flatMap')
+
+    it('should iterates through the collection and passes each value to the given closure', () => {
+      expect(call('flatMap', [1, 2, 3], (value, key, index) => [`${index} - ${key} - ${value}`]))
+        .toEqual(['0 - 0 - 1', '1 - 1 - 2', '2 - 2 - 3'])
+      expect(call('flatMap', [1, 2, 3], (value, key, index) => ({ [key]: `${index} - ${key} - ${value}` })))
+        .toEqual({ 0: '0 - 0 - 1', 1: '1 - 1 - 2', 2: '2 - 2 - 3' })
+      expect(call('flatMap', { a: 1, b: 2, c: 3 }, (value, key, index) => ({ [key]: `${index} - ${key} - ${value}` })))
+        .toEqual({ a: '0 - a - 1', b: '1 - b - 2', c: '2 - c - 3' })
+      expect(call('flatMap', { a: 1, b: 2, c: 3 }, (value, key, index) => [`${index} - ${key} - ${value}`]))
+        .toEqual(['0 - a - 1', '1 - b - 2', '2 - c - 3'])
+    })
+  })
 })
