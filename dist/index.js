@@ -235,9 +235,13 @@
   };
 
   var _merge = function _merge(items, merged, flag) {
-    var result = reduce(merged, function (result, value, key) {
-      return _extends({}, result, defineProperty({}, isn(key) ? flag++ : key, value));
-    }, _extends({}, items));
+    var mergedIsArray = isa(merged);
+
+    var result = _extends({}, items);
+
+    for (var key in merged) {
+      result = _extends({}, result, defineProperty({}, mergedIsArray ? flag++ : key, merged[key]));
+    }
 
     return {
       flag: flag,
@@ -742,11 +746,17 @@
       merged[_key3 - 1] = arguments[_key3];
     }
 
-    return reduce(merged, function (_ref, merged) {
-      var flag = _ref.flag,
-          result = _ref.result;
-      return _merge(result, merged, flag);
-    }, { flag: isa(items) ? count(items) : 0, result: items }).result;
+    var result = items;
+    var flag = isa(items) ? count(items) : 0;
+
+    for (var key in merged) {
+      var _merge2 = _merge(result, merged[key], flag);
+
+      result = _merge2.result;
+      flag = _merge2.flag;
+    }
+
+    return result;
   };
 
   var keyBy = function keyBy(items, key) {
@@ -808,9 +818,9 @@
 
     return _sort(map(items, function (value) {
       return callback(value);
-    }), descending, function (_ref2) {
-      var key = _ref2.key,
-          value = _ref2.value;
+    }), descending, function (_ref) {
+      var key = _ref.key,
+          value = _ref.value;
       return { key: key, value: items[key] };
     });
   };
@@ -925,6 +935,17 @@
     return Object.isFrozen(items);
   };
 
+  var flatMap = function flatMap(items, callback) {
+    var result = [];
+    var index = 0;
+
+    for (var key in items) {
+      result = merge(result, callback(items[key], isn(+key) ? +key : key, index++));
+    }
+
+    return result;
+  };
+
   var methods = {
     keys: keys,
     values: values,
@@ -979,7 +1000,8 @@
     flip: flip,
     fill: fill,
     freeze: freeze,
-    isFrozen: isFrozen
+    isFrozen: isFrozen,
+    flatMap: flatMap
   };
 
   var call = function call(method, items) {

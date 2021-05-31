@@ -63,11 +63,13 @@ const _has = (items, key, defaultValue = null) => {
 }
 
 const _merge = (items, merged, flag) => {
-  let result = reduce(
-    merged,
-    (result, value, key) => ({ ...result, [isn(key) ? flag++ : key]: value }),
-    { ...items }
-  )
+  const mergedIsArray = isa(merged)
+
+  let result = { ...items }
+
+  for (let key in merged) {
+    result = { ...result, [mergedIsArray ? flag++ : key]: merged[key] }
+  }
 
   return {
     flag,
@@ -496,11 +498,16 @@ const intersectByKeys = (items, compared) => {
   return filter({ ...items }, (item, key) => contains(comparedKeys, key))
 }
 
-const merge = (items, ...merged) => reduce(
-  merged,
-  ({ flag, result }, merged) => _merge(result, merged, flag),
-  { flag: isa(items) ? count(items) : 0, result: items }
-).result
+const merge = (items, ...merged) => {
+  let result = items
+  let flag = isa(items) ? count(items) : 0
+
+  for (let key in merged) {
+    ({ result, flag } = _merge(result, merged[key], flag))
+  }
+
+  return result
+}
 
 const keyBy = (items, key) => {
   let result = {}
