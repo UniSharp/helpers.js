@@ -55,6 +55,7 @@ require('@unisharp/helpers.js')
   - [fill](#fill)
   - [filter](#filter)
   - [first](#first)
+  - [flatMap](#flatmap)
   - [flatten](#flatten)
   - [flip](#flip)
   - [freeze](#freeze)
@@ -217,6 +218,13 @@ require('@unisharp/helpers.js')
 { a: 1, b: 2, c: 3 }.first(n => n > 1) // 2
 ```
 
+##### flatMap
+
+```javascript
+[1, 2, 3].flatMap((value, index) => [value, value + 1])                               // [1, 2, 2, 3, 3, 4]
+{ a: 1, b: 2 }.flatMap((value, key, index) => ({ [key]: value, [index]: value + 1 })) // { a: 1, 0: 2, b: 2, 1: 3 }
+```
+
 #### flatten
 
 ```javascript
@@ -227,7 +235,7 @@ require('@unisharp/helpers.js')
 #### flip
 
 ```javascript
-['a', 'b', 'c'].flip()         // { a: 0, b: 1, c: 2 }
+['a', 'b', 'c'].flip()      // { a: 0, b: 1, c: 2 }
 { a: 1, b: 2, c: 3 }.flip() // { 1: 'a', 2: 'b', 3: 'c' }
 ```
 
