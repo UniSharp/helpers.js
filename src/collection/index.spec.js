@@ -617,6 +617,13 @@ describe('Collection', () => {
       expect(call('groupBy', [{ a: 'a' }, { a: 'a' }, { a: 'b' }], row => row.a)).toEqual({ a: [{ a: 'a' }, { a: 'a' }], b: [{ a: 'b' }] })
       expect(call('groupBy', { a: { a: 'a' }, b: { a: 'b' } }, row => row.a)).toEqual({ a: { a: { a: 'a' } }, b: { b: { a: 'b' } } })
     })
+
+    it('should groups the collection by array value', () => {
+      expect(call('groupBy', [{ a: ['a'] }, { a: ['a', 'b'] }, { a: ['b'] }], 'a'))
+        .toEqual({ a: [{ a: ['a'] }, { a: ['a', 'b'] }], b: [{ a: ['a', 'b'] }, { a: ['b'] }] })
+      expect(call('groupBy', { a: { a: ['a'] }, b: { a: ['a', 'b'] } }, 'a'))
+        .toEqual({ a: { a: { a: ['a'] }, b: { a: ['a', 'b'] } }, b: { b: { a: ['a', 'b'] } } })
+    })
   })
 
   describe('#sort', () => {

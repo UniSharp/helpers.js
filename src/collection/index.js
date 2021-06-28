@@ -527,15 +527,23 @@ const groupBy = (items, key) => {
 
   let result = {}
 
-  for (let k in items) {
+  for (const k in items) {
     const row = items[k]
-    const group = keyIsFunction ? key(row) : get(row, key)
+    let groups = keyIsFunction ? key(row) : get(row, key)
 
-    if (!result[group]) {
-      result[group] = itemsIsArray ? [] : {}
+    if (!isa(groups)) {
+      groups = [groups]
     }
 
-    itemsIsArray ? result[group].push(row) : result[group][k] = row
+    for (const gk in groups) {
+      const group = groups[gk]
+
+      if (!result[group]) {
+        result[group] = itemsIsArray ? [] : {}
+      }
+
+      itemsIsArray ? result[group].push(row) : result[group][k] = row
+    }
   }
 
   return result

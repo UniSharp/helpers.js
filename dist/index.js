@@ -779,13 +779,21 @@
 
     for (var k in items) {
       var row = items[k];
-      var group = keyIsFunction ? key(row) : get$1(row, key);
+      var groups = keyIsFunction ? key(row) : get$1(row, key);
 
-      if (!result[group]) {
-        result[group] = itemsIsArray ? [] : {};
+      if (!isa(groups)) {
+        groups = [groups];
       }
 
-      itemsIsArray ? result[group].push(row) : result[group][k] = row;
+      for (var gk in groups) {
+        var group = groups[gk];
+
+        if (!result[group]) {
+          result[group] = itemsIsArray ? [] : {};
+        }
+
+        itemsIsArray ? result[group].push(row) : result[group][k] = row;
+      }
     }
 
     return result;
