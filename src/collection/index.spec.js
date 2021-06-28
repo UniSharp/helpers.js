@@ -157,6 +157,10 @@ describe('Collection', () => {
       expect(call('get', [1, 2, 3, 4, 5], 5, 6)).toBe(6)
       expect(call('get', { a: 1, b: 2, c: 3 }, 'd', 4)).toBe(4)
     })
+
+    it('should return the collection if has no given key', () => {
+      expect(call('get', [1, 2, 3])).toEqual([1, 2, 3])
+    })
   })
 
   describe('#set()', () => {
@@ -530,6 +534,16 @@ describe('Collection', () => {
     it('should return all of the unique items', () => {
       expect(call('unique', [1, 2, 2])).toEqual([1, 2])
       expect(call('unique', { a: 1, b: 2, c: 2 })).toEqual({ a: 1, b: 2 })
+    })
+
+    it('should return all of the unique items by the given key', () => {
+      expect(call('unique', [{ a: 1 }, { a: 2 }, { a: 2 }], 'a')).toEqual([{ a: 1 }, { a: 2 }])
+      expect(call('unique', { a: { a: 1 }, b: { a: 2 }, c: { a: 2 } }, 'a')).toEqual({ a: { a: 1 }, b: { a: 2 } })
+    })
+
+    it('should return all of the unique items by the given callback', () => {
+      expect(call('unique', [{ a: 1 }, { a: 2 }, { a: 2 }], ({ a }) => a)).toEqual([{ a: 1 }, { a: 2 }])
+      expect(call('unique', { a: { a: 1 }, b: { a: 2 }, c: { a: 2 } }, ({ a }) => a)).toEqual({ a: { a: 1 }, b: { a: 2 } })
     })
   })
 

@@ -313,8 +313,14 @@
     return _has(items, key)[0];
   };
 
-  var get$1 = function get$$1(items, key) {
+  var get$1 = function get$$1(items) {
+    var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+    if (key === null) {
+      return items;
+    }
+
     return _has(items, key, defaultValue)[1];
   };
 
@@ -697,16 +703,20 @@
   };
 
   var unique = function unique(items) {
+    var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+    var keyIsFunction = isf(key);
     var haystack = [];
     var result = {};
 
-    for (var key in items) {
-      var value = items[key];
+    for (var k in items) {
+      var row = items[k];
+      var uniqueBy = keyIsFunction ? key(row) : get$1(row, key);
 
-      if (haystack.indexOf(value) === -1) {
-        result[key] = value;
+      if (haystack.indexOf(uniqueBy) === -1) {
+        result[k] = row;
 
-        haystack.push(value);
+        haystack.push(uniqueBy);
       }
     }
 

@@ -126,7 +126,13 @@ const count = items => keys(items).length
 
 const has = (items, key) => _has(items, key)[0]
 
-const get = (items, key, defaultValue = null) => _has(items, key, defaultValue)[1]
+const get = (items, key = null, defaultValue = null) => {
+  if (key === null) {
+    return items
+  }
+
+  return _has(items, key, defaultValue)[1]
+}
 
 const set = (items, key, value) => {
   key = normalizeKey(key)
@@ -465,17 +471,19 @@ const shuffle = items => {
 
 const take = (items, limit) => slice(items, 0, limit)
 
-const unique = items => {
+const unique = (items, key = null) => {
+  const keyIsFunction = isf(key)
   let haystack = []
   let result = {}
 
-  for (let key in items) {
-    let value = items[key]
+  for (let k in items) {
+    const row = items[k]
+    const uniqueBy = keyIsFunction ? key(row) : get(row, key)
 
-    if (haystack.indexOf(value) === -1) {
-      result[key] = value
+    if (haystack.indexOf(uniqueBy) === -1) {
+      result[k] = row
 
-      haystack.push(value)
+      haystack.push(uniqueBy)
     }
   }
 
