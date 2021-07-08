@@ -473,12 +473,18 @@ const take = (items, limit) => slice(items, 0, limit)
 
 const unique = (items, key = null) => {
   const keyIsFunction = isf(key)
+  const itemsIsArray = isa(items)
   let haystack = []
   let result = {}
+  let index = 0
 
   for (let k in items) {
+    if (itemsIsArray) {
+      k = +k
+    }
+
     const row = items[k]
-    const uniqueBy = keyIsFunction ? key(row) : get(row, key)
+    const uniqueBy = keyIsFunction ? key(row, k, index++) : get(row, key)
 
     if (haystack.indexOf(uniqueBy) === -1) {
       result[k] = row
@@ -519,12 +525,18 @@ const merge = (items, ...merged) => {
 
 const keyBy = (items, key) => {
   const keyIsFunction = isf(key)
+  const itemsIsArray = isa(items)
   let result = {}
+  let index = 0
 
   for (let k in items) {
+    if (itemsIsArray) {
+      k = +k
+    }
+
     const row = items[k]
 
-    result[keyIsFunction ? key(row) : get(row, key)] = row
+    result[keyIsFunction ? key(row, k, index++) : get(row, key)] = row
   }
 
   return result
@@ -533,12 +545,16 @@ const keyBy = (items, key) => {
 const groupBy = (items, key) => {
   const keyIsFunction = isf(key)
   const itemsIsArray = isa(items)
-
   let result = {}
+  let index = 0
 
-  for (const k in items) {
+  for (let k in items) {
+    if (itemsIsArray) {
+      k = +k
+    }
+
     const row = items[k]
-    let groups = keyIsFunction ? key(row) : get(row, key)
+    let groups = keyIsFunction ? key(row, k, index++) : get(row, key)
 
     if (!isa(groups)) {
       groups = [groups]
