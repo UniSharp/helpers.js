@@ -631,14 +631,20 @@
   var pluck = function pluck(items, value) {
     var key = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
+    var keyIsFunction = isf(key);
     var keyIsNull = key === null;
-
+    var itemsIsArray = isa(items);
     var result = keyIsNull ? [] : {};
+    var index = 0;
 
     for (var k in items) {
+      if (itemsIsArray) {
+        k = +k;
+      }
+
       var row = items[k];
 
-      result = keyIsNull ? [].concat(toConsumableArray(result), [get$1(row, value)]) : _extends({}, result, defineProperty({}, get$1(row, key), get$1(row, value)));
+      result = keyIsNull ? [].concat(toConsumableArray(result), [get$1(row, value)]) : _extends({}, result, defineProperty({}, keyIsFunction ? key(row, k, index++) : get$1(row, key), get$1(row, value)));
     }
 
     return result;
@@ -706,12 +712,18 @@
     var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
     var keyIsFunction = isf(key);
+    var itemsIsArray = isa(items);
     var haystack = [];
     var result = {};
+    var index = 0;
 
     for (var k in items) {
+      if (itemsIsArray) {
+        k = +k;
+      }
+
       var row = items[k];
-      var uniqueBy = keyIsFunction ? key(row) : get$1(row, key);
+      var uniqueBy = keyIsFunction ? key(row, k, index++) : get$1(row, key);
 
       if (haystack.indexOf(uniqueBy) === -1) {
         result[k] = row;
@@ -771,12 +783,18 @@
 
   var keyBy = function keyBy(items, key) {
     var keyIsFunction = isf(key);
+    var itemsIsArray = isa(items);
     var result = {};
+    var index = 0;
 
     for (var k in items) {
+      if (itemsIsArray) {
+        k = +k;
+      }
+
       var row = items[k];
 
-      result[keyIsFunction ? key(row) : get$1(row, key)] = row;
+      result[keyIsFunction ? key(row, k, index++) : get$1(row, key)] = row;
     }
 
     return result;
@@ -785,12 +803,16 @@
   var groupBy = function groupBy(items, key) {
     var keyIsFunction = isf(key);
     var itemsIsArray = isa(items);
-
     var result = {};
+    var index = 0;
 
     for (var k in items) {
+      if (itemsIsArray) {
+        k = +k;
+      }
+
       var row = items[k];
-      var groups = keyIsFunction ? key(row) : get$1(row, key);
+      var groups = keyIsFunction ? key(row, k, index++) : get$1(row, key);
 
       if (!isa(groups)) {
         groups = [groups];

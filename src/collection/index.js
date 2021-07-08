@@ -404,14 +404,22 @@ const only = (items, ...keys) => {
 const pipe = (items, callback) => callback(items)
 
 const pluck = (items, value, key = null) => {
+  const keyIsFunction = isf(key)
   const keyIsNull = key === null
-
+  const itemsIsArray = isa(items)
   let result = keyIsNull ? [] : {}
+  let index = 0
 
   for (let k in items) {
+    if (itemsIsArray) {
+      k = +k
+    }
+
     const row = items[k]
 
-    result = keyIsNull ? [...result, get(row, value)] : { ...result, [get(row, key)]: get(row, value) }
+    result = keyIsNull
+      ? [...result, get(row, value)]
+      : { ...result, [keyIsFunction ? key(row, k, index++) : get(row, key)]: get(row, value) }
   }
 
   return result

@@ -479,6 +479,9 @@ describe('Collection', () => {
 
       expect(call('pluck', [{ a: 1, b: 'a' }, { a: 2, b: 'b' }], 'a', 'b')).toEqual({ a: 1, b: 2 })
       expect(call('pluck', { a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } }, 'a', 'b')).toEqual({ a: 1, b: 2 })
+
+      expect(call('pluck', [{ a: 1, b: 'a' }, { a: 2, b: 'b' }], 'a', row => row.b)).toEqual({ a: 1, b: 2 })
+      expect(call('pluck', { a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } }, 'a', row => row.b)).toEqual({ a: 1, b: 2 })
     })
   })
 
