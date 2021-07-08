@@ -619,6 +619,11 @@ describe('Collection', () => {
       expect(call('keyBy', [{ a: 1, b: 'a' }, { a: 2, b: 'b' }], 'b')).toEqual({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } })
       expect(call('keyBy', { a: { a: 1, b: 'c' }, b: { a: 2, b: 'd' } }, 'b')).toEqual({ c: { a: 1, b: 'c' }, d: { a: 2, b: 'd' } })
     })
+
+    it('should keys the collection by the given callback', () => {
+      expect(call('keyBy', [{ a: 1, b: 'a' }, { a: 2, b: 'b' }], row => row.b)).toEqual({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } })
+      expect(call('keyBy', { a: { a: 1, b: 'c' }, b: { a: 2, b: 'd' } }, row => row.b)).toEqual({ c: { a: 1, b: 'c' }, d: { a: 2, b: 'd' } })
+    })
   })
 
   describe('#groupBy', () => {

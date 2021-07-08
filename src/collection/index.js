@@ -518,12 +518,13 @@ const merge = (items, ...merged) => {
 }
 
 const keyBy = (items, key) => {
+  const keyIsFunction = isf(key)
   let result = {}
 
   for (let k in items) {
     const row = items[k]
 
-    result[get(row, key)] = row
+    result[keyIsFunction ? key(row) : get(row, key)] = row
   }
 
   return result

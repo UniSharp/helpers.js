@@ -770,12 +770,13 @@
   };
 
   var keyBy = function keyBy(items, key) {
+    var keyIsFunction = isf(key);
     var result = {};
 
     for (var k in items) {
       var row = items[k];
 
-      result[get$1(row, key)] = row;
+      result[keyIsFunction ? key(row) : get$1(row, key)] = row;
     }
 
     return result;

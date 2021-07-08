@@ -1,6 +1,6 @@
 {
   "name": "@unisharp/helpers.js",
-  "version": "1.2.24",
+  "version": "1.2.25",
   "description": "JavaScript useful helpers.",
   "main": "dist/index.js",
   "typings": "index.d.ts",
