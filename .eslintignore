@@ -1,1 +1,5 @@
-*.spec.js
+node_modules
+dist
+.nuxt
+static
+coverage

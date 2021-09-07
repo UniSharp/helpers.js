@@ -1,6 +1,6 @@
-import { Helpers } from '../'
+import { init } from '../src/string'
 
-Helpers.init()
+init(String)
 
 describe('String', () => {
   describe('#random()', () => {

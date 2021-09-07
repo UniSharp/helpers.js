@@ -1,62 +1,32 @@
 {
   "name": "@unisharp/helpers.js",
-  "version": "1.2.26",
+  "version": "2.0.0",
   "description": "JavaScript useful helpers.",
   "main": "dist/index.js",
-  "typings": "index.d.ts",
+  "types": "dist/index.d.ts",
   "author": {
     "name": "UniSharp Ltd.",
     "email": "unisharp-service@unisharp.com"
   },
   "scripts": {
-    "lint": "node_modules/.bin/eslint src",
-    "test": "node_modules/.bin/jest --coverage",
-    "rollup": "node_modules/.bin/rollup -c",
-    "uglify": "node_modules/.bin/uglifyjs dist/index.js -c -m -o dist/index.min.js",
-    "build": "npm run lint && npm run test && npm run rollup && npm run uglify"
-  },
-  "babel": {
-    "env": {
-      "test": {
-        "presets": [
-          "env"
-        ],
-        "plugins": [
-          "transform-object-rest-spread"
-        ]
-      }
-    }
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    }
+    "lint": "eslint --ext .ts .",
+    "lint:fix": "yarn lint --fix",
+    "test": "yarn lint && jest",
+    "compile": "tsc",
+    "clean": "rm -rf dist",
+    "build": "yarn run clean && yarn compile"
   },
   "license": "MIT",
   "files": [
     "dist"
   ],
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.2.3",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "coveralls": "^3.0.2",
-    "eslint": "^4.19.1",
-    "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "jest": "^22.4.3",
-    "rollup": "^0.58.1",
-    "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-node-resolve": "^3.3.0",
-    "uglify-js": "^3.3.21"
-  },
-  "dependencies": {
-    "@unisharp/babel-plugin": "^0.3.0"
+    "@nuxtjs/eslint-config-typescript": "latest",
+    "@types/jest": "latest",
+    "coveralls": "latest",
+    "eslint": "latest",
+    "jest": "latest",
+    "ts-jest": "latest",
+    "typescript": "~4.2"
   }
 }
