@@ -3,6 +3,8 @@ module.exports = {
     '@nuxtjs/eslint-config-typescript'
   ],
   rules: {
-    'no-extend-native': ['error', { exceptions: ['String', 'Number', 'Array', 'Object'] }]
+    'no-extend-native': ['error', { exceptions: ['String', 'Number', 'Array', 'Object'] }],
+    'no-redeclare': 'off',
+    '@typescript-eslint/no-redeclare': ['error']
   }
 }
