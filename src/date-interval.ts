@@ -1,4 +1,4 @@
-import './helpers'
+import { Optional } from './helpers'
 
 export interface DateIntervalConfig {
   years?: number

@@ -18,7 +18,7 @@ declare global {
   }
 }
 
-export const init = (String: StringConstructor): void => {
+export function init (String: StringConstructor): void {
   String.random = function (length: number = 16): string {
     let string: string = ''
 
