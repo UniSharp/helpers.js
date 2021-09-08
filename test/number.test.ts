@@ -1,25 +1,26 @@
-import { Helpers } from '../'
+import { init } from '../src/number'
+import { DateInterval } from '../src/date-interval'
 
-Helpers.init()
+init(Number)
 
 describe('Number', () => {
   describe('#random()', () => {
-    let originalRandom = Math.random
+    const originalRandom: () => number = Math.random
 
     it('should return a random float from 0 to 1 (exclusive)', () => {
-      Math.random = () => 0.5
+      Math.random = (): number => 0.5
 
       expect(Number.random()).toEqual(0.5)
     })
 
     it('should return a random integer from 0 to max (exclusive)', () => {
-      Math.random = () => 0.5
+      Math.random = (): number => 0.5
 
       expect(Number.random(5)).toEqual(2)
     })
 
     it('should return a random float from 0 to max (exclusive)', () => {
-      Math.random = () => 0.5
+      Math.random = (): number => 0.5
 
       expect(Number.random(2.5)).toEqual(1.25)
     })
@@ -94,98 +95,98 @@ describe('Number', () => {
   describe('#millisecond()', () => {
     it('should return a date interval', () => {
       expect((1).millisecond() instanceof DateInterval).toBe(true)
-      expect((1).millisecond().milliseconds).toBe(1)
+      expect((1).millisecond().getConfig().milliseconds).toBe(1)
     })
   })
 
   describe('#milliseconds()', () => {
     it('should return a date interval', () => {
       expect((10).milliseconds() instanceof DateInterval).toBe(true)
-      expect((10).milliseconds().milliseconds).toBe(10)
+      expect((10).milliseconds().getConfig().milliseconds).toBe(10)
     })
   })
 
   describe('#second()', () => {
     it('should return a date interval', () => {
       expect((1).second() instanceof DateInterval).toBe(true)
-      expect((1).second().seconds).toBe(1)
+      expect((1).second().getConfig().seconds).toBe(1)
     })
   })
 
   describe('#seconds()', () => {
     it('should return a date interval', () => {
       expect((10).seconds() instanceof DateInterval).toBe(true)
-      expect((10).seconds().seconds).toBe(10)
+      expect((10).seconds().getConfig().seconds).toBe(10)
     })
   })
 
   describe('#minute()', () => {
     it('should return a date interval', () => {
       expect((1).minute() instanceof DateInterval).toBe(true)
-      expect((1).minute().minutes).toBe(1)
+      expect((1).minute().getConfig().minutes).toBe(1)
     })
   })
 
   describe('#minutes()', () => {
     it('should return a date interval', () => {
       expect((10).minutes() instanceof DateInterval).toBe(true)
-      expect((10).minutes().minutes).toBe(10)
+      expect((10).minutes().getConfig().minutes).toBe(10)
     })
   })
 
   describe('#hour()', () => {
     it('should return a date interval', () => {
       expect((1).hour() instanceof DateInterval).toBe(true)
-      expect((1).hour().hours).toBe(1)
+      expect((1).hour().getConfig().hours).toBe(1)
     })
   })
 
   describe('#hours()', () => {
     it('should return a date interval', () => {
       expect((10).hours() instanceof DateInterval).toBe(true)
-      expect((10).hours().hours).toBe(10)
+      expect((10).hours().getConfig().hours).toBe(10)
     })
   })
 
   describe('#day()', () => {
     it('should return a date interval', () => {
       expect((1).day() instanceof DateInterval).toBe(true)
-      expect((1).day().days).toBe(1)
+      expect((1).day().getConfig().days).toBe(1)
     })
   })
 
   describe('#days()', () => {
     it('should return a date interval', () => {
       expect((10).days() instanceof DateInterval).toBe(true)
-      expect((10).days().days).toBe(10)
+      expect((10).days().getConfig().days).toBe(10)
     })
   })
 
   describe('#month()', () => {
     it('should return a date interval', () => {
       expect((1).month() instanceof DateInterval).toBe(true)
-      expect((1).month().months).toBe(1)
+      expect((1).month().getConfig().months).toBe(1)
     })
   })
 
   describe('#months()', () => {
     it('should return a date interval', () => {
       expect((10).months() instanceof DateInterval).toBe(true)
-      expect((10).months().months).toBe(10)
+      expect((10).months().getConfig().months).toBe(10)
     })
   })
 
   describe('#year()', () => {
     it('should return a date interval', () => {
       expect((1).year() instanceof DateInterval).toBe(true)
-      expect((1).year().years).toBe(1)
+      expect((1).year().getConfig().years).toBe(1)
     })
   })
 
   describe('#years()', () => {
     it('should return a date interval', () => {
       expect((10).years() instanceof DateInterval).toBe(true)
-      expect((10).years().years).toBe(10)
+      expect((10).years().getConfig().years).toBe(10)
     })
   })
 })
