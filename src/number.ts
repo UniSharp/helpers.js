@@ -40,102 +40,128 @@ function createInterval (type: keyof DateIntervalConfig, value: number) {
   return new DateInterval({ [type]: value })
 }
 
-export function init (Number: NumberConstructor): void {
-  Number.random = function (max: Optional<number> = null) {
-    const result: number = Math.random() * (max || 1)
+export function random (): number
+export function random (max: number): number
+export function random (max: Optional<number> = null) {
+  const result: number = Math.random() * (max || 1)
 
-    if (max === null || max === undefined || isFloat(max)) {
-      return result
-    }
-
-    return Math.floor(result)
+  if (max === null || max === undefined || isFloat(max)) {
+    return result
   }
 
-  Number.prototype.format = function (): string {
-    return this.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,')
-  }
+  return Math.floor(result)
+}
 
-  Number.prototype.times = function <T> (callback: (n: number) => T): T[] {
-    return [...Array(+this).keys()].map((n: number) => n + 1).map(callback)
-  }
+export function format (number: number): string {
+  return number.toString().replace(/(.)(?=(?:\d{3})+$)/g, '$1,')
+}
 
-  Number.prototype.upto = function <T> (limit: number, callback: (n: number) => T): T[] {
-    return (limit - +this + 1).times((n: number) => n + +this - 1).map(callback)
-  }
+export function times<T> (number: number, callback: (n: number) => T): T[] {
+  return [...Array(number).keys()].map((n: number) => n + 1).map(callback)
+}
 
-  Number.prototype.downto = function <T> (limit: number, callback: (n: number) => T): T[] {
-    return (+this - limit + 1).times((n: number) => +this - n + 1).map(callback)
-  }
+export function upto<T> (number: number, limit: number, callback: (n: number) => T): T[] {
+  return times((limit - number + 1), (n: number) => n + number - 1).map(callback)
+}
 
-  Number.prototype.round = function (precision: number = 0): number {
-    return Math.round(+this * 10 ** precision) / 10 ** precision
-  }
+export function downto<T> (number: number, limit: number, callback: (n: number) => T): T[] {
+  return times((number - limit + 1), (n: number) => number - n + 1).map(callback)
+}
 
-  Number.prototype.floor = function (): number {
-    return Math.floor(+this)
-  }
+export function round (number: number, precision: number = 0): number {
+  return Math.round(number * 10 ** precision) / 10 ** precision
+}
 
-  Number.prototype.ceil = function (): number {
-    return Math.ceil(+this)
-  }
+export function floor (number: number): number {
+  return Math.floor(number)
+}
 
-  Number.prototype.abs = function (): number {
-    return Math.abs(+this)
-  }
+export function ceil (number: number): number {
+  return Math.ceil(number)
+}
 
-  Number.prototype.year = function (): DateInterval {
-    return createInterval('years', +this)
-  }
+export function abs (number: number): number {
+  return Math.abs(number)
+}
 
-  Number.prototype.month = function (): DateInterval {
-    return createInterval('months', +this)
-  }
+export function year (number: number): DateInterval {
+  return createInterval('years', number)
+}
 
-  Number.prototype.day = function (): DateInterval {
-    return createInterval('days', +this)
-  }
+export function month (number: number): DateInterval {
+  return createInterval('months', number)
+}
 
-  Number.prototype.hour = function (): DateInterval {
-    return createInterval('hours', +this)
-  }
+export function day (number: number): DateInterval {
+  return createInterval('days', number)
+}
 
-  Number.prototype.minute = function (): DateInterval {
-    return createInterval('minutes', +this)
-  }
+export function hour (number: number): DateInterval {
+  return createInterval('hours', number)
+}
 
-  Number.prototype.second = function (): DateInterval {
-    return createInterval('seconds', +this)
-  }
+export function minute (number: number): DateInterval {
+  return createInterval('minutes', number)
+}
 
-  Number.prototype.millisecond = function (): DateInterval {
-    return createInterval('milliseconds', +this)
-  }
+export function second (number: number): DateInterval {
+  return createInterval('seconds', number)
+}
 
-  Number.prototype.years = function (): DateInterval {
-    return this.year()
-  }
+export function millisecond (number: number): DateInterval {
+  return createInterval('milliseconds', number)
+}
 
-  Number.prototype.months = function (): DateInterval {
-    return this.month()
-  }
+export function years (number: number): DateInterval {
+  return year(number)
+}
 
-  Number.prototype.days = function (): DateInterval {
-    return this.day()
-  }
+export function months (number: number): DateInterval {
+  return month(number)
+}
 
-  Number.prototype.hours = function (): DateInterval {
-    return this.hour()
-  }
+export function days (number: number): DateInterval {
+  return day(number)
+}
 
-  Number.prototype.minutes = function (): DateInterval {
-    return this.minute()
-  }
+export function hours (number: number): DateInterval {
+  return hour(number)
+}
 
-  Number.prototype.seconds = function (): DateInterval {
-    return this.second()
-  }
+export function minutes (number: number): DateInterval {
+  return minute(number)
+}
 
-  Number.prototype.milliseconds = function (): DateInterval {
-    return this.millisecond()
-  }
+export function seconds (number: number): DateInterval {
+  return second(number)
+}
+
+export function milliseconds (number: number): DateInterval {
+  return millisecond(number)
+}
+
+export const staticMethods = { random }
+export const methods = {
+  format,
+  times,
+  upto,
+  downto,
+  round,
+  floor,
+  ceil,
+  abs,
+  year,
+  month,
+  day,
+  hour,
+  minute,
+  second,
+  millisecond,
+  years,
+  months,
+  days,
+  hours,
+  minutes,
+  seconds,
+  milliseconds
 }

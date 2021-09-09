@@ -1,7 +1,29 @@
-import { init } from '../src/number'
 import { DateInterval } from '../src/date-interval'
-
-init(Number)
+import {
+  random,
+  format,
+  times,
+  upto,
+  downto,
+  round,
+  floor,
+  ceil,
+  abs,
+  year,
+  month,
+  day,
+  hour,
+  minute,
+  second,
+  millisecond,
+  years,
+  months,
+  days,
+  hours,
+  minutes,
+  seconds,
+  milliseconds
+} from '../src/number'
 
 describe('Number', () => {
   describe('#random()', () => {
@@ -10,19 +32,19 @@ describe('Number', () => {
     it('should return a random float from 0 to 1 (exclusive)', () => {
       Math.random = (): number => 0.5
 
-      expect(Number.random()).toEqual(0.5)
+      expect(random()).toEqual(0.5)
     })
 
     it('should return a random integer from 0 to max (exclusive)', () => {
       Math.random = (): number => 0.5
 
-      expect(Number.random(5)).toEqual(2)
+      expect(random(5)).toEqual(2)
     })
 
     it('should return a random float from 0 to max (exclusive)', () => {
       Math.random = (): number => 0.5
 
-      expect(Number.random(2.5)).toEqual(1.25)
+      expect(random(2.5)).toEqual(1.25)
     })
 
     Math.random = originalRandom
@@ -30,163 +52,163 @@ describe('Number', () => {
 
   describe('#format()', () => {
     it('should format a number with grouped thousands', () => {
-      expect((1000000).format()).toBe('1,000,000')
+      expect(format(1000000)).toBe('1,000,000')
     })
   })
 
   describe('#times()', () => {
     it('should iterate callback function n items', () => {
-      expect((3).times(n => n)).toEqual([1, 2, 3])
-      expect((3).times(n => n * 2)).toEqual([2, 4, 6])
+      expect(times(3, n => n)).toEqual([1, 2, 3])
+      expect(times(3, n => n * 2)).toEqual([2, 4, 6])
     })
   })
 
   describe('#upto()', () => {
     it('should iterate callback function from n up to and including limit', () => {
-      expect((1).upto(3, n => n)).toEqual([1, 2, 3])
-      expect((1).upto(3, n => n * 2)).toEqual([2, 4, 6])
+      expect(upto(1, 3, n => n)).toEqual([1, 2, 3])
+      expect(upto(1, 3, n => n * 2)).toEqual([2, 4, 6])
     })
   })
 
   describe('#downto()', () => {
     it('should iterate callback function from n down to and including limit', () => {
-      expect((3).downto(1, n => n)).toEqual([3, 2, 1])
-      expect((3).downto(1, n => n * 2)).toEqual([6, 4, 2])
+      expect(downto(3, 1, n => n)).toEqual([3, 2, 1])
+      expect(downto(3, 1, n => n * 2)).toEqual([6, 4, 2])
     })
   })
 
   describe('#round()', () => {
     it('should round a float', () => {
-      expect((1.4).round()).toEqual(1)
-      expect((1.5).round()).toEqual(2)
-      expect((1.44).round()).toEqual(1)
-      expect((1.55).round()).toEqual(2)
+      expect(round(1.4)).toEqual(1)
+      expect(round(1.5)).toEqual(2)
+      expect(round(1.44)).toEqual(1)
+      expect(round(1.55)).toEqual(2)
     })
 
     it('should round a float with precision', () => {
-      expect((1.44).round(1)).toEqual(1.4)
-      expect((1.45).round(1)).toEqual(1.5)
-      expect((1.444).round(2)).toEqual(1.44)
-      expect((1.445).round(2)).toEqual(1.45)
+      expect(round(1.44, 1)).toEqual(1.4)
+      expect(round(1.45, 1)).toEqual(1.5)
+      expect(round(1.444, 2)).toEqual(1.44)
+      expect(round(1.445, 2)).toEqual(1.45)
     })
   })
 
   describe('#floor()', () => {
     it('should round fractions down a float', () => {
-      expect((1.4).floor()).toEqual(1)
-      expect((1.5).floor()).toEqual(1)
+      expect(floor(1.4)).toEqual(1)
+      expect(floor(1.5)).toEqual(1)
     })
   })
 
   describe('#ceil()', () => {
     it('should round fractions up a float', () => {
-      expect((1.4).ceil()).toEqual(2)
-      expect((1.5).ceil()).toEqual(2)
+      expect(ceil(1.4)).toEqual(2)
+      expect(ceil(1.5)).toEqual(2)
     })
   })
 
   describe('#abs()', () => {
     it('should return the absolute value', () => {
-      expect((10).abs()).toEqual(10)
-      expect((-10).abs()).toEqual(10)
+      expect(abs(10)).toEqual(10)
+      expect(abs(-10)).toEqual(10)
     })
   })
 
   describe('#millisecond()', () => {
     it('should return a date interval', () => {
-      expect((1).millisecond() instanceof DateInterval).toBe(true)
-      expect((1).millisecond().getConfig().milliseconds).toBe(1)
+      expect(millisecond(1) instanceof DateInterval).toBe(true)
+      expect(millisecond(1).getConfig().milliseconds).toBe(1)
     })
   })
 
   describe('#milliseconds()', () => {
     it('should return a date interval', () => {
-      expect((10).milliseconds() instanceof DateInterval).toBe(true)
-      expect((10).milliseconds().getConfig().milliseconds).toBe(10)
+      expect(milliseconds(10) instanceof DateInterval).toBe(true)
+      expect(milliseconds(10).getConfig().milliseconds).toBe(10)
     })
   })
 
   describe('#second()', () => {
     it('should return a date interval', () => {
-      expect((1).second() instanceof DateInterval).toBe(true)
-      expect((1).second().getConfig().seconds).toBe(1)
+      expect(second(1) instanceof DateInterval).toBe(true)
+      expect(second(1).getConfig().seconds).toBe(1)
     })
   })
 
   describe('#seconds()', () => {
     it('should return a date interval', () => {
-      expect((10).seconds() instanceof DateInterval).toBe(true)
-      expect((10).seconds().getConfig().seconds).toBe(10)
+      expect(seconds(10) instanceof DateInterval).toBe(true)
+      expect(seconds(10).getConfig().seconds).toBe(10)
     })
   })
 
   describe('#minute()', () => {
     it('should return a date interval', () => {
-      expect((1).minute() instanceof DateInterval).toBe(true)
-      expect((1).minute().getConfig().minutes).toBe(1)
+      expect(minute(1) instanceof DateInterval).toBe(true)
+      expect(minute(1).getConfig().minutes).toBe(1)
     })
   })
 
   describe('#minutes()', () => {
     it('should return a date interval', () => {
-      expect((10).minutes() instanceof DateInterval).toBe(true)
-      expect((10).minutes().getConfig().minutes).toBe(10)
+      expect(minutes(10) instanceof DateInterval).toBe(true)
+      expect(minutes(10).getConfig().minutes).toBe(10)
     })
   })
 
   describe('#hour()', () => {
     it('should return a date interval', () => {
-      expect((1).hour() instanceof DateInterval).toBe(true)
-      expect((1).hour().getConfig().hours).toBe(1)
+      expect(hour(1) instanceof DateInterval).toBe(true)
+      expect(hour(1).getConfig().hours).toBe(1)
     })
   })
 
   describe('#hours()', () => {
     it('should return a date interval', () => {
-      expect((10).hours() instanceof DateInterval).toBe(true)
-      expect((10).hours().getConfig().hours).toBe(10)
+      expect(hours(10) instanceof DateInterval).toBe(true)
+      expect(hours(10).getConfig().hours).toBe(10)
     })
   })
 
   describe('#day()', () => {
     it('should return a date interval', () => {
-      expect((1).day() instanceof DateInterval).toBe(true)
-      expect((1).day().getConfig().days).toBe(1)
+      expect(day(1) instanceof DateInterval).toBe(true)
+      expect(day(1).getConfig().days).toBe(1)
     })
   })
 
   describe('#days()', () => {
     it('should return a date interval', () => {
-      expect((10).days() instanceof DateInterval).toBe(true)
-      expect((10).days().getConfig().days).toBe(10)
+      expect(days(10) instanceof DateInterval).toBe(true)
+      expect(days(10).getConfig().days).toBe(10)
     })
   })
 
   describe('#month()', () => {
     it('should return a date interval', () => {
-      expect((1).month() instanceof DateInterval).toBe(true)
-      expect((1).month().getConfig().months).toBe(1)
+      expect(month(1) instanceof DateInterval).toBe(true)
+      expect(month(1).getConfig().months).toBe(1)
     })
   })
 
   describe('#months()', () => {
     it('should return a date interval', () => {
-      expect((10).months() instanceof DateInterval).toBe(true)
-      expect((10).months().getConfig().months).toBe(10)
+      expect(months(10) instanceof DateInterval).toBe(true)
+      expect(months(10).getConfig().months).toBe(10)
     })
   })
 
   describe('#year()', () => {
     it('should return a date interval', () => {
-      expect((1).year() instanceof DateInterval).toBe(true)
-      expect((1).year().getConfig().years).toBe(1)
+      expect(year(1) instanceof DateInterval).toBe(true)
+      expect(year(1).getConfig().years).toBe(1)
     })
   })
 
   describe('#years()', () => {
     it('should return a date interval', () => {
-      expect((10).years() instanceof DateInterval).toBe(true)
-      expect((10).years().getConfig().years).toBe(10)
+      expect(years(10) instanceof DateInterval).toBe(true)
+      expect(years(10).getConfig().years).toBe(10)
     })
   })
 })
