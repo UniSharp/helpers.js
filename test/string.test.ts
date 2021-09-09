@@ -1,132 +1,143 @@
-import { init } from '../src/string'
-
-init(String)
+import {
+  random,
+  slugify,
+  stripTags,
+  limit,
+  nl2br,
+  ucfirst,
+  lcfirst,
+  studly,
+  camel,
+  snake,
+  kebab,
+  title
+} from '../src/string'
 
 describe('String', () => {
   describe('#random()', () => {
     it('should generates a random string with default length', () => {
-      expect(String.random().length).toBe(16)
+      expect(random().length).toBe(16)
     })
 
     it('should generates a random string with specify length', () => {
-      expect(String.random(10).length).toBe(10)
-      expect(String.random(20).length).toBe(20)
-      expect(String.random(30).length).toBe(30)
+      expect(random(10).length).toBe(10)
+      expect(random(20).length).toBe(20)
+      expect(random(30).length).toBe(30)
     })
   })
 
   describe('#slugify()', () => {
     it('should slugify a string', () => {
-      expect(' A:B/C.D??E=F&G#H '.slugify()).toBe('a-b-c-d-e-f-g-h')
+      expect(slugify(' A:B/C.D??E=F&G#H ')).toBe('a-b-c-d-e-f-g-h')
     })
   })
 
   describe('#stripTags()', () => {
     it('should strip tags', () => {
-      expect('<h1>Hello World</h1>'.stripTags()).toBe('Hello World')
-      expect('<H1>Hello World</H1>'.stripTags()).toBe('Hello World')
-      expect('<h1 class="h1">Hello World</h1>'.stripTags()).toBe('Hello World')
-      expect('<h1 class="h1">Hello < World ></h1>'.stripTags()).toBe('Hello < World >')
+      expect(stripTags('<h1>Hello World</h1>')).toBe('Hello World')
+      expect(stripTags('<H1>Hello World</H1>')).toBe('Hello World')
+      expect(stripTags('<h1 class="h1">Hello World</h1>')).toBe('Hello World')
+      expect(stripTags('<h1 class="h1">Hello < World ></h1>')).toBe('Hello < World >')
     })
   })
 
   describe('#limit()', () => {
     it('should truncate the given string at the specified length', () => {
-      expect('Hello World'.limit(5)).toBe('Hello...')
-      expect('您好世界您好世界'.limit(4)).toBe('您好世界...')
+      expect(limit('Hello World', 5)).toBe('Hello...')
+      expect(limit('您好世界您好世界', 4)).toBe('您好世界...')
     })
 
     it('should truncate the given string with specify suffix', () => {
-      expect('Hello World'.limit(5, '***')).toBe('Hello***')
-      expect('您好世界您好世界'.limit(4, '***')).toBe('您好世界***')
+      expect(limit('Hello World', 5, '***')).toBe('Hello***')
+      expect(limit('您好世界您好世界', 4, '***')).toBe('您好世界***')
     })
   })
 
   describe('#nl2br()', () => {
     it('should nl2br a string', () => {
-      expect('a\nb\nc'.nl2br()).toBe('a<br>b<br>c')
-      expect('a\rb\rc'.nl2br()).toBe('a<br>b<br>c')
-      expect('a\n\rb\n\rc'.nl2br()).toBe('a<br>b<br>c')
-      expect('a\r\nb\r\nc'.nl2br()).toBe('a<br>b<br>c')
+      expect(nl2br('a\nb\nc')).toBe('a<br>b<br>c')
+      expect(nl2br('a\rb\rc')).toBe('a<br>b<br>c')
+      expect(nl2br('a\n\rb\n\rc')).toBe('a<br>b<br>c')
+      expect(nl2br('a\r\nb\r\nc')).toBe('a<br>b<br>c')
     })
   })
 
   describe('#studly()', () => {
     it('should convert the given string to studly case', () => {
-      expect('foo bar baz'.studly()).toBe('FooBarBaz')
-      expect('foo-bar-baz'.studly()).toBe('FooBarBaz')
-      expect('foo_bar_baz'.studly()).toBe('FooBarBaz')
-      expect('Foo_Bar_Baz'.studly()).toBe('FooBarBaz')
-      expect('   foo   bar   baz   '.studly()).toBe('FooBarBaz')
-      expect('___foo___bar___baz___'.studly()).toBe('FooBarBaz')
-      expect(' foo -_- bar -_- baz '.studly()).toBe('FooBarBaz')
+      expect(studly('foo bar baz')).toBe('FooBarBaz')
+      expect(studly('foo-bar-baz')).toBe('FooBarBaz')
+      expect(studly('foo_bar_baz')).toBe('FooBarBaz')
+      expect(studly('Foo_Bar_Baz')).toBe('FooBarBaz')
+      expect(studly('   foo   bar   baz   ')).toBe('FooBarBaz')
+      expect(studly('___foo___bar___baz___')).toBe('FooBarBaz')
+      expect(studly(' foo -_- bar -_- baz ')).toBe('FooBarBaz')
     })
   })
 
   describe('#camel()', () => {
     it('should convert the given string to camel case', () => {
-      expect('foo bar baz'.camel()).toBe('fooBarBaz')
-      expect('foo-bar-baz'.camel()).toBe('fooBarBaz')
-      expect('foo_bar_baz'.camel()).toBe('fooBarBaz')
-      expect('Foo_Bar_Baz'.camel()).toBe('fooBarBaz')
-      expect('   foo   bar   baz   '.camel()).toBe('fooBarBaz')
-      expect('___foo___bar___baz___'.camel()).toBe('fooBarBaz')
-      expect(' foo -_- bar -_- baz '.camel()).toBe('fooBarBaz')
+      expect(camel('foo bar baz')).toBe('fooBarBaz')
+      expect(camel('foo-bar-baz')).toBe('fooBarBaz')
+      expect(camel('foo_bar_baz')).toBe('fooBarBaz')
+      expect(camel('Foo_Bar_Baz')).toBe('fooBarBaz')
+      expect(camel('   foo   bar   baz   ')).toBe('fooBarBaz')
+      expect(camel('___foo___bar___baz___')).toBe('fooBarBaz')
+      expect(camel(' foo -_- bar -_- baz ')).toBe('fooBarBaz')
     })
   })
 
   describe('#snake()', () => {
     it('should convert the given string to snake case', () => {
-      expect('fooBarBaz'.snake()).toBe('foo_bar_baz')
-      expect('FooBarBaz'.snake()).toBe('foo_bar_baz')
-      expect('foo bar baz'.snake()).toBe('foo_bar_baz')
-      expect('foo_bar_baz'.snake()).toBe('foo_bar_baz')
-      expect('Foo_Bar_Baz'.snake()).toBe('foo_bar_baz')
-      expect('___foo___bar___baz___'.snake()).toBe('foo_bar_baz')
-      expect('   foo   bar   baz   '.snake()).toBe('foo_bar_baz')
-      expect(' foo -_- bar -_- baz '.snake()).toBe('foo_bar_baz')
+      expect(snake('fooBarBaz')).toBe('foo_bar_baz')
+      expect(snake('FooBarBaz')).toBe('foo_bar_baz')
+      expect(snake('foo bar baz')).toBe('foo_bar_baz')
+      expect(snake('foo_bar_baz')).toBe('foo_bar_baz')
+      expect(snake('Foo_Bar_Baz')).toBe('foo_bar_baz')
+      expect(snake('___foo___bar___baz___')).toBe('foo_bar_baz')
+      expect(snake('   foo   bar   baz   ')).toBe('foo_bar_baz')
+      expect(snake(' foo -_- bar -_- baz ')).toBe('foo_bar_baz')
     })
   })
 
   describe('#kebab()', () => {
     it('should convert the given string to kebab case', () => {
-      expect('fooBarBaz'.kebab()).toBe('foo-bar-baz')
-      expect('FooBarBaz'.kebab()).toBe('foo-bar-baz')
-      expect('foo bar baz'.kebab()).toBe('foo-bar-baz')
-      expect('foo_bar_baz'.kebab()).toBe('foo-bar-baz')
-      expect('Foo_Bar_Baz'.kebab()).toBe('foo-bar-baz')
-      expect('___foo___bar___baz___'.kebab()).toBe('foo-bar-baz')
-      expect('   foo   bar   baz   '.kebab()).toBe('foo-bar-baz')
-      expect(' foo -_- bar -_- baz '.kebab()).toBe('foo-bar-baz')
+      expect(kebab('fooBarBaz')).toBe('foo-bar-baz')
+      expect(kebab('FooBarBaz')).toBe('foo-bar-baz')
+      expect(kebab('foo bar baz')).toBe('foo-bar-baz')
+      expect(kebab('foo_bar_baz')).toBe('foo-bar-baz')
+      expect(kebab('Foo_Bar_Baz')).toBe('foo-bar-baz')
+      expect(kebab('___foo___bar___baz___')).toBe('foo-bar-baz')
+      expect(kebab('   foo   bar   baz   ')).toBe('foo-bar-baz')
+      expect(kebab(' foo -_- bar -_- baz ')).toBe('foo-bar-baz')
     })
   })
 
   describe('#title()', () => {
     it('should convert the given string to title string', () => {
-      expect('fooBarBaz'.title()).toBe('Foo Bar Baz')
-      expect('FooBarBaz'.title()).toBe('Foo Bar Baz')
-      expect('foo bar baz'.title()).toBe('Foo Bar Baz')
-      expect('foo_bar_baz'.title()).toBe('Foo Bar Baz')
-      expect('Foo_Bar_Baz'.title()).toBe('Foo Bar Baz')
-      expect('___foo___bar___baz___'.title()).toBe('Foo Bar Baz')
-      expect('   foo   bar   baz   '.title()).toBe('Foo Bar Baz')
-      expect(' foo -_- bar -_- baz '.title()).toBe('Foo Bar Baz')
+      expect(title('fooBarBaz')).toBe('Foo Bar Baz')
+      expect(title('FooBarBaz')).toBe('Foo Bar Baz')
+      expect(title('foo bar baz')).toBe('Foo Bar Baz')
+      expect(title('foo_bar_baz')).toBe('Foo Bar Baz')
+      expect(title('Foo_Bar_Baz')).toBe('Foo Bar Baz')
+      expect(title('___foo___bar___baz___')).toBe('Foo Bar Baz')
+      expect(title('   foo   bar   baz   ')).toBe('Foo Bar Baz')
+      expect(title(' foo -_- bar -_- baz ')).toBe('Foo Bar Baz')
     })
   })
 
   describe('#ucfirst()', () => {
     it('should convert first character of the given string to uppercase', () => {
-      expect('foo'.ucfirst()).toBe('Foo')
-      expect('fOo'.ucfirst()).toBe('FOo')
-      expect('foO'.ucfirst()).toBe('FoO')
+      expect(ucfirst('foo')).toBe('Foo')
+      expect(ucfirst('fOo')).toBe('FOo')
+      expect(ucfirst('foO')).toBe('FoO')
     })
   })
 
   describe('#lcfirst()', () => {
     it('should convert first character of the given string to lowercase', () => {
-      expect('Foo'.lcfirst()).toBe('foo')
-      expect('FOo'.lcfirst()).toBe('fOo')
-      expect('FoO'.lcfirst()).toBe('foO')
+      expect(lcfirst('Foo')).toBe('foo')
+      expect(lcfirst('FOo')).toBe('fOo')
+      expect(lcfirst('FoO')).toBe('foO')
     })
   })
 })

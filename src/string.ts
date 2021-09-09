@@ -18,58 +18,75 @@ declare global {
   }
 }
 
-export function init (String: StringConstructor): void {
-  String.random = function (length: number = 16): string {
-    let string: string = ''
+export function random (): string
+export function random (length: number): string
+export function random (length: number = 16) {
+  let string: string = ''
 
-    while (string.length < length) {
-      string += Math.random().toString(36).slice(2)
-    }
-
-    return string.slice(-length)
+  while (string.length < length) {
+    string += Math.random().toString(36).slice(2)
   }
 
-  String.prototype.slugify = function (): string {
-    return this.toLowerCase().replace(/[:/.?=&#\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
-  }
+  return string.slice(-length)
+}
 
-  String.prototype.stripTags = function (): string {
-    return this.replace(/<\/?[a-z0-9]+.*?>/ig, '')
-  }
+export function slugify (string: string): string {
+  return string.toLowerCase().replace(/[:/.?=&#\s]/g, '-').replace(/-+/g, '-').replace(/^-+|-+$/g, '')
+}
 
-  String.prototype.limit = function (length: number, suffix: string = '...'): string {
-    return this.slice(0, length) + suffix
-  }
+export function stripTags (string: string): string {
+  return string.replace(/<\/?[a-z0-9]+.*?>/ig, '')
+}
 
-  String.prototype.nl2br = function (): string {
-    return this.replace(/\r\n|\n\r|\n|\r/g, '<br>')
-  }
+export function limit (string: string, length: number): string
+export function limit (string: string, length: number, suffix: string): string
+export function limit (string: string, length: number, suffix: string = '...') {
+  return string.slice(0, length) + suffix
+}
 
-  String.prototype.ucfirst = function (): string {
-    return this.replace(/^(.)/, (match: string) => match.toUpperCase())
-  }
+export function nl2br (string: string): string {
+  return string.replace(/\r\n|\n\r|\n|\r/g, '<br>')
+}
 
-  String.prototype.lcfirst = function (): string {
-    return this.replace(/^(.)/, (match: string) => match.toLowerCase())
-  }
+export function ucfirst (string: string): string {
+  return string.replace(/^(.)/, (match: string) => match.toUpperCase())
+}
 
-  String.prototype.studly = function (): string {
-    return this.split(/[-_ ]/).filter((word: string) => word).map((word: string) => word.ucfirst()).join('')
-  }
+export function lcfirst (string: string): string {
+  return string.replace(/^(.)/, (match: string) => match.toLowerCase())
+}
 
-  String.prototype.camel = function (): string {
-    return this.studly().lcfirst()
-  }
+export function studly (string: string): string {
+  return string.split(/[-_ ]/).filter((word: string) => word).map((word: string) => ucfirst(word)).join('')
+}
 
-  String.prototype.snake = function (): string {
-    return this.split(/(?=[A-Z])|[-_ ]/g).filter((word: string) => word).join('_').toLowerCase()
-  }
+export function camel (string: string): string {
+  return lcfirst(studly(string))
+}
 
-  String.prototype.kebab = function (): string {
-    return this.snake().replace(/_/g, '-')
-  }
+export function snake (string: string): string {
+  return string.split(/(?=[A-Z])|[-_ ]/g).filter((word: string) => word).join('_').toLowerCase()
+}
 
-  String.prototype.title = function (): string {
-    return this.snake().split(/_/).map((word: string) => word.ucfirst()).join(' ')
-  }
+export function kebab (string: string): string {
+  return snake(string).replace(/_/g, '-')
+}
+
+export function title (string: string): string {
+  return snake(string).split(/_/).map((word: string) => ucfirst(word)).join(' ')
+}
+
+export const staticMethods = { random }
+export const methods = {
+  slugify,
+  stripTags,
+  limit,
+  nl2br,
+  ucfirst,
+  lcfirst,
+  studly,
+  camel,
+  snake,
+  kebab,
+  title,
 }
