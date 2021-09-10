@@ -1,37 +1,6 @@
 import { Optional } from './helpers'
 import { DateInterval, DateIntervalConfig } from './date-interval'
 
-declare global {
-  interface NumberConstructor {
-    random: (max?: number) => number
-  }
-
-  interface Number {
-    format: () => string
-    times: <T>(callback: (n: number) => T) => T[]
-    upto: <T>(limit: number, callback: (n: number) => T) => T[]
-    downto: <T>(limit: number, callback: (n: number) => T) => T[]
-    round: (precision?: number) => number
-    floor: () => number
-    ceil: () => number
-    abs: () => number
-    year: () => DateInterval
-    month: () => DateInterval
-    day: () => DateInterval
-    hour: () => DateInterval
-    minute: () => DateInterval
-    second: () => DateInterval
-    millisecond: () => DateInterval
-    years: () => DateInterval
-    months: () => DateInterval
-    days: () => DateInterval
-    hours: () => DateInterval
-    minutes: () => DateInterval
-    seconds: () => DateInterval
-    milliseconds: () => DateInterval
-  }
-}
-
 function isFloat (n: Optional<number>): boolean {
   return Number(n) === n && n % 1 !== 0
 }
@@ -138,30 +107,4 @@ export function seconds (number: number): DateInterval {
 
 export function milliseconds (number: number): DateInterval {
   return millisecond(number)
-}
-
-export const staticMethods = { random }
-export const methods = {
-  format,
-  times,
-  upto,
-  downto,
-  round,
-  floor,
-  ceil,
-  abs,
-  year,
-  month,
-  day,
-  hour,
-  minute,
-  second,
-  millisecond,
-  years,
-  months,
-  days,
-  hours,
-  minutes,
-  seconds,
-  milliseconds
 }

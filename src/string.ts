@@ -1,23 +1,3 @@
-declare global {
-  interface StringConstructor {
-    random: (length?: number) => string
-  }
-
-  interface String {
-    slugify: () => string
-    stripTags: () => string
-    limit: (length: number, suffix?: string) => string
-    nl2br: () => string
-    ucfirst: () => string
-    lcfirst: () => string
-    studly: () => string
-    camel: () => string
-    snake: () => string
-    kebab: () => string
-    title: () => string
-  }
-}
-
 export function random (): string
 export function random (length: number): string
 export function random (length: number = 16) {
@@ -74,19 +54,4 @@ export function kebab (string: string): string {
 
 export function title (string: string): string {
   return snake(string).split(/_/).map((word: string) => ucfirst(word)).join(' ')
-}
-
-export const staticMethods = { random }
-export const methods = {
-  slugify,
-  stripTags,
-  limit,
-  nl2br,
-  ucfirst,
-  lcfirst,
-  studly,
-  camel,
-  snake,
-  kebab,
-  title,
 }
