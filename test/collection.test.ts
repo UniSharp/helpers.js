@@ -1,6 +1,6 @@
 import { Optional } from '../src/helpers'
 import {
-  call,
+  CollectionKey,
   keys,
   values,
   contains,
@@ -58,12 +58,12 @@ import {
   flatMap
 } from '../src/collection'
 
-function testIterator (method: string, callback?: Optional<(value, key, index) => any>): void {
+function testIterator (method: Function, callback?: Optional<(value: any, key: CollectionKey, index: number) => any>): void {
   it('should iterate correct key, value and index with array', () => {
-    let count = 0
-    const array = ['a', 'b', 'c']
+    let count: number = 0
+    const array: string[] = ['a', 'b', 'c']
 
-    call(method, array, (value, key, index) => {
+    method(array, (value: string, key: number, index: number) => {
       expect(value).toBe(array[count])
       expect(key).toBe(count)
       expect(index).toBe(count++)
@@ -79,12 +79,12 @@ function testIterator (method: string, callback?: Optional<(value, key, index) =
   })
 
   it('should iterate correct key, value and index with object', () => {
-    let count = 0
-    const object = { a: 1, b: 2, c: 3 }
-    const keys = ['a', 'b', 'c']
-    const values = [1, 2, 3]
+    let count: number = 0
+    const object: { [key: string]: number } = { a: 1, b: 2, c: 3 }
+    const keys: string[] = ['a', 'b', 'c']
+    const values: number[] = [1, 2, 3]
 
-    call(method, object, (value, key, index) => {
+    method(object, (value: number, key: string, index: number) => {
       expect(value).toBe(values[count])
       expect(key).toBe(keys[count])
       expect(index).toBe(count++)
@@ -101,22 +101,22 @@ function testIterator (method: string, callback?: Optional<(value, key, index) =
 }
 
 describe('Collection', () => {
-  it('Accept only Array or Object', () => {
-    expect(call('slice', 'Hello World')).toBe('Hello World')
-  })
+  // it('Accept only Array or Object', () => {
+  //   expect(call('slice', 'Hello World')).toBe('Hello World')
+  // })
 
-  it('Run own method first', () => {
-    const Foo = class {
-      count (): number {
-        return 10
-      }
-    }
+  // it('Run own method first', () => {
+  //   const Foo = class {
+  //     count (): number {
+  //       return 10
+  //     }
+  //   }
 
-    expect(call('count', new Foo())).toBe(10)
-    expect(call('count', { count: () => 10 })).toBe(10)
-    expect(call('count', ['foo'])).toBe(1)
-    expect(call('count', { foo: 'foo' })).toBe(1)
-  })
+  //   expect(call('count', new Foo())).toBe(10)
+  //   expect(call('count', { count: () => 10 })).toBe(10)
+  //   expect(call('count', ['foo'])).toBe(1)
+  //   expect(call('count', { foo: 'foo' })).toBe(1)
+  // })
 
   describe('#keys()', () => {
     it('should return the keys', () => {
@@ -289,7 +289,7 @@ describe('Collection', () => {
   })
 
   describe('#each()', () => {
-    testIterator('each')
+    testIterator(each)
 
     it('should stop iterating when callback function return false', () => {
       let count = 0
@@ -389,7 +389,7 @@ describe('Collection', () => {
   })
 
   describe('#filter', () => {
-    testIterator('filter')
+    testIterator(filter)
 
     it('should filter the items using the given callback', () => {
       expect(filter([1, 2, 3], value => value > 1)).toEqual([2, 3])
@@ -423,7 +423,7 @@ describe('Collection', () => {
   })
 
   describe('#first()', () => {
-    testIterator('first')
+    testIterator(first)
 
     it('should return the first element', () => {
       expect(first([1, 2, 3])).toBe(1)
@@ -442,7 +442,7 @@ describe('Collection', () => {
   })
 
   describe('#last()', () => {
-    testIterator('last')
+    testIterator(last)
 
     it('should return the last element', () => {
       expect(last([1, 2, 3])).toBe(3)
@@ -461,7 +461,7 @@ describe('Collection', () => {
   })
 
   describe('#map()', () => {
-    testIterator('map')
+    testIterator(map)
 
     it('should iterate over the items and replace value from callback', () => {
       expect(map([1, 2, 3], (value, key, index) => `${index} - ${key} - ${value}`))
@@ -472,7 +472,7 @@ describe('Collection', () => {
   })
 
   describe('#mapWithKeys()', () => {
-    testIterator('mapWithKeys', () => ({ foo: 'bar' }))
+    testIterator(mapWithKeys, () => ({ foo: 'bar' }))
 
     it('should iterate over the items and replace key and value from callback', () => {
       expect(mapWithKeys([1, 2], (value, key, index) => ({ [`${index} - ${key}`]: `${index} - ${key} - ${value}` })))
@@ -536,13 +536,21 @@ describe('Collection', () => {
       expect(pluck([{ a: 1, b: 'a' }, { a: 2, b: 'b' }], 'a', 'b')).toEqual({ a: 1, b: 2 })
       expect(pluck({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } }, 'a', 'b')).toEqual({ a: 1, b: 2 })
 
-      expect(pluck([{ a: 1, b: 'a' }, { a: 2, b: 'b' }], 'a', row => row.b)).toEqual({ a: 1, b: 2 })
-      expect(pluck({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } }, 'a', row => row.b)).toEqual({ a: 1, b: 2 })
+      expect(pluck(
+        [{ a: 1, b: 'a' }, { a: 2, b: 'b' }],
+        'a',
+        (row: { [key: string]: number | string }): string => row.b.toString()
+      )).toEqual({ a: 1, b: 2 })
+      expect(pluck(
+        { a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } },
+        'a',
+        (row: { [key: string]: number | string }): string => row.b.toString()
+      )).toEqual({ a: 1, b: 2 })
     })
   })
 
   describe('#reject', () => {
-    testIterator('reject')
+    testIterator(reject)
 
     it('should reject the items using the given callback', () => {
       expect(reject([1, 2, 3], value => value > 1)).toEqual([1])
@@ -670,8 +678,14 @@ describe('Collection', () => {
     })
 
     it('should keys the collection by the given callback', () => {
-      expect(keyBy([{ a: 1, b: 'a' }, { a: 2, b: 'b' }], row => row.b)).toEqual({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } })
-      expect(keyBy({ a: { a: 1, b: 'c' }, b: { a: 2, b: 'd' } }, row => row.b)).toEqual({ c: { a: 1, b: 'c' }, d: { a: 2, b: 'd' } })
+      expect(keyBy(
+        [{ a: 1, b: 'a' }, { a: 2, b: 'b' }],
+        (row: { [key: string]: number | string }): string => row.b.toString()
+      )).toEqual({ a: { a: 1, b: 'a' }, b: { a: 2, b: 'b' } })
+      expect(keyBy(
+        { a: { a: 1, b: 'c' }, b: { a: 2, b: 'd' } },
+        (row: { [key: string]: number | string }): string => row.b.toString()
+      )).toEqual({ c: { a: 1, b: 'c' }, d: { a: 2, b: 'd' } })
     })
   })
 
@@ -682,8 +696,14 @@ describe('Collection', () => {
     })
 
     it('should groups the collection by the given callback', () => {
-      expect(groupBy([{ a: 'a' }, { a: 'a' }, { a: 'b' }], row => row.a)).toEqual({ a: [{ a: 'a' }, { a: 'a' }], b: [{ a: 'b' }] })
-      expect(groupBy({ a: { a: 'a' }, b: { a: 'b' } }, row => row.a)).toEqual({ a: { a: { a: 'a' } }, b: { b: { a: 'b' } } })
+      expect(groupBy(
+        [{ a: 'a' }, { a: 'a' }, { a: 'b' }],
+        (row: { [key: string]: string }): string => row.a
+      )).toEqual({ a: [{ a: 'a' }, { a: 'a' }], b: [{ a: 'b' }] })
+      expect(groupBy(
+        { a: { a: 'a' }, b: { a: 'b' } },
+        (row: { [key: string]: string }): string => row.a
+      )).toEqual({ a: { a: { a: 'a' } }, b: { b: { a: 'b' } } })
     })
 
     it('should groups the collection by array value', () => {
@@ -826,7 +846,7 @@ describe('Collection', () => {
   })
 
   describe('#partition', () => {
-    testIterator('partition')
+    testIterator(partition)
 
     it('should separate elements that pass a given truth test from those that do not', () => {
       expect(partition([1, 2, 3, 4, 5], (value, key) => key < 2 && value < 3)).toEqual([[1, 2], [3, 4, 5]])
@@ -854,8 +874,8 @@ describe('Collection', () => {
 
   describe('#freeze', () => {
     it('should freeze the collection', () => {
-      const array = []
-      const object = []
+      const array: never[] = []
+      const object: {} = {}
 
       expect(Object.isFrozen(array)).toEqual(false)
       expect(Object.isFrozen(object)).toEqual(false)
@@ -870,8 +890,8 @@ describe('Collection', () => {
 
   describe('#isFrozen', () => {
     it('should return the collection is forzen or not', () => {
-      const array = []
-      const object = []
+      const array: never[] = []
+      const object: {} = {}
 
       expect(isFrozen(array)).toEqual(false)
       expect(isFrozen(object)).toEqual(false)
@@ -885,7 +905,7 @@ describe('Collection', () => {
   })
 
   describe('#flatMap', () => {
-    testIterator('flatMap')
+    testIterator(flatMap)
 
     it('should iterates through the collection and passes each value to the given closure', () => {
       expect(flatMap([1, 2, 3], (value, key, index) => [`${index} - ${key} - ${value}`]))

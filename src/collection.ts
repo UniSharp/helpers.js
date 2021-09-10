@@ -1,11 +1,13 @@
-import { Optional } from './helpers'
+import { Optional, isArray, isObject } from './helpers'
 
 export type List<T = any> = T[]
 export type Hash<T = any> = { [key: string]: T }
 export type Collection<T = any> = List<T> | Hash<T>
 export type CollectionKey = number | string
 export type CollectionItemPath = number | string | CollectionKey[]
-export type IterableCallback<T = any, K = CollectionKey> = (value: any, key: K, index: number) => T
+export type ListCallback<T = any> = (value: any, key: number, index: number) => T
+export type HashCallback<T = any> = (value: any, key: string, index: number) => T
+export type CollectionCallback<T = any> = ListCallback<T> | HashCallback<T>
 export type CompareFunction = (a: any, b: any) => number
 
 interface FindResult {
@@ -26,14 +28,6 @@ function isNumber (value: any): boolean {
   return typeof value === 'number' && isFinite(value)
 }
 
-function isArray (value: any): boolean {
-  return value && Array.isArray(value)
-}
-
-function isObject (value: any): boolean {
-  return value && typeof value === 'object' && value.constructor.name === 'Object'
-}
-
 function spaceship (a: any, b: any): number {
   if (a > b) {
     return 1
@@ -46,9 +40,9 @@ function spaceship (a: any, b: any): number {
   return 0
 }
 
-function normalizeCallback (callback: Optional<IterableCallback<boolean>>): IterableCallback<boolean> {
+function normalizeCallback (callback: Optional<CollectionCallback<boolean>>): CollectionCallback<boolean> {
   if (isFunction(callback)) {
-    return <IterableCallback<boolean>>callback
+    return <CollectionCallback<boolean>>callback
   }
 
   return (value: any): boolean => !!value
@@ -78,7 +72,8 @@ function find (items: Collection, key: CollectionItemPath, defaultValue: Optiona
     }
   }
 
-  const target = items[segment]
+  // FIXME: type hint
+  const target = (<Hash>items)[segment]
 
   if (!key.length) {
     return {
@@ -117,6 +112,26 @@ function _sort (
   }
 
   return isObject(items) ? pluck(result, 'value', 'key') : pluck(result, 'value')
+}
+
+function _sortBy (
+  items: Collection,
+  callback: CollectionCallback | CollectionItemPath,
+  descending: boolean = false
+): Collection {
+  if (!isFunction(callback)) {
+    const key: CollectionItemPath = <CollectionItemPath>callback
+
+    callback = (item: any) => get(item, key)
+  }
+
+  return _sort(
+    map(items, (item, key, index) => (<CollectionCallback>callback)(item, key, index)),
+    null,
+    descending,
+    // FIXME: type hint
+    ({ key }) => ({ key, value: (<Hash>items)[key] })
+  )
 }
 
 export function keys (items: List): List<number>
@@ -165,9 +180,11 @@ export function set (items: List, key: CollectionItemPath, value: any): List
 export function set (items: Collection, key: CollectionItemPath, value: any) {
   key = normalizeKey(key)
 
-  let previous: Collection = items
+  // FIXME: type hint
+  let previous: Hash = items
   let previousKey: CollectionKey = <CollectionKey>key.shift()
-  let current: any = items[previousKey]
+  // FIXME: type hint
+  let current: Hash = previous[previousKey]
 
   while (key.length) {
     const k: CollectionKey = <CollectionKey>key.shift()
@@ -213,21 +230,15 @@ export function avg (items: Collection, key: Optional<CollectionItemPath> = null
   return sum(items) / c
 }
 
-// FIXME: typehint
-export function each (items: List, callback: IterableCallback<boolean | void, number>): List
-export function each (items: Hash, callback: IterableCallback<boolean | void, string>): Hash
-export function each (items: Collection, callback) {
+export function each (items: List, callback: ListCallback<boolean | void>): List
+export function each (items: Hash, callback: HashCallback<boolean | void>): Hash
+export function each (items: Collection, callback: CollectionCallback<boolean | void>) {
   const itemsIsArray: boolean = isArray(items)
 
   let index: number = 0
-  let key: CollectionKey
 
-  for (key in items) {
-    if (itemsIsArray) {
-      key = +key
-    }
-
-    if (callback(items[key], key, index++) === false) {
+  for (const [key, item] of Object.entries(items)) {
+    if (callback(item, itemsIsArray ? +key : key, index++) === false) {
       break
     }
   }
@@ -262,9 +273,7 @@ export function slice (items: Collection, begin: number = 0, end: Optional<numbe
 
   let index: number = 0
 
-  for (const key in items) {
-    const value = items[key]
-
+  for (const [key, value] of Object.entries(items)) {
     if (index >= begin && index < <number>end) {
       result[key] = value
     }
@@ -285,14 +294,9 @@ export function reduce<T = any> (
 
   let result: T = initialValue
   let index: number = 0
-  let key: CollectionKey
 
-  for (key in items) {
-    if (itemsIsArray) {
-      key = +key
-    }
-
-    result = callback(result, items[key], key, index++)
+  for (const [key, item] of Object.entries(items)) {
+    result = callback(result, item, itemsIsArray ? +key : key, index++)
   }
 
   return result
@@ -318,9 +322,9 @@ export function chunk (items: Collection, size: number) {
 
 export function filter (items: List): List
 export function filter (items: Hash): Hash
-export function filter (items: List, callback: IterableCallback<boolean>): List
-export function filter (items: Hash, callback: IterableCallback<boolean>): Hash
-export function filter (items: Collection, callback: Optional<IterableCallback<boolean>> = null) {
+export function filter (items: List, callback: ListCallback<boolean>): List
+export function filter (items: Hash, callback: HashCallback<boolean>): Hash
+export function filter (items: Collection, callback: Optional<CollectionCallback<boolean>> = null) {
   const itemsIsArray: boolean = isArray(items)
 
   const result: Hash = {}
@@ -328,17 +332,27 @@ export function filter (items: Collection, callback: Optional<IterableCallback<b
 
   callback = normalizeCallback(callback)
 
-  let key: CollectionKey
-
-  for (key in items) {
-    const value: any = items[key]
-
-    if (itemsIsArray) {
-      key = +key
-    }
-
-    if (callback(value, key, index++)) {
+  for (const [key, value] of Object.entries(items)) {
+    if (callback(value, itemsIsArray ? +key : key, index++)) {
       result[key] = value
+    }
+  }
+
+  return itemsIsArray ? Object.values(result) : result
+}
+
+export function only (items: List, ...keys: CollectionKey[] | CollectionKey[][]): List
+export function only (items: Hash, ...keys: CollectionKey[] | CollectionKey[][]): Hash
+export function only (items: Collection, ...keys: CollectionKey[] | CollectionKey[][]) {
+  const itemsIsArray: boolean = isArray(items)
+
+  const result: Hash = {}
+
+  keys = flatten(keys)
+
+  for (const [key, item] of Object.entries(items)) {
+    if (keys.includes(itemsIsArray ? +key : key)) {
+      result[key] = item
     }
   }
 
@@ -350,19 +364,13 @@ export function except (items: Hash, ...keys: CollectionKey[] | CollectionKey[][
 export function except (items: Collection, ...keys: CollectionKey[] | CollectionKey[][]) {
   const itemsIsArray: boolean = isArray(items)
 
-  const result: Object = {}
+  const result: Hash = {}
 
   keys = flatten(keys)
 
-  let key: CollectionKey
-
-  for (key in items) {
-    if (itemsIsArray) {
-      key = +key
-    }
-
-    if (!keys.includes(key)) {
-      result[key] = items[key]
+  for (const [key, item] of Object.entries(items)) {
+    if (!keys.includes(itemsIsArray ? +key : key)) {
+      result[key] = item
     }
   }
 
@@ -378,58 +386,69 @@ export function isNotEmpty (items: Collection): boolean {
 }
 
 export function first (items: Collection): any
-export function first (items: Collection, callback: IterableCallback<boolean>): any
-export function first (items: Collection, callback: Optional<IterableCallback<boolean>> = null) {
+export function first (items: List, callback: ListCallback<boolean>): any
+export function first (items: Hash, callback: HashCallback<boolean>): any
+export function first (items: Collection, callback: Optional<CollectionCallback<boolean>> = null) {
   if (callback) {
-    items = filter(items, callback)
+    items = filter(items, <typeof items extends List ? ListCallback<boolean> : HashCallback<boolean>>callback)
   }
 
   return isNotEmpty(items) ? Object.values(items)[0] : null
 }
 
 export function last (items: Collection): any
-export function last (items: Collection, callback: IterableCallback<boolean>): any
-export function last (items: Collection, callback: Optional<IterableCallback<boolean>> = null) {
+export function last (items: List, callback: ListCallback<boolean>): any
+export function last (items: Hash, callback: HashCallback<boolean>): any
+export function last (items: Collection, callback: Optional<CollectionCallback<boolean>> = null) {
   if (callback) {
-    items = filter(items, callback)
+    items = filter(items, <typeof items extends List ? ListCallback<boolean> : HashCallback<boolean>>callback)
   }
 
   return isNotEmpty(items) ? Object.values(items)[count(items) - 1] : null
 }
 
-export function map<T> (items: List, callback: IterableCallback<T>): List
-export function map<T> (items: Hash, callback: IterableCallback<T>): Hash
-export function map<T> (items: Collection, callback: IterableCallback<T>): Collection {
+export function map<T = any> (items: List, callback: ListCallback<T>): List
+export function map<T = any> (items: Hash, callback: HashCallback<T>): Hash
+export function map<T = any> (items: Collection, callback: CollectionCallback<T>) {
   const itemsIsArray: boolean = isArray(items)
 
   const result: Hash<T> = {}
   let index: number = 0
-  let key: CollectionKey
 
-  for (key in items) {
-    if (itemsIsArray) {
-      key = +key
-    }
-
-    result[key] = callback(items[key], key, index++)
+  for (const [key, item] of Object.entries(items)) {
+    result[key] = callback(item, itemsIsArray ? +key : key, index++)
   }
 
   return isObject(items) ? result : Object.values(result)
 }
 
-export function mapWithKeys (items: Collection, callback: IterableCallback<Hash>): Hash {
+export function mapWithKeys<T = any> (items: List, callback: ListCallback<Hash<T>>): Hash<T>
+export function mapWithKeys<T = any> (items: Hash, callback: HashCallback<Hash<T>>): Hash<T>
+export function mapWithKeys<T = any> (items: Collection, callback: CollectionCallback<Hash<T>>) {
   const itemsIsArray: boolean = isArray(items)
 
-  let result: Hash = {}
+  let result: Hash<T> = {}
   let index: number = 0
-  let key: CollectionKey
 
-  for (key in items) {
-    if (itemsIsArray) {
-      key = +key
-    }
+  for (const [key, item] of Object.entries(items)) {
+    result = { ...result, ...callback(item, itemsIsArray ? +key : key, index++) }
+  }
 
-    result = { ...result, ...callback(items[key], key, index++) }
+  return result
+}
+
+export function flatMap<T = any> (items: List, callback: ListCallback<List<T>>): List<T>
+export function flatMap<T = any> (items: List, callback: ListCallback<Hash<T>>): Hash<T>
+export function flatMap<T = any> (items: Hash, callback: HashCallback<List<T>>): Hash<T>
+export function flatMap<T = any> (items: Hash, callback: HashCallback<Hash<T>>): Hash<T>
+export function flatMap<T = any> (items: Collection, callback: CollectionCallback<Collection<T>>) {
+  const itemsIsArray: boolean = isArray(items)
+
+  let result: Collection<T> = []
+  let index: number = 0
+
+  for (const [key, item] of Object.entries(items)) {
+    result = merge(result, callback(item, itemsIsArray ? +key : key, index++))
   }
 
   return result
@@ -440,9 +459,7 @@ export function flatten (items: Collection, depth: number): List
 export function flatten (items: Collection, depth: number = Infinity) {
   let result: any[] = []
 
-  for (const key in items) {
-    const item: any = items[key]
-
+  for (const [_, item] of Object.entries(items)) {
     if (!isArray(item) && !isObject(item)) {
       result.push(item)
 
@@ -473,54 +490,24 @@ export function max (items: Collection<number>) {
   return Math.max(...Object.values(items))
 }
 
-export function only (items: List, ...keys: CollectionKey[] | CollectionKey[][]): List
-export function only (items: Hash, ...keys: CollectionKey[] | CollectionKey[][]): Hash
-export function only (items: Collection, ...keys: CollectionKey[] | CollectionKey[][]) {
-  const itemsIsArray: boolean = isArray(items)
-
-  const result: Object = {}
-
-  keys = flatten(keys)
-
-  let key: CollectionKey
-
-  for (key in items) {
-    if (itemsIsArray) {
-      key = +key
-    }
-
-    if (keys.includes(key)) {
-      result[key] = items[key]
-    }
-  }
-
-  return isObject(items) ? result : Object.values(result)
-}
-
 // FIXME: typehint
 export function pipe (items: List, callback: (items: List) => any): any
 export function pipe (items: Hash, callback: (items: Hash) => any): any
-export function pipe (items: Collection, callback) {
+export function pipe (items: Collection, callback: ((items: List) => any) | ((items: Hash) => any)) {
   return callback(items)
 }
 
 export function pluck (items: Collection, value: CollectionItemPath): List
 export function pluck (items: Collection, value: CollectionItemPath, key: CollectionItemPath): Hash
-export function pluck (items: Collection, value: CollectionItemPath, key: IterableCallback<string>): Hash
-export function pluck (items: Collection, value: CollectionItemPath, key: Optional<CollectionItemPath | IterableCallback<string>> = null) {
+export function pluck (items: Collection, value: CollectionItemPath, key: CollectionCallback<string>): Hash
+export function pluck (items: Collection, value: CollectionItemPath, key: Optional<CollectionItemPath | CollectionCallback<string>> = null) {
   const keyIsFunction: boolean = isFunction(key)
   const keyIsNull: boolean = key === null
   const itemsIsArray: boolean = isArray(items)
   let result: Collection = keyIsNull ? [] : {}
   let index: number = 0
-  let k: CollectionKey
 
-  for (k in items) {
-    if (itemsIsArray) {
-      k = +k
-    }
-
-    const row: any = items[k]
+  for (const [k, row] of Object.entries(items)) {
     const v: any = get(row, value)
 
     if (keyIsNull) {
@@ -529,7 +516,7 @@ export function pluck (items: Collection, value: CollectionItemPath, key: Option
     }
 
     if (keyIsFunction) {
-      result = { ...result, [(<IterableCallback<string>>key)(row, k, index++)]: v }
+      result = { ...result, [(<CollectionCallback<string>>key)(row, itemsIsArray ? +k : k, index++)]: v }
       continue
     }
 
@@ -539,24 +526,19 @@ export function pluck (items: Collection, value: CollectionItemPath, key: Option
   return result
 }
 
-export function reject (items: List, callback: IterableCallback<boolean>): List
-export function reject (items: Hash, callback: IterableCallback<boolean>): Hash
-export function reject (items: Collection, callback: IterableCallback<boolean>) {
+export function reject (items: List, callback: ListCallback<boolean>): List
+export function reject (items: Hash, callback: HashCallback<boolean>): Hash
+export function reject (items: Collection, callback: CollectionCallback<boolean>) {
   const itemsIsArray: boolean = isArray(items)
 
   const result: Hash = {}
   let index: number = 0
-  let key: CollectionKey
 
   callback = normalizeCallback(callback)
 
-  for (key in items) {
-    if (itemsIsArray) {
-      key = +key
-    }
-
-    if (!callback(items[key], key, index++)) {
-      result[key] = items[key]
+  for (const [key, item] of Object.entries(items)) {
+    if (!callback(item, itemsIsArray ? +key : key, index++)) {
+      result[key] = item
     }
   }
 
@@ -600,28 +582,22 @@ export function take (items: Collection, limit: number) {
   return slice(items, 0, limit)
 }
 
-// TODO: itempath
+// TODO: support itempath
 export function unique (items: List): List
 export function unique (items: List, key: CollectionKey): List
-export function unique (items: List, key: IterableCallback): List
+export function unique (items: List, key: ListCallback): List
 export function unique (items: Hash): Hash
 export function unique (items: Hash, key: CollectionKey): Hash
-export function unique (items: Hash, key: IterableCallback): Hash
-export function unique (items: Collection, key: Optional<CollectionKey | IterableCallback> = null): Collection {
+export function unique (items: Hash, key: HashCallback): Hash
+export function unique (items: Collection, key: Optional<CollectionKey | CollectionCallback> = null): Collection {
   const keyIsFunction: boolean = isFunction(key)
   const itemsIsArray: boolean = isArray(items)
   const haystack: any[] = []
   const result: Hash = {}
   let index: number = 0
-  let k: CollectionKey
 
-  for (k in items) {
-    if (itemsIsArray) {
-      k = +k
-    }
-
-    const row: any = items[k]
-    const uniqueBy: any = keyIsFunction ? (<IterableCallback>key)(row, k, index++) : get(row, key)
+  for (const [k, row] of Object.entries(items)) {
+    const uniqueBy: any = keyIsFunction ? (<CollectionCallback>key)(row, itemsIsArray ? +k : k, index++) : get(row, key)
 
     if (!haystack.includes(uniqueBy)) {
       result[k] = row
@@ -671,8 +647,8 @@ export function merge (items: Collection, ...merged: Collection[]) {
 
     let result: Hash = { ...items }
 
-    for (const key in merged) {
-      result = { ...result, [mergedIsArray ? flag++ : key]: merged[key] }
+    for (const [key, value] of Object.entries(merged)) {
+      result = { ...result, [mergedIsArray ? flag++ : key]: value }
     }
 
     return {
@@ -691,46 +667,35 @@ export function merge (items: Collection, ...merged: Collection[]) {
   return result
 }
 
-// TODO: itempath
+// TODO: support itempath
 export function keyBy (items: Collection, key: CollectionKey): Hash
-export function keyBy (items: Collection, key: IterableCallback<string>): Hash
-export function keyBy (items: Collection, key: CollectionKey | IterableCallback<string>): Hash {
+export function keyBy (items: List, key: ListCallback<string>): Hash
+export function keyBy (items: Hash, key: HashCallback<string>): Hash
+export function keyBy (items: Collection, key: CollectionKey | CollectionCallback<string>): Hash {
   const keyIsFunction: boolean = isFunction(key)
   const itemsIsArray: boolean = isArray(items)
-  const result: Object = {}
+  const result: Hash = {}
   let index: number = 0
-  let k: CollectionKey
 
-  for (k in items) {
-    if (itemsIsArray) {
-      k = +k
-    }
-
-    const row = items[k]
-
-    result[keyIsFunction ? (<IterableCallback<string>>key)(row, k, index++) : get(row, key)] = row
+  for (const [k, row] of Object.entries(items)) {
+    result[keyIsFunction ? (<CollectionCallback<string>>key)(row, itemsIsArray ? +k : k, index++) : get(row, key)] = row
   }
 
   return result
 }
 
-// TODO: itempath
+// TODO: support itempath
 export function groupBy (items: Collection, key: CollectionKey): Hash
-export function groupBy (items: Collection, key: IterableCallback<string>): Hash
-export function groupBy (items: Collection, key: CollectionKey | IterableCallback<string>) {
+export function groupBy (items: List, key: ListCallback<string>): Hash
+export function groupBy (items: Hash, key: HashCallback<string>): Hash
+export function groupBy (items: Collection, key: CollectionKey | CollectionCallback<string>) {
   const keyIsFunction: boolean = isFunction(key)
   const itemsIsArray: boolean = isArray(items)
-  const result: Object = {}
+  const result: Hash<Collection> = {}
   let index: number = 0
-  let k: CollectionKey
 
-  for (k in items) {
-    if (itemsIsArray) {
-      k = +k
-    }
-
-    const row: any = items[k]
-    let groups = keyIsFunction ? (<IterableCallback<string>>key)(row, k, index++) : get(row, key)
+  for (const [k, row] of Object.entries(items)) {
+    let groups = keyIsFunction ? (<CollectionCallback<string>>key)(row, itemsIsArray ? +k : k, index++) : get(row, key)
 
     if (!isArray(groups)) {
       groups = [groups]
@@ -743,7 +708,7 @@ export function groupBy (items: Collection, key: CollectionKey | IterableCallbac
         result[group] = itemsIsArray ? [] : {}
       }
 
-      itemsIsArray ? (<any[]>result[group]).push(row) : result[group][k] = row
+      itemsIsArray ? (<List>result[group]).push(row) : (<Hash>result[group])[k] = row
     }
   }
 
@@ -768,37 +733,24 @@ export function sortDesc (items: Collection) {
   return _sort(items, null, true)
 }
 
-// FIXME: typehint
+export function sortBy (items: List, callback: ListCallback): List
+export function sortBy (items: Hash, callback: HashCallback): Hash
 export function sortBy (items: List, callback: CollectionItemPath): List
 export function sortBy (items: Hash, callback: CollectionItemPath): Hash
-export function sortBy (items: List, callback: IterableCallback<any, number>): List
-export function sortBy (items: Hash, callback: IterableCallback<any, string>): Hash
+export function sortBy (items: List, callback: ListCallback, descending: boolean): List
+export function sortBy (items: Hash, callback: HashCallback, descending: boolean): Hash
 export function sortBy (items: List, callback: CollectionItemPath, descending: boolean): List
 export function sortBy (items: Hash, callback: CollectionItemPath, descending: boolean): Hash
-export function sortBy (items: List, callback: IterableCallback<any, number>, descending: boolean): List
-export function sortBy (items: Hash, callback: IterableCallback<any, string>, descending: boolean): Hash
-export function sortBy (items: Collection, callback, descending: boolean = false) {
-  if (!isFunction(callback)) {
-    const key: CollectionItemPath = <CollectionItemPath>callback
-
-    callback = item => get(item, key)
-  }
-
-  return _sort(
-    map(items, (value, key, index) => (<IterableCallback>callback)(value, key, index)),
-    null,
-    descending,
-    ({ key }) => ({ key, value: items[key] })
-  )
+export function sortBy (items: Collection, callback: CollectionCallback | CollectionItemPath, descending: boolean = false) {
+  return _sortBy(items, callback, descending)
 }
 
-// FIXME: typehint
+export function sortByDesc (items: List, callback: ListCallback): List
+export function sortByDesc (items: Hash, callback: HashCallback): Hash
 export function sortByDesc (items: List, callback: CollectionItemPath): List
 export function sortByDesc (items: Hash, callback: CollectionItemPath): Hash
-export function sortByDesc (items: List, callback: IterableCallback<any, number>): List
-export function sortByDesc (items: Hash, callback: IterableCallback<any, string>): Hash
-export function sortByDesc (items: Collection, callback) {
-  return sortBy(items, callback, true)
+export function sortByDesc (items: Collection, callback: CollectionCallback | CollectionItemPath) {
+  return _sortBy(items, callback, true)
 }
 
 export function append (items: List, value: any): List
@@ -846,24 +798,18 @@ export function join (items: Collection, glue: string = ', '): string {
   return items.join(glue)
 }
 
-export function partition (items: List, callback): List<List>
-export function partition (items: Hash, callback): List<Hash>
-export function partition (items: Collection, callback) {
+export function partition (items: List, callback: ListCallback<boolean>): List<List>
+export function partition (items: Hash, callback: HashCallback<boolean>): List<Hash>
+export function partition (items: Collection, callback: CollectionCallback<boolean>) {
   const itemsIsArray: boolean = isArray(items)
 
   const result: List<Collection> = itemsIsArray ? [[], []] : [{}, {}]
   let index: number = 0
-  let key: CollectionKey
 
-  for (key in items) {
-    if (itemsIsArray) {
-      key = +key
-    }
+  for (const [key, item] of Object.entries(items)) {
+    const part: number = +!callback(item, itemsIsArray ? +key : key, index++)
 
-    const value: any = items[key]
-    const part: number = +!callback(value, key, index++)
-
-    itemsIsArray ? (<List>result[part]).push(value) : result[part][key] = value
+    itemsIsArray ? (<List>result[part]).push(item) : (<Hash>result[part])[key] = item
   }
 
   return result
@@ -874,8 +820,8 @@ export function flip (items: Collection): Hash {
 
   const result: Hash = {}
 
-  for (const key in items) {
-    result[items[key]] = itemsIsArray ? +key : key
+  for (const [key, item] of Object.entries(items)) {
+    result[item] = itemsIsArray ? +key : key
   }
 
   return result
@@ -899,8 +845,8 @@ export function fill (items: Collection, value: any, start: number = 0, end: Opt
   let index: number = 0
   const result: Hash = {}
 
-  for (const key in items) {
-    result[key] = start <= index && index < end ? value : items[key]
+  for (const [key, item] of Object.entries(items)) {
+    result[key] = start <= index && index < end ? value : item
     index++
   }
 
@@ -915,84 +861,4 @@ export function freeze (items: Collection) {
 
 export function isFrozen (items: Collection): boolean {
   return Object.isFrozen(items)
-}
-
-export function flatMap<T = any> (items: Collection, callback: IterableCallback<List<T>>): List<T>
-export function flatMap<T = any> (items: Collection, callback: IterableCallback<Hash<T>>): Hash<T>
-export function flatMap<T = any> (items: Collection, callback: IterableCallback<Collection<T>>) {
-  let result: Collection = []
-  let index: number = 0
-
-  for (const key in items) {
-    result = merge(result, callback(items[key], isNumber(+key) ? +key : key, index++))
-  }
-
-  return result
-}
-
-export const methods = {
-  keys,
-  values,
-  contains,
-  count,
-  has,
-  get,
-  set,
-  sum,
-  avg,
-  each,
-  slice,
-  reduce,
-  toArray,
-  chunk,
-  except,
-  filter,
-  isEmpty,
-  isNotEmpty,
-  first,
-  last,
-  map,
-  mapWithKeys,
-  flatten,
-  min,
-  max,
-  only,
-  pipe,
-  pluck,
-  reject,
-  swap,
-  shuffle,
-  take,
-  unique,
-  diff,
-  diffKeys,
-  intersect,
-  intersectByKeys,
-  merge,
-  keyBy,
-  groupBy,
-  sort,
-  sortDesc,
-  sortBy,
-  sortByDesc,
-  append,
-  prepend,
-  index,
-  insert,
-  join,
-  partition,
-  flip,
-  fill,
-  freeze,
-  isFrozen,
-  flatMap
-}
-
-export function call (method: string, items: any, ...args): any {
-  if ((!isArray(items) && !isObject(items)) ||
-      (isObject(items) && method in items)) {
-    return items[method](...args)
-  }
-
-  return methods[method](items, ...args)
 }
