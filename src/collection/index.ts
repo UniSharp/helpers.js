@@ -12,9 +12,9 @@ export type Hash<T = any> = { [key: string]: T }
 export type Collection<T = any> = List<T> | Hash<T>
 export type CollectionKey = number | string
 export type CollectionItemPath = number | string | CollectionKey[]
-export type ListCallback<T = any> = (value: any, key: number, index: number) => T
-export type HashCallback<T = any> = (value: any, key: string, index: number) => T
-export type CollectionCallback<T = any> = ListCallback<T> | HashCallback<T>
+export type CollectionCallback<T = any, K = any> = (value: any, key: K, index: number) => T
+export type ListCallback<T = any> = CollectionCallback<T, number>
+export type HashCallback<T = any> = CollectionCallback<T, string>
 export type CompareFunction = (a: any, b: any) => number
 
 interface FindResult {
@@ -339,8 +339,10 @@ export function filter (items: Collection, callback: Optional<CollectionCallback
   return itemsIsArray ? Object.values(result) : result
 }
 
-export function only (items: List, ...keys: CollectionKey[] | CollectionKey[][]): List
-export function only (items: Hash, ...keys: CollectionKey[] | CollectionKey[][]): Hash
+export function only (items: List, keys: CollectionKey[]): List
+export function only (items: Hash, keys: CollectionKey[]): Hash
+export function only (items: List, ...keys: CollectionKey[]): List
+export function only (items: Hash, ...keys: CollectionKey[]): Hash
 export function only (items: Collection, ...keys: CollectionKey[] | CollectionKey[][]) {
   const itemsIsArray: boolean = isArray(items)
 
@@ -357,8 +359,10 @@ export function only (items: Collection, ...keys: CollectionKey[] | CollectionKe
   return itemsIsArray ? Object.values(result) : result
 }
 
-export function except (items: List, ...keys: CollectionKey[] | CollectionKey[][]): List
-export function except (items: Hash, ...keys: CollectionKey[] | CollectionKey[][]): Hash
+export function except (items: List, keys: CollectionKey[]): List
+export function except (items: Hash, keys: CollectionKey[]): Hash
+export function except (items: List, ...keys: CollectionKey[]): List
+export function except (items: Hash, ...keys: CollectionKey[]): Hash
 export function except (items: Collection, ...keys: CollectionKey[] | CollectionKey[][]) {
   const itemsIsArray: boolean = isArray(items)
 
@@ -488,7 +492,7 @@ export function pipe (items: Collection, callback: ((items: List) => any) | ((it
 
 export function pluck (items: Collection, value: CollectionItemPath): List
 export function pluck (items: Collection, value: CollectionItemPath, key: CollectionItemPath): Hash
-export function pluck (items: Collection, value: CollectionItemPath, key: CollectionCallback<string>): Hash
+export function pluck (items: Collection, value: CollectionItemPath, callback: CollectionCallback<string>): Hash
 export function pluck (items: Collection, value: CollectionItemPath, key: Optional<CollectionItemPath | CollectionCallback<string>> = null) {
   const keyIsFunction: boolean = isFunction(key)
   const keyIsNull: boolean = key === null
@@ -569,10 +573,10 @@ export function take (items: Collection, limit: number) {
 // TODO: support itempath
 export function unique (items: List): List
 export function unique (items: List, key: CollectionKey): List
-export function unique (items: List, key: ListCallback): List
+export function unique (items: List, callback: ListCallback): List
 export function unique (items: Hash): Hash
 export function unique (items: Hash, key: CollectionKey): Hash
-export function unique (items: Hash, key: HashCallback): Hash
+export function unique (items: Hash, callback: HashCallback): Hash
 export function unique (items: Collection, key: Optional<CollectionKey | CollectionCallback> = null): Collection {
   const keyIsFunction: boolean = isFunction(key)
   const haystack: List = []
@@ -644,8 +648,8 @@ export function merge (items: Collection, ...merged: Collection[]) {
 
 // TODO: support itempath
 export function keyBy (items: Collection, key: CollectionKey): Hash
-export function keyBy (items: List, key: ListCallback<string>): Hash
-export function keyBy (items: Hash, key: HashCallback<string>): Hash
+export function keyBy (items: List, callback: ListCallback<string>): Hash
+export function keyBy (items: Hash, callback: HashCallback<string>): Hash
 export function keyBy (items: Collection, key: CollectionKey | CollectionCallback<string>): Hash {
   const keyIsFunction: boolean = isFunction(key)
   const result: Hash = {}
@@ -659,8 +663,8 @@ export function keyBy (items: Collection, key: CollectionKey | CollectionCallbac
 
 // TODO: support itempath
 export function groupBy (items: Collection, key: CollectionKey): Hash
-export function groupBy (items: List, key: ListCallback<string>): Hash
-export function groupBy (items: Hash, key: HashCallback<string>): Hash
+export function groupBy (items: List, callback: ListCallback<string>): Hash
+export function groupBy (items: Hash, callback: HashCallback<string>): Hash
 export function groupBy (items: Collection, key: CollectionKey | CollectionCallback<string>) {
   const keyIsFunction: boolean = isFunction(key)
   const itemsIsArray: boolean = isArray(items)
@@ -705,20 +709,20 @@ export function sortDesc (items: Collection) {
 
 export function sortBy (items: List, callback: ListCallback): List
 export function sortBy (items: Hash, callback: HashCallback): Hash
-export function sortBy (items: List, callback: CollectionItemPath): List
-export function sortBy (items: Hash, callback: CollectionItemPath): Hash
+export function sortBy (items: List, key: CollectionItemPath): List
+export function sortBy (items: Hash, key: CollectionItemPath): Hash
 export function sortBy (items: List, callback: ListCallback, descending: boolean): List
 export function sortBy (items: Hash, callback: HashCallback, descending: boolean): Hash
-export function sortBy (items: List, callback: CollectionItemPath, descending: boolean): List
-export function sortBy (items: Hash, callback: CollectionItemPath, descending: boolean): Hash
+export function sortBy (items: List, key: CollectionItemPath, descending: boolean): List
+export function sortBy (items: Hash, key: CollectionItemPath, descending: boolean): Hash
 export function sortBy (items: Collection, callback: CollectionCallback | CollectionItemPath, descending: boolean = false) {
   return _sortBy(items, callback, descending)
 }
 
 export function sortByDesc (items: List, callback: ListCallback): List
 export function sortByDesc (items: Hash, callback: HashCallback): Hash
-export function sortByDesc (items: List, callback: CollectionItemPath): List
-export function sortByDesc (items: Hash, callback: CollectionItemPath): Hash
+export function sortByDesc (items: List, key: CollectionItemPath): List
+export function sortByDesc (items: Hash, key: CollectionItemPath): Hash
 export function sortByDesc (items: Collection, callback: CollectionCallback | CollectionItemPath) {
   return _sortBy(items, callback, true)
 }
