@@ -551,7 +551,7 @@ describe('Collection', () => {
   })
 
   describe('#shuffle()', () => {
-    it('should shuffle the itmes', () => {
+    it('should shuffle the items', () => {
       const originalRandom = Math.random
 
       Math.random = () => 0
