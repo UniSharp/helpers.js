@@ -1,9 +1,5 @@
-import { Optional } from './helpers'
+import { Optional, isFloat } from './helpers'
 import { DateInterval, DateIntervalConfig } from './date-interval'
-
-function isFloat (n: Optional<number>): boolean {
-  return Number(n) === n && n % 1 !== 0
-}
 
 function createInterval (type: keyof DateIntervalConfig, value: number) {
   return new DateInterval({ [type]: value })

@@ -7,7 +7,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "strict": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "stripInternal": true,

@@ -101,23 +101,6 @@ function testIterator (method: Function, callback?: Optional<(value: any, key: C
 }
 
 describe('Collection', () => {
-  // it('Accept only Array or Object', () => {
-  //   expect(call('slice', 'Hello World')).toBe('Hello World')
-  // })
-
-  // it('Run own method first', () => {
-  //   const Foo = class {
-  //     count (): number {
-  //       return 10
-  //     }
-  //   }
-
-  //   expect(call('count', new Foo())).toBe(10)
-  //   expect(call('count', { count: () => 10 })).toBe(10)
-  //   expect(call('count', ['foo'])).toBe(1)
-  //   expect(call('count', { foo: 'foo' })).toBe(1)
-  // })
-
   describe('#keys()', () => {
     it('should return the keys', () => {
       expect(keys([1, 2, 3])).toEqual([0, 1, 2])
@@ -347,7 +330,7 @@ describe('Collection', () => {
         reduce<number[]>([1, 2, 3], (carry, value) => [...carry, value], [])
       ).toEqual([1, 2, 3])
       expect(
-        reduce<number[]>([1, 2, 3], (carry, value, key: number) => ([...carry, key]), [])
+        reduce<number[]>([1, 2, 3], (carry, _, key: number) => ([...carry, key]), [])
       ).toEqual([0, 1, 2])
       expect(
         reduce<string>([1, 2, 3], (carry, value, key, index) => `${carry} - ${index} - ${key} - ${value}`, 'x')
@@ -393,9 +376,9 @@ describe('Collection', () => {
 
     it('should filter the items using the given callback', () => {
       expect(filter([1, 2, 3], value => value > 1)).toEqual([2, 3])
-      expect(filter([1, 2, 3], (value, key, index) => key === 1 && index === 1)).toEqual([2])
+      expect(filter([1, 2, 3], (_, key, index) => key === 1 && index === 1)).toEqual([2])
       expect(filter({ a: 1, b: 2, c: 3 }, value => value > 1)).toEqual({ b: 2, c: 3 })
-      expect(filter({ a: 1, b: 2, c: 3 }, (value, key, index) => key === 'b' && index === 1)).toEqual({ b: 2 })
+      expect(filter({ a: 1, b: 2, c: 3 }, (_, key, index) => key === 'b' && index === 1)).toEqual({ b: 2 })
     })
 
     it('should filter the items without callback', () => {
@@ -554,9 +537,9 @@ describe('Collection', () => {
 
     it('should reject the items using the given callback', () => {
       expect(reject([1, 2, 3], value => value > 1)).toEqual([1])
-      expect(reject([1, 2, 3], (value, key, index) => key === 1 && index === 1)).toEqual([1, 3])
+      expect(reject([1, 2, 3], (_, key, index) => key === 1 && index === 1)).toEqual([1, 3])
       expect(reject({ a: 1, b: 2, c: 3 }, value => value > 1)).toEqual({ a: 1 })
-      expect(reject({ a: 1, b: 2, c: 3 }, (value, key, index) => key === 'b' && index === 1)).toEqual({ a: 1, c: 3 })
+      expect(reject({ a: 1, b: 2, c: 3 }, (_, key, index) => key === 'b' && index === 1)).toEqual({ a: 1, c: 3 })
     })
   })
 
@@ -916,7 +899,7 @@ describe('Collection', () => {
         .toEqual({ a: '0 - a - 1', b: '1 - b - 2', c: '2 - c - 3' })
       expect(flatMap({ a: 1, b: 2, c: 3 }, (value, key, index) => [`${index} - ${key} - ${value}`]))
         .toEqual(['0 - a - 1', '1 - b - 2', '2 - c - 3'])
-      expect(flatMap([1, 2, 3], (value, key, index) => [value, value + 1]))
+      expect(flatMap([1, 2, 3], value => [value, value + 1]))
         .toEqual([1, 2, 2, 3, 3, 4])
       expect(flatMap({ a: 1, b: 2 }, (value, key, index) => ({ [key]: value, [index]: value + 1 })))
         .toEqual({ a: 1, 0: 2, b: 2, 1: 3 })

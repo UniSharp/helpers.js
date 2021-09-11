@@ -1,4 +1,11 @@
-import { Optional, isArray, isObject } from './helpers'
+import {
+  Optional,
+  isArray,
+  isObject,
+  isFunction,
+  isNumber,
+  spaceship
+} from '../helpers'
 
 export type List<T = any> = T[]
 export type Hash<T = any> = { [key: string]: T }
@@ -18,26 +25,6 @@ interface FindResult {
 interface KeyValuePair {
   key: string
   value: any
-}
-
-function isFunction (value: any): boolean {
-  return typeof value === 'function'
-}
-
-function isNumber (value: any): boolean {
-  return typeof value === 'number' && isFinite(value)
-}
-
-function spaceship (a: any, b: any): number {
-  if (a > b) {
-    return 1
-  }
-
-  if (a < b) {
-    return -1
-  }
-
-  return 0
 }
 
 function normalizeCallback (callback: Optional<CollectionCallback<boolean>>): CollectionCallback<boolean> {
@@ -72,7 +59,6 @@ function find (items: Collection, key: CollectionItemPath, defaultValue: Optiona
     }
   }
 
-  // FIXME: type hint
   const target = (<Hash>items)[segment]
 
   if (!key.length) {
@@ -102,7 +88,7 @@ function _sort (
       null,
       map(
         [a.value, b.value],
-        (item: any) => isObject(item) ? Object.values(item) : item
+        (item: unknown) => isObject(item) ? Object.values(<Hash>item) : item
       )
     ) * [1, -1][+descending]
   })
@@ -122,7 +108,7 @@ function _sortBy (
   if (!isFunction(callback)) {
     const key: CollectionItemPath = <CollectionItemPath>callback
 
-    callback = (item: any) => get(item, key)
+    callback = (item: Collection) => get(item, key)
   }
 
   return _sort(
@@ -137,13 +123,11 @@ function _sortBy (
 export function keys (items: List): List<number>
 export function keys (items: Hash): List<string>
 export function keys (items: Collection) {
-  const keys: string[] = Object.keys(items)
-
-  if (isArray(items)) {
-    return keys.map((key: string): number => +key)
+  if (isObject(items)) {
+    return Object.keys(items)
   }
 
-  return keys
+  return Object.keys(items).map((key: string): number => +key)
 }
 
 export function values (items: List): List
@@ -211,7 +195,7 @@ export function sum (items: Collection, key: Optional<CollectionItemPath> = null
     items = pluck(items, key)
   }
 
-  return Object.values(items).reduce((carry: number, n: any) => carry + (+n || 0), 0)
+  return (<List<number>>Object.values(items)).reduce((carry: number, n: number) => carry + (+n || 0), 0)
 }
 
 export function avg (items: Collection): number | null
@@ -284,6 +268,7 @@ export function slice (items: Collection, begin: number = 0, end: Optional<numbe
   return result
 }
 
+// FIXME: type hint
 // TODO: optional initialValue
 export function reduce<T = any> (
   items: Collection,
@@ -457,9 +442,9 @@ export function flatMap<T = any> (items: Collection, callback: CollectionCallbac
 export function flatten (items: Collection): List
 export function flatten (items: Collection, depth: number): List
 export function flatten (items: Collection, depth: number = Infinity) {
-  let result: any[] = []
+  let result: List = []
 
-  for (const [_, item] of Object.entries(items)) {
+  for (const item of Object.values(items)) {
     if (!isArray(item) && !isObject(item)) {
       result.push(item)
 
@@ -511,7 +496,7 @@ export function pluck (items: Collection, value: CollectionItemPath, key: Option
     const v: any = get(row, value)
 
     if (keyIsNull) {
-      result = [...<any[]>result, v]
+      result = [...<List>result, v]
       continue
     }
 
@@ -592,7 +577,7 @@ export function unique (items: Hash, key: HashCallback): Hash
 export function unique (items: Collection, key: Optional<CollectionKey | CollectionCallback> = null): Collection {
   const keyIsFunction: boolean = isFunction(key)
   const itemsIsArray: boolean = isArray(items)
-  const haystack: any[] = []
+  const haystack: List = []
   const result: Hash = {}
   let index: number = 0
 
@@ -807,7 +792,7 @@ export function partition (items: Collection, callback: CollectionCallback<boole
   let index: number = 0
 
   for (const [key, item] of Object.entries(items)) {
-    const part: number = +!callback(item, itemsIsArray ? +key : key, index++)
+    const part: number = callback(item, itemsIsArray ? +key : key, index++) ? 0 : 1
 
     itemsIsArray ? (<List>result[part]).push(item) : (<Hash>result[part])[key] = item
   }
