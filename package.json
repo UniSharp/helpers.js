@@ -28,5 +28,8 @@
     "jest": "latest",
     "ts-jest": "latest",
     "typescript": "~4.2"
+  },
+  "dependencies": {
+    "@unisharp/babel-plugin": "^0.3.7"
   }
 }

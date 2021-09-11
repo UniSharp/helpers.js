@@ -773,6 +773,11 @@
     "@typescript-eslint/types" "4.31.0"
     eslint-visitor-keys "^2.0.0"
 
+"@unisharp/babel-plugin@^0.3.7":
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/@unisharp/babel-plugin/-/babel-plugin-0.3.7.tgz#50afa5c328f1583a591e95acab340bdf30a67987"
+  integrity sha512-A/WePpiLLt/6vHfkfDzu3QzU3IBQ1ieyVypu70/whQCVaIZreMZlFqDpf0kgcE2utEzAVrJSqcHu3/arj6uoJw==
+
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.5.tgz#c0b678fb32d60fc1219c784d6a826fe385aeb79a"

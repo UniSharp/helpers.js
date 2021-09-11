@@ -2,6 +2,7 @@ import { Collection } from './collection'
 import * as collectionMethods from './collection'
 
 export type Optional<T> = T | null | undefined
+export type ValueOf<T> = T extends any[] ? T[0] : T[keyof T]
 
 export function isArray (value: any): boolean {
   return value && Array.isArray(value)

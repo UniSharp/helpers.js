@@ -327,20 +327,20 @@ describe('Collection', () => {
   describe('#reduce()', () => {
     it('should iterate over the items and reduce to a single value', () => {
       expect(
-        reduce<number[]>([1, 2, 3], (carry, value) => [...carry, value], [])
+        reduce([1, 2, 3], (carry, value) => [...carry, value], <number[]>[])
       ).toEqual([1, 2, 3])
       expect(
-        reduce<number[]>([1, 2, 3], (carry, _, key: number) => ([...carry, key]), [])
+        reduce([1, 2, 3], (carry, _, key: number) => ([...carry, key]), <number[]>[])
       ).toEqual([0, 1, 2])
       expect(
-        reduce<string>([1, 2, 3], (carry, value, key, index) => `${carry} - ${index} - ${key} - ${value}`, 'x')
+        reduce([1, 2, 3], (carry, value, key, index) => `${carry} - ${index} - ${key} - ${value}`, 'x')
       ).toBe('x - 0 - 0 - 1 - 1 - 1 - 2 - 2 - 2 - 3')
 
       expect(
-        reduce<number[]>({ a: 1, b: 2, c: 3 }, (carry, value) => [...carry, value], [])
+        reduce({ a: 1, b: 2, c: 3 }, (carry, value) => [...carry, value], <number[]>[])
       ).toEqual([1, 2, 3])
       expect(
-        reduce<string>({ a: 1, b: 2, c: 3 }, (carry, value, key, index) => `${carry} - ${index} - ${key} - ${value}`, 'x')
+        reduce({ a: 1, b: 2, c: 3 }, (carry, value, key, index) => `${carry} - ${index} - ${key} - ${value}`, 'x')
       ).toBe('x - 0 - a - 1 - 1 - b - 2 - 2 - c - 3')
     })
   })
@@ -901,7 +901,7 @@ describe('Collection', () => {
         .toEqual(['0 - a - 1', '1 - b - 2', '2 - c - 3'])
       expect(flatMap([1, 2, 3], value => [value, value + 1]))
         .toEqual([1, 2, 2, 3, 3, 4])
-      expect(flatMap({ a: 1, b: 2 }, (value, key, index) => ({ [key]: value, [index]: value + 1 })))
+      expect(flatMap({ a: 1, b: 2 }, (value, key, index) => ({ [key]: value, [index.toString()]: value + 1 })))
         .toEqual({ a: 1, 0: 2, b: 2, 1: 3 })
     })
   })
