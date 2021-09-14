@@ -32,8 +32,12 @@ First, add our babel plugin to your bable configuration.
 Then require main library to happy coding.
 
 ```javascript
-require('@unisharp/helpers.js')
+import { init } from '@unisharp/helpers.js'
 
+init({ Number, String })
+
+1.5.floor()                // 1
+'Hello World'.slugify()    // 'hello-world'
 [1, 2, 3].count()          // 3
 [1, 2, 3].avg()            // 2
 [1, 2, 2].unique()         // [1, 2]
