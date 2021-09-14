@@ -44,6 +44,20 @@ Helpers.init({ global })
 { a: 1, b: 2, c: 3 }.sum() // 6
 ```
 
+## Nuxt Support
+
+Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.config.js`.
+No more extra configuration needed.
+
+```javascript
+// nuxt.config.js
+{
+  buildModules: [
+    '@unisharp/helpers.js/nuxt',
+  ],
+}
+```
+
 ## Available Methods
 
 - [**Collection**](#collection)
