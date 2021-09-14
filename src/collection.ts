@@ -99,7 +99,7 @@ function find (items: Collection, key: CollectionItemPath, defaultValue: Optiona
 
 function _sort<C extends Collection> (
   items: C,
-  callback: Optional<CompareFunction<ValueOf<C>>> = null,
+  callback: Optional<CompareFunction<ValueOf<C>>>,
   descending: boolean = false,
   afterSort: Optional<(pair: KeyValuePair) => KeyValuePair> = null
 ): C {
@@ -125,7 +125,7 @@ function _sort<C extends Collection> (
 function _sortBy (
   items: Collection,
   callback: CollectionCallback | CollectionItemPath,
-  descending: boolean = false
+  descending: boolean
 ): Collection {
   if (!isFunction(callback)) {
     const key: CollectionItemPath = <CollectionItemPath>callback

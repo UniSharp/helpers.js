@@ -18,13 +18,13 @@ describe('DateInterval', () => {
 
     it('can create duration via config', () => {
       const interval = new DateInterval({
-        milliseconds: 1,
-        seconds: 1,
-        minutes: 1,
-        hours: 1,
-        days: 1,
+        years: 1,
         months: 1,
-        years: 1
+        days: 1,
+        hours: 1,
+        minutes: 1,
+        seconds: 1,
+        milliseconds: 1
       })
 
       expect(interval.getConfig()).toStrictEqual({
@@ -35,6 +35,72 @@ describe('DateInterval', () => {
         minutes: 1,
         seconds: 1,
         milliseconds: 1
+      })
+    })
+  })
+
+  describe('#setConfig()', () => {
+    it('should set config correctly', () => {
+      const interval = new DateInterval()
+
+      interval.setConfig({
+        years: 1,
+        months: 1,
+        days: 1,
+        hours: 1,
+        minutes: 1,
+        seconds: 1,
+        milliseconds: 1
+      })
+
+      expect(interval.getConfig()).toStrictEqual({
+        years: 1,
+        months: 1,
+        days: 1,
+        hours: 1,
+        minutes: 1,
+        seconds: 1,
+        milliseconds: 1
+      })
+    })
+
+    it('should skip undefined value', () => {
+      const interval = new DateInterval()
+
+      interval.setConfig({
+        years: undefined,
+        months: undefined,
+        days: 1,
+        hours: 1,
+        minutes: 1,
+        seconds: 1,
+        milliseconds: 1
+      })
+
+      expect(interval.getConfig()).toStrictEqual({
+        years: 0,
+        months: 0,
+        days: 1,
+        hours: 1,
+        minutes: 1,
+        seconds: 1,
+        milliseconds: 1
+      })
+    })
+
+    it('should not skip 0 value', () => {
+      const interval = new DateInterval({ years: 100 })
+
+      interval.setConfig({ years: 0 })
+
+      expect(interval.getConfig()).toStrictEqual({
+        years: 0,
+        months: 0,
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 0
       })
     })
   })

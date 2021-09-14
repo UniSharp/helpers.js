@@ -55,7 +55,7 @@ export class DateInterval {
     for (key in config) {
       const value: Optional<number> = config[key]
 
-      if (value === null || value === undefined) {
+      if (value !== 0 && !value) {
         continue
       }
 
