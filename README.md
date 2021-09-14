@@ -1,6 +1,6 @@
 # Helpers.js
 
-[![Build Status](https://travis-ci.org/UniSharp/helpers.js.svg?branch=master)](https://travis-ci.org/UniSharp/helpers.js)
+[![Build Status](https://app.travis-ci.com/UniSharp/helpers.js.svg?branch=master)](https://app.travis-ci.com/UniSharp/helpers.js)
 [![Coverage Status](https://coveralls.io/repos/github/UniSharp/helpers.js/badge.svg?branch=master)](https://coveralls.io/github/UniSharp/helpers.js?branch=master)
 [![npm version](https://badge.fury.io/js/%40unisharp%2Fhelpers.js.svg)](https://badge.fury.io/js/%40unisharp%2Fhelpers.js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
