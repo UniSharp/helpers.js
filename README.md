@@ -46,9 +46,7 @@ Helpers.init({ global })
 
 ## Nuxt Support
 
-Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.config.js`.
-
-No more extra configuration is needed.
+Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.config.js`, and no more extra configuration is needed.
 
 ```javascript
 // nuxt.config.js
