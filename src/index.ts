@@ -251,23 +251,17 @@ function assignMethods<T> (target: NumberConstructor | StringConstructor, srouce
   }
 }
 
-export function init ({ Number, String }: { Number: NumberConstructor, String: StringConstructor }): void {
-  const { random: numberRandom, ...restNumberMethods } = numberMethods
-  const { random: stringRandom, ...restStringMethods } = stringMethods
+export const Helpers = {
+  Collection: { call: callCollectionMethod },
+  init ({ global }: { global: typeof globalThis }): void {
+    const { random: numberRandom, ...restNumberMethods } = numberMethods
+    const { random: stringRandom, ...restStringMethods } = stringMethods
 
-  assignMethods<Number>(Number, restNumberMethods)
-  assignMethods<String>(String, restStringMethods)
+    assignMethods<Number>(global.Number, restNumberMethods)
+    assignMethods<String>(global.String, restStringMethods)
 
-  Object.assign(Number, { random: numberRandom })
-  Object.assign(String, { random: stringRandom })
-  Object.assign(global, {
-    DateInterval,
-    UniSharp: {
-      Helpers: {
-        Collection: {
-          call: callCollectionMethod
-        }
-      }
-    }
-  })
+    Object.assign(global.Number, { random: numberRandom })
+    Object.assign(global.String, { random: stringRandom })
+    Object.assign(global, { DateInterval, UniSharp: { Helpers } })
+  }
 }

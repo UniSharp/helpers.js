@@ -32,9 +32,9 @@ First, add our babel plugin to your bable configuration.
 Then require main library to happy coding.
 
 ```javascript
-import { init } from '@unisharp/helpers.js'
+import { Helpers } from '@unisharp/helpers.js'
 
-init({ Number, String })
+Helpers.init({ global })
 
 1.5.floor()                // 1
 'Hello World'.slugify()    // 'hello-world'

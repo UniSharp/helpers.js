@@ -1,10 +1,10 @@
-import { init } from '../src'
+import { Helpers } from '../src'
 import { DateInterval } from '../src/date-interval'
 import { callCollectionMethod } from '../src/helpers'
 
 describe('Plugin', () => {
   describe('#init()', () => {
-    beforeEach(() => init({ global }))
+    beforeEach(() => Helpers.init({ global }))
 
     test('global DateInterval', () => {
       expect(global.DateInterval).toEqual(DateInterval)

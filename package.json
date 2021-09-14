@@ -14,7 +14,7 @@
     "test": "yarn lint && jest",
     "compile": "tsc",
     "clean": "rm -rf dist",
-    "build": "yarn clean && yarn compile"
+    "build": "yarn test && yarn clean && yarn compile"
   },
   "license": "MIT",
   "files": [
