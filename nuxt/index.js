@@ -13,5 +13,9 @@ module.exports = function () {
     })
   )
 
+  if (!this.options.build.babel.plugins) {
+    this.options.build.babel.plugins = []
+  }
+
   this.options.build.babel.plugins.push('@unisharp/babel-plugin')
 }
