@@ -102,6 +102,7 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
   - [prepend](#prepend)
   - [reduce](#reduce)
   - [reject](#reject)
+  - [reverse](#reverse)
   - [set](#set)
   - [shuffle](#shuffle)
   - [slice](#slice)
@@ -192,7 +193,6 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### diffKeys
 
 ```javascript
-[1, 2, 3, 4, 5].diffKeys([1, 2, 3])           // { 3: 4, 4: 5 }
 { a: 1, b: 2, c: 3 }.diffKeys({ a: 1, b: 2 }) // { c: 3 }
 ```
 
@@ -215,14 +215,12 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### fill
 
 ```javascript
-[1, 2, 3, 4, 5].fill(6)      // [6, 6, 6, 6, 6]
 { a: 1, b: 2, c: 3 }.fill(6) // { a: 6, b: 6, c: 6 }
 ```
 
 #### filter
 
 ```javascript
-[1, 2, 3, 4, 5].filter((value, index) => value > 1)           // [2, 3, 4, 5]
 { a: 1, b: 2, c: 3 }.filter((value, key, index) => value > 1) // { b: 2, c: 3 }
 ```
 
@@ -238,7 +236,6 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 ##### flatMap
 
 ```javascript
-[1, 2, 3].flatMap((value, index) => [value, value + 1])                               // [1, 2, 2, 3, 3, 4]
 { a: 1, b: 2 }.flatMap((value, key, index) => ({ [key]: value, [index]: value + 1 })) // { a: 1, 0: 2, b: 2, 1: 3 }
 ```
 
@@ -312,7 +309,6 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### intersectByKeys
 
 ```javascript
-[1, 2, 3, 4, 5].intersectByKeys([1, 2, 3])           // { 0: 1, 1: 2, 2: 3 }
 { a: 1, b: 2, c: 3 }.intersectByKeys({ a: 1, b: 2 }) // { a: 1, b: 2 }
 ```
 
@@ -344,9 +340,7 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### join
 
 ```javascript
-[1, 2, 3, 4, 5].join()         // 1, 2, 3, 4, 5
-{ a: 1, b: 2, c: 3 }.join()    // 1, 2, 3
-[1, 2, 3, 4, 5].join('-')      // 1-2-3-4-5
+{ a: 1, b: 2, c: 3 }.join()    // 1,2,3
 { a: 1, b: 2, c: 3 }.join('-') // 1-2-3
 ```
 
@@ -360,7 +354,6 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### keys
 
 ```javascript
-[1, 2, 3, 4, 5].keys()      // [0, 1, 2, 3, 4]
 { a: 1, b: 2, c: 3 }.keys() // ['a', 'b', 'c']
 ```
 
@@ -376,7 +369,6 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### map
 
 ```javascript
-[1, 2, 3, 4, 5].map((value, index) => value * 2)           // [2, 4, 6, 8, 10]
 { a: 1, b: 2, c: 3 }.map((value, key, index) => value * 2) // { a: 2, b: 4, c: 6 }
 ```
 
@@ -450,7 +442,6 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### reduce
 
 ```javascript
-[1, 2, 3, 4, 5].reduce((carry, value, index) => carry + value)           // 15
 { a: 1, b: 2, c: 3 }.reduce((carry, value, key, index) => carry + value) // 6
 ```
 
@@ -459,6 +450,12 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 ```javascript
 [1, 2, 3, 4, 5].reject((value, index) => value > 4)           // [1, 2, 3, 4]
 { a: 1, b: 2, c: 3 }.reject((value, key, index) => value > 2) // { a: 1, b: 2 }
+```
+
+#### reverse
+
+```javascript
+{ a: 1, b: 2, c: 3 }.reverse() // { c: 3, b: 2, a: 1 }
 ```
 
 #### set
@@ -477,10 +474,6 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### slice
 
 ```javascript
-[1, 2, 3, 4, 5].slice(1)          // [2, 3, 4, 5]
-[1, 2, 3, 4, 5].slice(-1)         // [5]
-[1, 2, 3, 4, 5].slice(1, 2)       // [2]
-[1, 2, 3, 4, 5].slice(1, -1)      // [2, 3, 4]
 { a: 1, b: 2, c: 3 }.slice(1)     // { b: 2, c: 3 }
 { a: 1, b: 2, c: 3 }.slice(-1)    // { c: 3 }
 { a: 1, b: 2, c: 3 }.slice(1, 2)  // { b: 2 }
@@ -490,13 +483,9 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### sort
 
 ```javascript
-[5, 4, 3, 2, 1].sort()                          // [1, 2, 3, 4, 5]
-[[5, 5], [5, 4]].sort()                         // [[5, 4], [5, 5]]
-[{ a: 5, b: 5 }, { a: 5, b: 4 }].sort()         // [{ a: 5, b: 4 }, { a: 5, b: 5 }]
 { a: 3, b: 2, c: 1 }.sort()                     // { c: 1, b: 2, a: 3 }
 { a: [3, 3], b: [3, 2] }.sort()                 // { b: [3, 2], a: [3, 3] }
 { a: { a: 3, b: 3 }, b: { a: 3, b: 2 } }.sort() // { b: { a: 3, b: 2 }, a: { a: 3, b: 3 } }
-[1, 2, 3, 4, 5].sort((a, b) => b - a)           // [5, 4, 3, 2, 1]
 { a: 1, b: 2, c: 3 }.sort((a, b) => b - a)      // { c: 3, b: 2, a: 1 }
 ```
 
@@ -558,7 +547,6 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### toArray
 
 ```javascript
-[{ a: 1, b: 2 }, { c: 3 }].toArray()        // [1, 2, 3]
 { a: { a: 1, b: 2 }, b: { c: 3 }}.toArray() // [1, 2, 3]
 ```
 
@@ -572,7 +560,6 @@ Just add `@unisharp/helpers.js/nuxt` to the `buildModules` section of `nuxt.conf
 #### values
 
 ```javascript
-[1, 2, 3, 4, 5].values()      // [1, 2, 3, 4, 5]
 { a: 1, b: 2, c: 3 }.values() // [1, 2, 3]
 ```
 

@@ -1,47 +1,56 @@
-import { Collection } from './collection'
-import * as collectionMethods from './collection'
-
 export type Optional<T> = T | null | undefined
-export type ValueOf<T> = T extends any[] ? T[0] : T[keyof T]
 
-export function isArray (value: any): boolean {
-  return value && Array.isArray(value)
+export function isArray (value: unknown): boolean {
+  return value !== undefined && value !== null && Array.isArray(value)
 }
 
-export function isObject (value: any): boolean {
-  return value && typeof value === 'object' && value.constructor.name === 'Object'
+export function isObject (value: unknown): boolean {
+  return value !== undefined && value !== null && typeof value === 'object' && value!.constructor.name === 'Object'
 }
 
-export function isFunction (value: any): boolean {
+export function isFunction (value: unknown): boolean {
   return typeof value === 'function'
 }
 
-export function isNumber (value: any): boolean {
+export function isNumber (value: unknown): boolean {
   return typeof value === 'number' && isFinite(value)
 }
 
-export function isFloat (value: any): boolean {
+export function isFloat (value: unknown): boolean {
   return Number(value) === value && value % 1 !== 0
 }
 
-export function spaceship (a: any, b: any): number {
-  if (a > b) {
+export function isString (value: unknown): boolean {
+  return typeof value === 'string' || value instanceof String
+}
+
+export function spaceship (a: unknown, b: unknown): number {
+  const normalizedA = normalizeComparable(a)
+  const normalizedB = normalizeComparable(b)
+
+  if (normalizedA > normalizedB) {
     return 1
   }
 
-  if (a < b) {
+  if (normalizedA < normalizedB) {
     return -1
   }
 
   return 0
 }
 
-export function callCollectionMethod (method: string, items: any, ...args: any[]): any {
-  if ((!isArray(items) && !isObject(items)) ||
-      (isObject(items) && method in items)
-  ) {
-    return items[method](...args)
+function normalizeComparable (value: unknown): number | string {
+  if (isNumber(value)) {
+    return <number>value
   }
 
-  return (<(items: Collection, ...args: any[]) => any>collectionMethods[<keyof typeof collectionMethods>method])(items, ...args)
+  if (isString(value)) {
+    return <string>value
+  }
+
+  if (isArray(value)) {
+    return (<unknown[]>value).toString()
+  }
+
+  return Object.values(<{ [key: string]: unknown }>value).toString()
 }

@@ -1,22 +1,9 @@
-import { callCollectionMethod } from '../src/helpers'
+import { spaceship } from '../src/helpers'
 
 describe('Helpers', () => {
-  describe('#collectionCall()', () => {
-    it('accept only array or object', () => {
-      expect(callCollectionMethod('slice', 'Hello World')).toBe('Hello World')
-    })
-
-    it('run own method first', () => {
-      const Foo = class {
-        count (): number {
-          return 10
-        }
-      }
-
-      expect(callCollectionMethod('count', new Foo())).toBe(10)
-      expect(callCollectionMethod('count', { count: () => 10 })).toBe(10)
-      expect(callCollectionMethod('count', ['foo'])).toBe(1)
-      expect(callCollectionMethod('count', { foo: 'foo' })).toBe(1)
-    })
+  it('#spaceship()', () => {
+    expect(spaceship(1, 2)).toBe(-1)
+    expect(spaceship(2, 1)).toBe(1)
+    expect(spaceship(1, 1)).toBe(0)
   })
 })
