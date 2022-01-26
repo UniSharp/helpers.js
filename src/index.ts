@@ -230,9 +230,9 @@ export const Helpers = {
     const { random: numberRandom, ...restNumberMethods } = numberMethods
     const { random: stringRandom, ...restStringMethods } = stringMethods
 
-    assignMethods<Number>(global.Number, restNumberMethods)
-    assignMethods<String>(global.String, restStringMethods)
-    assignMethods<Array<any>>(global.Array, arrayMethods)
+    assignMethods(global.Number, restNumberMethods)
+    assignMethods(global.String, restStringMethods)
+    assignMethods(global.Array, arrayMethods)
 
     Object.assign(global.Number, { random: numberRandom })
     Object.assign(global.String, { random: stringRandom })

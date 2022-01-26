@@ -8,14 +8,15 @@ describe('Collection Helpers', () => {
 
     it('run own method first', () => {
       const Foo = class {
-        count (): number {
-          return 10
+        join (): string {
+          return 'join'
         }
       }
 
-      expect(call('count', new Foo())).toBe(10)
-      expect(call('count', { count: () => 10 })).toBe(10)
-      expect(call('count', { foo: 'foo' })).toBe(1)
+      expect(call('join', new Foo())).toBe('join')
+      expect(call('join', { join: () => 'nioj' })).toBe('nioj')
+      expect(call('join', { foo: 'foo', bar: 'bar' })).toBe('foo,bar')
+      expect(call('join', ['foo', 'bar'])).toBe('foo,bar')
     })
   })
 })

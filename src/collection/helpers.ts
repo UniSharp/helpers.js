@@ -78,9 +78,13 @@ export function range (from: number, to: number): number[] {
 }
 
 export function call (method: string, items: any, ...args: any[]): any {
-  if (!isObject(items) || (isObject(items) && method in items)) {
-    return items[method](...args)
+  if (isObject(items) && !(method in items)) {
+    return (<(items: Hash, ...args: any[]) => any>methods[<keyof typeof methods>method])(items, ...args)
   }
 
-  return (<(items: Hash, ...args: any[]) => any>methods[<keyof typeof methods>method])(items, ...args)
+  if (isArray(items) && method in items) {
+    return Array.prototype[<keyof Array<any>>method].apply(items, args)
+  }
+
+  return items[method](...args)
 }
