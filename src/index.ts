@@ -85,6 +85,9 @@ declare global {
     sortByDesc<T extends Hash<unknown>>(this: Hash<T>, key: CollectionItemPath): Hash<T>
     sortByDesc<T extends Hash<unknown>>(this: Hash<T>, callback: HashCallback<unknown, T>): Hash<T>
     index<T>(this: Hash<T>, needle: T): string | null
+    append<T>(this: Hash<T>, value: T, key: string): Hash<T>
+    prepend<T>(this: Hash<T>, value: T, key: string): Hash<T>
+    insert<T>(this: Hash<T>, target: string, value: T, key: string): Hash<T>
     join(this: Hash<unknown>): string
     join(this: Hash<unknown>, glue: string): string
     partition<T>(this: Hash<T>, callback: HashCallback<boolean, T>): [Hash<T>, Hash<T>]
