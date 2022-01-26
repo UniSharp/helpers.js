@@ -1,6 +1,5 @@
 import { Helpers } from '../src'
 import { DateInterval } from '../src/date-interval'
-import { call } from '../src/collection/helpers'
 
 describe('Plugin', () => {
   describe('#init()', () => {
@@ -15,7 +14,7 @@ describe('Plugin', () => {
     })
 
     test('UniSharp.Helpers.Collection.call', () => {
-      expect(UniSharp.Helpers.Collection.call).toEqual(call)
+      expect(UniSharp.Helpers.Collection.call('unique', [1, 2, 3, 2, 1])).toEqual([1, 2, 3])
     })
 
     test('Number static method', () => {

@@ -225,7 +225,7 @@ function assignMethods<T> (target: NumberConstructor | StringConstructor | Array
 }
 
 export const Helpers = {
-  Collection: { call },
+  Collection: {},
   init ({ global }: { global: typeof globalThis }): void {
     const { random: numberRandom, ...restNumberMethods } = numberMethods
     const { random: stringRandom, ...restStringMethods } = stringMethods
@@ -237,5 +237,7 @@ export const Helpers = {
     Object.assign(global.Number, { random: numberRandom })
     Object.assign(global.String, { random: stringRandom })
     Object.assign(global, { DateInterval, UniSharp: { Helpers } })
+
+    Object.assign(Helpers.Collection, { call: call(global) })
   }
 }

@@ -77,14 +77,16 @@ export function range (from: number, to: number): number[] {
   return result
 }
 
-export function call (method: string, items: any, ...args: any[]): any {
-  if (isObject(items) && !(method in items)) {
-    return (<(items: Hash, ...args: any[]) => any>methods[<keyof typeof methods>method])(items, ...args)
-  }
+export function call (global: typeof globalThis) {
+  return function (method: string, items: any, ...args: any[]): any {
+    if (isObject(items) && !(method in items)) {
+      return (<(items: Hash, ...args: any[]) => any>methods[<keyof typeof methods>method])(items, ...args)
+    }
 
-  if (isArray(items) && method in items) {
-    return Array.prototype[<keyof Array<any>>method].apply(items, args)
-  }
+    if (isArray(items) && method in global.Array.prototype) {
+      return global.Array.prototype[<keyof Array<any>>method].apply(items, args)
+    }
 
-  return items[method](...args)
+    return items[method](...args)
+  }
 }
