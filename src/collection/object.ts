@@ -505,6 +505,20 @@ export function index<T> (items: Hash<T>, needle: T): string | null {
   return Object.keys(items)[result]
 }
 
+export function append<T> (items: Hash<T>, value: T, key: string): Hash<T> {
+  return { ...items, [key]: value }
+}
+
+export function prepend<T> (items: Hash<T>, value: T, key: string): Hash<T> {
+  return { [key]: value, ...items }
+}
+
+export function insert<T> (items: Hash<T>, target: string, value: T, key: string): Hash<T> {
+  const targetIndex = Arr.index(Object.keys(items), target) ?? count(items)
+
+  return { ...slice(items, 0, targetIndex), [key]: value, ...slice(items, targetIndex) }
+}
+
 export function join (items: Hash<unknown>): string
 export function join (items: Hash<unknown>, glue: string): string
 export function join (items: Hash<unknown>, glue: string = ',') {

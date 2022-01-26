@@ -45,6 +45,9 @@ import {
   sortBy,
   sortByDesc,
   index,
+  append,
+  prepend,
+  insert,
   join,
   partition,
   flip,
@@ -564,6 +567,25 @@ describe('Collection', () => {
     it('should return the index of the first item in collection', () => {
       expect(index({ a: 1, b: 2, c: 3 }, 2)).toBe('b')
       expect(index({ a: 1, b: 2, c: 3 }, 0)).toBe(null)
+    })
+  })
+
+  describe('#append', () => {
+    it('should appends an item to the end of the collection', () => {
+      expect(JSON.stringify(append({ a: 1, b: 2 }, 3, 'c'))).toBe(JSON.stringify({ a: 1, b: 2, c: 3 }))
+    })
+  })
+
+  describe('#prepend', () => {
+    it('should adds an item to the beginning of the collection', () => {
+      expect(JSON.stringify(prepend({ b: 2, c: 3 }, 1, 'a'))).toBe(JSON.stringify({ a: 1, b: 2, c: 3 }))
+    })
+  })
+
+  describe('#insert', () => {
+    it('should insert an item before the element with the given index of the collection', () => {
+      expect(JSON.stringify(insert({ a: 1, c: 3 }, 'c', 2, 'b'))).toBe(JSON.stringify({ a: 1, b: 2, c: 3 }))
+      expect(JSON.stringify(insert({ a: 1, c: 3 }, 'e', 2, 'b'))).toBe(JSON.stringify({ a: 1, c: 3, b: 2 }))
     })
   })
 
