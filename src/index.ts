@@ -225,7 +225,7 @@ function assignMethods<T> (target: NumberConstructor | StringConstructor | Array
 }
 
 export const Helpers = {
-  Collection: {},
+  Collection: { call: call(global) },
   init ({ global }: { global: typeof globalThis }): void {
     const { random: numberRandom, ...restNumberMethods } = numberMethods
     const { random: stringRandom, ...restStringMethods } = stringMethods
