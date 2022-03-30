@@ -773,10 +773,10 @@
     "@typescript-eslint/types" "4.31.0"
     eslint-visitor-keys "^2.0.0"
 
-"@unisharp/babel-plugin@^0.3.7":
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/@unisharp/babel-plugin/-/babel-plugin-0.3.7.tgz#50afa5c328f1583a591e95acab340bdf30a67987"
-  integrity sha512-A/WePpiLLt/6vHfkfDzu3QzU3IBQ1ieyVypu70/whQCVaIZreMZlFqDpf0kgcE2utEzAVrJSqcHu3/arj6uoJw==
+"@unisharp/babel-plugin@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@unisharp/babel-plugin/-/babel-plugin-1.0.2.tgz#e2075bc4e25c2cf52d65af9fadbbe963aabaa221"
+  integrity sha512-u0y/O1NUCxLs87l2a7sQEGjkFckh1eap8+54sYcmB3yLEEO0KyAWbDBU2VJoYizg4a+t4PIW6D3zEIRQjjsfIQ==
 
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.5"
@@ -2982,9 +2982,9 @@ minimatch@^3.0.4:
     brace-expansion "^1.1.7"
 
 minimist@^1.2.0, minimist@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
-  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
+  integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
 ms@2.0.0:
   version "2.0.0"
