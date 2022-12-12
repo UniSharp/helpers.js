@@ -773,10 +773,10 @@
     "@typescript-eslint/types" "4.31.0"
     eslint-visitor-keys "^2.0.0"
 
-"@unisharp/babel-plugin@^0.3.7":
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/@unisharp/babel-plugin/-/babel-plugin-0.3.7.tgz#50afa5c328f1583a591e95acab340bdf30a67987"
-  integrity sha512-A/WePpiLLt/6vHfkfDzu3QzU3IBQ1ieyVypu70/whQCVaIZreMZlFqDpf0kgcE2utEzAVrJSqcHu3/arj6uoJw==
+"@unisharp/babel-plugin@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@unisharp/babel-plugin/-/babel-plugin-1.0.2.tgz#e2075bc4e25c2cf52d65af9fadbbe963aabaa221"
+  integrity sha512-u0y/O1NUCxLs87l2a7sQEGjkFckh1eap8+54sYcmB3yLEEO0KyAWbDBU2VJoYizg4a+t4PIW6D3zEIRQjjsfIQ==
 
 abab@^2.0.3, abab@^2.0.5:
   version "2.0.5"
@@ -3327,9 +3327,9 @@ punycode@^2.1.0, punycode@^2.1.1:
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
 qs@~6.5.2:
-  version "6.5.2"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
-  integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.3.tgz#3aeeffc91967ef6e35c0e488ef46fb296ab76aad"
+  integrity sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==
 
 queue-microtask@^1.2.2:
   version "1.2.3"
